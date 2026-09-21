@@ -10,7 +10,7 @@ const predictColleges = async (req, res) => {
             round
         } = req.body;
 
-        // Basic validation
+        // Validate required fields
         if (!rank || !category) {
             return res.status(400).json({
                 success: false,
@@ -18,14 +18,17 @@ const predictColleges = async (req, res) => {
             });
         }
 
-        if (rank <= 0) {
+        const studentRank = Number(rank);
+
+        if (!Number.isInteger(studentRank) || studentRank <= 0) {
             return res.status(400).json({
                 success: false,
-                error: "Rank must be greater than 0"
+                error: "Rank must be a positive integer"
             });
         }
 
-        const values = [rank, category];
+        const values = [category];
+        let parameterIndex = 2;
 
         let query = `
             SELECT
@@ -37,12 +40,8 @@ const predictColleges = async (req, res) => {
                 opening_rank,
                 closing_rank
             FROM cutoffs
-            WHERE category = $2
-              AND opening_rank <= $1
-              AND closing_rank >= $1
+            WHERE category = $1
         `;
-
-        let parameterIndex = 3;
 
         if (program) {
             query += ` AND program ILIKE $${parameterIndex}`;
@@ -62,33 +61,60 @@ const predictColleges = async (req, res) => {
             parameterIndex++;
         }
 
+        // Get historical cutoffs up to twice the student's rank
         query += `
+            AND closing_rank <= $${parameterIndex}
             ORDER BY closing_rank ASC
-            LIMIT 50
+            LIMIT 100
         `;
+
+        values.push(studentRank * 2);
 
         const result = await pool.query(query, values);
 
-        // Add prediction classification
+        // Classify each college
         const results = result.rows.map((college) => {
-            const rankDifference = college.closing_rank - rank;
+            const closingRank = Number(college.closing_rank);
+
+            const difference = closingRank - studentRank;
             const percentageDifference =
-                (rankDifference / rank) * 100;
+                (difference / studentRank) * 100;
 
             let prediction;
 
             if (percentageDifference >= 20) {
-                prediction = "Safe";
+                prediction = "Safer Chance";
             } else if (percentageDifference >= 0) {
-                prediction = "Moderate";
+                prediction = "Moderate Chance";
             } else {
-                prediction = "Ambitious";
+                prediction = "Lower Chance";
             }
 
             return {
                 ...college,
                 prediction
             };
+        });
+
+        // Sort by chance category
+        const predictionOrder = {
+            "Safer Chance": 1,
+            "Moderate Chance": 2,
+            "Lower Chance": 3
+        };
+
+        results.sort((a, b) => {
+            if (
+                predictionOrder[a.prediction] !==
+                predictionOrder[b.prediction]
+            ) {
+                return (
+                    predictionOrder[a.prediction] -
+                    predictionOrder[b.prediction]
+                );
+            }
+
+            return Number(a.closing_rank) - Number(b.closing_rank);
         });
 
         res.json({
