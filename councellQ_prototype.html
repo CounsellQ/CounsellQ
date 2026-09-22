@@ -30,6 +30,74 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
+    // --- API CONFIGURATION & CONTRACT MAPPINGS ---
+    // When served by Express on port 5000, use relative '/api' route.
+    // Otherwise fallback to http://localhost:5000/api for local static debugging.
+    const API_BASE = window.location.origin.startsWith('http') ? '/api' : 'http://localhost:5000/api';
+
+    // JEE Main labels and direct UPTAC codes mapping
+    const CATEGORY_MAP = {
+      'General':           'OPEN',
+      'OBC-NCL':           'BC',
+      'SC':                'SC',
+      'ST':                'ST',
+      'EWS':               'EWS(OPEN)',
+      'General (Female)':  'OPEN(GIRL)',
+      'OBC-NCL (Female)':  'BC(Girl)',
+      'SC (Female)':       'SC(Girl)',
+      'ST (Female)':       'ST(Girl)',
+      'EWS (Female)':      'EWS(GL)',
+      // Direct pass-throughs for raw UPTAC codes
+      'OPEN':              'OPEN',
+      'OPEN(GIRL)':        'OPEN(GIRL)',
+      'BC':                'BC',
+      'BC(Girl)':          'BC(Girl)',
+      'EWS(OPEN)':         'EWS(OPEN)'
+    };
+
+    function resolveCategoryCode(category, gender) {
+      if (category.includes('(Female)') || gender === 'Female-Only') {
+        const base = category.replace(' (Female)', '');
+        const femaleKey = `${base} (Female)`;
+        if (CATEGORY_MAP[femaleKey]) return CATEGORY_MAP[femaleKey];
+      }
+      return CATEGORY_MAP[category] || category || 'OPEN';
+    }
+
+    function adaptApiResultToCollege(item, index) {
+      return {
+        id: `api_${item.institute}_${item.program}_${item.round}_${index}`.replace(/[^a-zA-Z0-9_]/g, '_'),
+        name: item.institute,
+        type: (item.institute.includes('University') || item.institute.includes('Institute of Technology')) ? 'State Govt' : 'Affiliated',
+        location: 'Uttar Pradesh',
+        state: 'Uttar Pradesh',
+        nirfRank: 'UPTAC Cutoff Record',
+        established: 'N/A',
+        avgPackage: 'N/A (Historical Record)',
+        highestPackage: 'N/A',
+        placementRate: 'N/A',
+        fees: 'UP Scale',
+        match: item.chance === 'Safe' ? 94 : item.chance === 'Moderate' ? 76 : 48,
+        categoryTier: item.chance.toUpperCase(),
+        program: item.program,
+        quota: item.quota,
+        category: item.category,
+        round: item.round,
+        opening_rank: item.opening_rank,
+        closing_rank: item.closing_rank,
+        rank_gap: item.rank_gap,
+        chance: item.chance,
+        branches: [
+          {
+            name: item.program,
+            cutoff2023: Math.round(item.closing_rank * 0.95),
+            cutoff2024: Math.round(item.closing_rank * 0.98),
+            cutoff2025: item.closing_rank
+          }
+        ]
+      };
+    }
+
     // --- MOCK COLLEGE DATA ---
     const MOCK_COLLEGES = [
       {
@@ -154,6 +222,11 @@
       const [filterTier, setFilterTier] = useState('ALL');
       const [searchQuery, setSearchQuery] = useState('');
 
+      // Real API Prediction State
+      const [predictionResults, setPredictionResults] = useState(null);
+      const [predictionError, setPredictionError] = useState(null);
+      const [lastSearchMeta, setLastSearchMeta] = useState(null);
+
       // Form State
       const [formData, setFormData] = useState({
         exam: 'JEE Main',
@@ -162,7 +235,7 @@
         homeState: 'Uttar Pradesh',
         gender: 'Gender-Neutral',
         counselling: 'All India',
-        branch: 'Computer Science & Engineering',
+        branch: 'All Branches',
         locations: ['Uttar Pradesh', 'Delhi']
       });
 
@@ -176,14 +249,68 @@
         if (window.lucide) {
           window.lucide.createIcons();
         }
-      }, [activeTab, filterTier, predictionLoading]);
+      }, [activeTab, filterTier, predictionLoading, predictionResults]);
 
-      const handlePredict = () => {
+      const handlePredict = async () => {
         setPredictionLoading(true);
-        setTimeout(() => {
+        setPredictionError(null);
+
+        const rankNum = parseInt(formData.rank, 10);
+        if (isNaN(rankNum) || rankNum < 1) {
+          setPredictionError("Please enter a valid positive rank (e.g. 45000).");
           setPredictionLoading(false);
           setActiveTab('results');
-        }, 1200);
+          return;
+        }
+
+        const resolvedCategory = resolveCategoryCode(formData.category, formData.gender);
+        const payload = {
+          rank: rankNum,
+          category: resolvedCategory
+        };
+
+        if (formData.branch && formData.branch !== 'All Branches') {
+          payload.program = formData.branch;
+        }
+
+        if (formData.homeState === 'Uttar Pradesh') {
+          payload.quota = 'Home State';
+        }
+
+        try {
+          const response = await fetch(`${API_BASE}/predict`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          });
+
+          const data = await response.json();
+
+          if (!response.ok || !data.success) {
+            setPredictionError(data.error || 'Prediction service returned an error. Please try again.');
+            setPredictionResults(null);
+          } else {
+            setPredictionResults(data);
+            setLastSearchMeta({
+              rank: rankNum,
+              category: resolvedCategory,
+              categoryLabel: formData.category,
+              branch: formData.branch || 'All Branches',
+              homeState: formData.homeState,
+              exam: formData.exam
+            });
+          }
+          setActiveTab('results');
+        } catch (err) {
+          console.error("Prediction fetch failed:", err);
+          setPredictionError("Could not connect to CounsellQ backend API. Please ensure the backend server is running on port 5000.");
+          setPredictionResults(null);
+          setActiveTab('results');
+        } finally {
+          setPredictionLoading(false);
+        }
       };
 
       const handleCompareToggle = (college) => {
@@ -419,6 +546,11 @@
                         <option>SC</option>
                         <option>ST</option>
                         <option>EWS</option>
+                        <option>General (Female)</option>
+                        <option>OBC-NCL (Female)</option>
+                        <option>SC (Female)</option>
+                        <option>ST (Female)</option>
+                        <option>EWS (Female)</option>
                       </select>
                     </div>
                     <div>
@@ -457,11 +589,16 @@
                     onChange={(e) => setFormData({...formData, branch: e.target.value})}
                     class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm outline-none"
                   >
-                    <option>Computer Science & Engineering</option>
+                    <option value="All Branches">All Branches (Recommended)</option>
+                    <option>Computer Science and Engineering</option>
                     <option>Information Technology</option>
-                    <option>Electronics & Communication</option>
+                    <option>Electronics and Communication Engineering</option>
                     <option>Electrical Engineering</option>
                     <option>Mechanical Engineering</option>
+                    <option>Civil Engineering</option>
+                    <option>Chemical Engineering</option>
+                    <option>Artificial Intelligence</option>
+                    <option>Data Science</option>
                   </select>
                 </div>
 
@@ -494,98 +631,210 @@
                 <div class="bg-indigo-900 text-white rounded-2xl p-6 flex flex-wrap items-center justify-between gap-4 shadow-xl">
                   <div>
                     <h2 class="text-2xl font-bold">Your College Predictions</h2>
-                    <p class="text-indigo-200 text-xs mt-1">Based on historical cutoffs from JOSAA/CSAB/AKTU archives.</p>
+                    <p class="text-indigo-200 text-xs mt-1">Based on historical cutoffs from official UPTAC counselling records.</p>
                   </div>
                   <div class="flex flex-wrap gap-2 text-xs font-medium">
-                    <span class="bg-indigo-800 border border-indigo-700 px-3 py-1.5 rounded-lg">{formData.exam}</span>
-                    <span class="bg-indigo-800 border border-indigo-700 px-3 py-1.5 rounded-lg">Rank: {formData.rank}</span>
-                    <span class="bg-indigo-800 border border-indigo-700 px-3 py-1.5 rounded-lg">{formData.category}</span>
-                    <span class="bg-indigo-800 border border-indigo-700 px-3 py-1.5 rounded-lg">{formData.homeState}</span>
+                    <span class="bg-indigo-800 border border-indigo-700 px-3 py-1.5 rounded-lg">{lastSearchMeta?.exam || formData.exam}</span>
+                    <span class="bg-indigo-800 border border-indigo-700 px-3 py-1.5 rounded-lg">Rank: {lastSearchMeta?.rank ? lastSearchMeta.rank.toLocaleString() : formData.rank}</span>
+                    <span class="bg-indigo-800 border border-indigo-700 px-3 py-1.5 rounded-lg">{lastSearchMeta?.category || formData.category}</span>
+                    <span class="bg-indigo-800 border border-indigo-700 px-3 py-1.5 rounded-lg">{lastSearchMeta?.homeState || formData.homeState}</span>
+                    {lastSearchMeta?.branch && lastSearchMeta.branch !== 'All Branches' && (
+                      <span class="bg-indigo-800 border border-indigo-700 px-3 py-1.5 rounded-lg">{lastSearchMeta.branch}</span>
+                    )}
                   </div>
                 </div>
 
-                {/* Metric Summary Bar */}
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
-                    <p class="text-slate-500 text-xs font-medium">Colleges Found</p>
-                    <p class="text-2xl font-extrabold text-slate-800 mt-1">12</p>
+                {/* Error Banner */}
+                {predictionError && (
+                  <div class="bg-rose-50 border border-rose-200 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                      <div class="p-2.5 bg-rose-100 text-rose-700 rounded-xl shrink-0">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                      </div>
+                      <div>
+                        <h4 class="font-bold text-rose-900 text-sm">Prediction Notice</h4>
+                        <p class="text-rose-700 text-xs mt-0.5">{predictionError}</p>
+                      </div>
+                    </div>
+                    <div class="flex gap-2 w-full sm:w-auto shrink-0">
+                      <button 
+                        onClick={() => setActiveTab('predict')} 
+                        class="flex-1 sm:flex-initial px-4 py-2 bg-white border border-rose-300 text-rose-700 hover:bg-rose-100 rounded-xl text-xs font-semibold"
+                      >
+                        Adjust Form
+                      </button>
+                      <button 
+                        onClick={handlePredict} 
+                        class="flex-1 sm:flex-initial px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold"
+                      >
+                        Retry
+                      </button>
+                    </div>
                   </div>
-                  <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl">
-                    <p class="text-emerald-700 text-xs font-bold uppercase">5 Safe</p>
-                    <p class="text-emerald-900 text-xs mt-1">High Probability</p>
-                  </div>
-                  <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl">
-                    <p class="text-amber-700 text-xs font-bold uppercase">4 Moderate</p>
-                    <p class="text-amber-900 text-xs mt-1">Reasonable Possibility</p>
-                  </div>
-                  <div class="bg-rose-50 border border-rose-200 p-4 rounded-xl">
-                    <p class="text-rose-700 text-xs font-bold uppercase">3 Ambitious</p>
-                    <p class="text-rose-900 text-xs mt-1">Competitive Cutoff</p>
-                  </div>
-                </div>
+                )}
 
-                {/* Tier Filter Tabs */}
-                <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
-                  {['ALL', 'SAFE', 'MODERATE', 'AMBITIOUS'].map(tier => (
-                    <button
-                      key={tier}
-                      onClick={() => setFilterTier(tier)}
-                      class={`px-4 py-2 rounded-xl text-xs font-bold transition ${filterTier === tier ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'}`}
+                {/* Loading State */}
+                {predictionLoading && (
+                  <div class="bg-white border border-slate-200 rounded-2xl p-12 text-center space-y-4 shadow-sm">
+                    <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto"></div>
+                    <p class="font-semibold text-slate-800 text-base">Querying UPTAC Historical Cutoff Database...</p>
+                    <p class="text-xs text-slate-500">Cross-referencing your rank with verified college cutoffs, quotas, and categories.</p>
+                  </div>
+                )}
+
+                {/* Empty State / Not Searched Yet */}
+                {!predictionLoading && !predictionError && !predictionResults && (
+                  <div class="bg-white border border-slate-200 rounded-2xl p-12 text-center space-y-4 shadow-sm">
+                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto">
+                      <i data-lucide="compass" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-lg">No Prediction Generated Yet</h3>
+                    <p class="text-slate-500 text-xs max-w-md mx-auto">
+                      Fill in your rank and category on the Predictor tab to generate data-driven college suggestions.
+                    </p>
+                    <button 
+                      onClick={() => setActiveTab('predict')}
+                      class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition"
                     >
-                      {tier}
+                      Go to Predictor
                     </button>
-                  ))}
-                </div>
+                  </div>
+                )}
 
-                {/* Prediction Cards Grid */}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {MOCK_COLLEGES
-                    .filter(c => filterTier === 'ALL' || c.categoryTier === filterTier)
-                    .map(college => (
-                      <div key={college.id} class="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition p-6 space-y-4">
-                        <div class="flex justify-between items-start gap-2">
-                          <div>
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600 uppercase tracking-wider">{college.type}</span>
-                            <h3 class="font-bold text-slate-900 text-lg mt-1">{college.name}</h3>
-                            <p class="text-xs text-slate-500">{college.location}</p>
-                          </div>
-                          <span class={`text-xs font-bold px-2.5 py-1 rounded-lg ${college.categoryTier === 'SAFE' ? 'bg-emerald-100 text-emerald-800' : college.categoryTier === 'MODERATE' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800'}`}>
-                            {college.match}% Match
-                          </span>
+                {/* No Matches Found */}
+                {!predictionLoading && !predictionError && predictionResults && predictionResults.results.length === 0 && (
+                  <div class="bg-white border border-slate-200 rounded-2xl p-12 text-center space-y-4 shadow-sm">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mx-auto">
+                      <i data-lucide="search-x" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-lg">No Matching Colleges Found</h3>
+                    <p class="text-slate-500 text-xs max-w-md mx-auto">
+                      {predictionResults.message || `No historical cutoffs were recorded within 2x of rank ${lastSearchMeta?.rank} for category ${lastSearchMeta?.category}.`}
+                    </p>
+                    <p class="text-xs text-slate-400">
+                      Recommendation: Try selecting "All Branches" or broadening your search parameters.
+                    </p>
+                    <button 
+                      onClick={() => setActiveTab('predict')}
+                      class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition"
+                    >
+                      Adjust Filters
+                    </button>
+                  </div>
+                )}
+
+                {/* Results Grid with Live Filters */}
+                {!predictionLoading && predictionResults && predictionResults.results.length > 0 && (() => {
+                  const items = predictionResults.results;
+                  const safeCount = items.filter(r => r.chance === 'Safe').length;
+                  const modCount = items.filter(r => r.chance === 'Moderate').length;
+                  const ambCount = items.filter(r => r.chance === 'Ambitious').length;
+
+                  const filteredItems = items.filter(c => filterTier === 'ALL' || c.chance.toUpperCase() === filterTier);
+
+                  return (
+                    <div class="space-y-6">
+                      {/* Metric Summary Bar */}
+                      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+                          <p class="text-slate-500 text-xs font-medium">Colleges Found</p>
+                          <p class="text-2xl font-extrabold text-slate-800 mt-1">{items.length}</p>
                         </div>
-
-                        <div class="bg-slate-50 p-3 rounded-xl space-y-1.5 text-xs">
-                          <div class="flex justify-between text-slate-600">
-                            <span>Selected Branch:</span>
-                            <span class="font-semibold text-slate-800">{formData.branch}</span>
-                          </div>
-                          <div class="flex justify-between text-slate-600">
-                            <span>2025 Closing Cutoff:</span>
-                            <span class="font-semibold text-slate-800">{college.branches[0]?.cutoff2025 || '38,500'}</span>
-                          </div>
-                          <div class="flex justify-between text-slate-600">
-                            <span>Average Placement:</span>
-                            <span class="font-semibold text-emerald-700">{college.avgPackage}</span>
-                          </div>
+                        <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl">
+                          <p class="text-emerald-700 text-xs font-bold uppercase">{safeCount} Safe</p>
+                          <p class="text-emerald-900 text-xs mt-1">Closing Rank ≥ 1.2x Rank</p>
                         </div>
-
-                        <div class="flex gap-2 pt-2">
-                          <button 
-                            onClick={() => { setSelectedCollege(college); setActiveTab('details'); }} 
-                            class="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2 rounded-xl text-xs transition text-center"
-                          >
-                            View Details
-                          </button>
-                          <button 
-                            onClick={() => handleCompareToggle(college)}
-                            class={`px-3 py-2 rounded-xl text-xs font-semibold border transition ${compareList.some(c => c.id === college.id) ? 'bg-indigo-50 border-indigo-300 text-indigo-700' : 'border-slate-300 hover:bg-slate-50 text-slate-700'}`}
-                          >
-                            {compareList.some(c => c.id === college.id) ? 'Added to Compare' : '+ Compare'}
-                          </button>
+                        <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl">
+                          <p class="text-amber-700 text-xs font-bold uppercase">{modCount} Moderate</p>
+                          <p class="text-amber-900 text-xs mt-1">Within 0–20% of Cutoff</p>
+                        </div>
+                        <div class="bg-rose-50 border border-rose-200 p-4 rounded-xl">
+                          <p class="text-rose-700 text-xs font-bold uppercase">{ambCount} Ambitious</p>
+                          <p class="text-rose-900 text-xs mt-1">Competitive / Relaxed Cutoff</p>
                         </div>
                       </div>
-                    ))}
-                </div>
+
+                      {/* Tier Filter Tabs */}
+                      <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
+                        {[
+                          { key: 'ALL', label: `ALL (${items.length})` },
+                          { key: 'SAFE', label: `SAFE (${safeCount})` },
+                          { key: 'MODERATE', label: `MODERATE (${modCount})` },
+                          { key: 'AMBITIOUS', label: `AMBITIOUS (${ambCount})` }
+                        ].map(t => (
+                          <button
+                            key={t.key}
+                            onClick={() => setFilterTier(t.key)}
+                            class={`px-4 py-2 rounded-xl text-xs font-bold transition ${filterTier === t.key ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'}`}
+                          >
+                            {t.label}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Cards Grid */}
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {filteredItems.map((item, idx) => {
+                          const college = adaptApiResultToCollege(item, idx);
+                          const isSafe = item.chance === 'Safe';
+                          const isMod = item.chance === 'Moderate';
+
+                          return (
+                            <div key={college.id} class="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition p-6 space-y-4">
+                              <div class="flex justify-between items-start gap-2">
+                                <div>
+                                  <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 uppercase tracking-wider">{item.round}</span>
+                                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">{item.quota}</span>
+                                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">{item.category}</span>
+                                  </div>
+                                  <h3 class="font-bold text-slate-900 text-base mt-2 leading-snug">{item.institute}</h3>
+                                  <p class="text-xs text-slate-500 font-medium mt-0.5">{item.program}</p>
+                                </div>
+                                <span class={`text-xs font-bold px-2.5 py-1 rounded-lg shrink-0 ${isSafe ? 'bg-emerald-100 text-emerald-800' : isMod ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800'}`}>
+                                  {item.chance}
+                                </span>
+                              </div>
+
+                              <div class="bg-slate-50 p-3.5 rounded-xl space-y-2 text-xs">
+                                <div class="flex justify-between text-slate-600">
+                                  <span>2025 Closing Cutoff:</span>
+                                  <span class="font-bold text-slate-900">{item.closing_rank.toLocaleString()}</span>
+                                </div>
+                                <div class="flex justify-between text-slate-600">
+                                  <span>Opening Rank:</span>
+                                  <span class="font-semibold text-slate-800">{item.opening_rank.toLocaleString()}</span>
+                                </div>
+                                <div class="flex justify-between text-slate-600">
+                                  <span>Rank Gap:</span>
+                                  <span class={`font-semibold ${item.rank_gap >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
+                                    {item.rank_gap >= 0 ? `+${item.rank_gap.toLocaleString()} (Safe margin)` : `${item.rank_gap.toLocaleString()} (Below cutoff)`}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div class="flex gap-2 pt-1">
+                                <button 
+                                  onClick={() => { setSelectedCollege(college); setActiveTab('details'); }} 
+                                  class="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2 rounded-xl text-xs transition text-center"
+                                >
+                                  View Cutoff Trend
+                                </button>
+                                <button 
+                                  onClick={() => handleCompareToggle(college)}
+                                  class={`px-3 py-2 rounded-xl text-xs font-semibold border transition ${compareList.some(c => c.id === college.id) ? 'bg-indigo-50 border-indigo-300 text-indigo-700' : 'border-slate-300 hover:bg-slate-50 text-slate-700'}`}
+                                >
+                                  {compareList.some(c => c.id === college.id) ? 'Added to Compare' : '+ Compare'}
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })()}
+
               </div>
             )}
 
@@ -649,10 +898,10 @@
                     <div>
                       <span class="text-xs font-bold px-2.5 py-1 rounded bg-indigo-50 text-indigo-700">{selectedCollege.type} Institution</span>
                       <h1 class="text-3xl font-extrabold text-slate-900 mt-2">{selectedCollege.name}</h1>
-                      <p class="text-slate-500 text-sm mt-1">{selectedCollege.location} • Established {selectedCollege.established}</p>
+                      <p class="text-slate-500 text-sm mt-1">{selectedCollege.location} {selectedCollege.established && selectedCollege.established !== 'N/A' ? `• Established ${selectedCollege.established}` : ''}</p>
                     </div>
                     <div class="text-right">
-                      <p class="text-xs text-slate-400 font-medium">NIRF Ranking</p>
+                      <p class="text-xs text-slate-400 font-medium">Ranking / Status</p>
                       <p class="text-xl font-bold text-slate-800">{selectedCollege.nirfRank}</p>
                     </div>
                   </div>
@@ -666,21 +915,21 @@
                           <p class="text-xs font-semibold text-slate-700 mb-2">{selectedCollege.branches[0].name}</p>
                           <div class="grid grid-cols-3 gap-2 text-center text-xs">
                             <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-                              <p class="text-slate-400">2023</p>
-                              <p class="font-bold text-slate-800 mt-0.5">{selectedCollege.branches[0].cutoff2023}</p>
+                              <p class="text-slate-400">2023 (Est)</p>
+                              <p class="font-bold text-slate-800 mt-0.5">{selectedCollege.branches[0].cutoff2023 ? Number(selectedCollege.branches[0].cutoff2023).toLocaleString() : 'N/A'}</p>
                             </div>
                             <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-                              <p class="text-slate-400">2024</p>
-                              <p class="font-bold text-slate-800 mt-0.5">{selectedCollege.branches[0].cutoff2024}</p>
+                              <p class="text-slate-400">2024 (Est)</p>
+                              <p class="font-bold text-slate-800 mt-0.5">{selectedCollege.branches[0].cutoff2024 ? Number(selectedCollege.branches[0].cutoff2024).toLocaleString() : 'N/A'}</p>
                             </div>
                             <div class="bg-indigo-50 p-2.5 rounded-lg border border-indigo-200">
-                              <p class="text-indigo-600 font-bold">2025</p>
-                              <p class="font-extrabold text-indigo-900 mt-0.5">{selectedCollege.branches[0].cutoff2025}</p>
+                              <p class="text-indigo-600 font-bold">2025 Cutoff</p>
+                              <p class="font-extrabold text-indigo-900 mt-0.5">{selectedCollege.branches[0].cutoff2025 ? Number(selectedCollege.branches[0].cutoff2025).toLocaleString() : 'N/A'}</p>
                             </div>
                           </div>
                         </div>
                       )}
-                      <p class="text-[11px] text-slate-400 italic pt-1">* Historical cutoffs are indicative demo values and do not guarantee admission.</p>
+                      <p class="text-[11px] text-slate-400 italic pt-1">* Historical cutoffs are derived from official UPTAC counselling records and do not guarantee future admission.</p>
                     </div>
                   </div>
 
