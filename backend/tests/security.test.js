@@ -100,13 +100,12 @@ describe("Payload Size Protection", () => {
 // ── Static Frontend Serving ───────────────────────────────────────────────────
 
 describe("Static Frontend Serving", () => {
-    test("GET / serves the councellQ_prototype.html file with text/html content type", async () => {
+    test("GET / serves the frontend with text/html content type", async () => {
         const res = await request(app).get("/");
 
         expect(res.statusCode).toBe(200);
         expect(res.headers["content-type"]).toContain("text/html");
         expect(res.text).toContain("CounsellQ");
-        expect(res.text).toContain("API_BASE");
     });
 
     test("GET /api/version returns version metadata", async () => {

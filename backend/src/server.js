@@ -111,10 +111,12 @@ app.use("/api", predictionRoutes);
 // ── Static Frontend Serving ───────────────────────────────────────────────────
 
 const candidateHtmlPaths = [
+    path.resolve(__dirname, "../../frontend/index.html"),
+    path.resolve(__dirname, "../frontend/index.html"),
+    path.resolve(process.cwd(), "frontend/index.html"),
+    path.resolve(process.cwd(), "../frontend/index.html"),
     path.resolve(__dirname, "../../councellQ_prototype.html"),
-    path.resolve(__dirname, "../councellQ_prototype.html"),
-    path.resolve(process.cwd(), "councellQ_prototype.html"),
-    path.resolve(process.cwd(), "../councellQ_prototype.html")
+    path.resolve(process.cwd(), "councellQ_prototype.html")
 ];
 const FRONTEND_FILE = candidateHtmlPaths.find((p) => fs.existsSync(p)) || candidateHtmlPaths[0];
 const FRONTEND_DIR = path.dirname(FRONTEND_FILE);
@@ -127,7 +129,7 @@ app.get("/", (req, res) => {
     } else {
         res.status(404).json({
             success: false,
-            error: "Frontend prototype file 'councellQ_prototype.html' not found."
+            error: "Frontend application file 'index.html' not found."
         });
     }
 });
