@@ -81,7 +81,16 @@ const predictColleges = async (req, res) => {
                             'program', a.program,
                             'validity', a.validity,
                             'updated_year', a.updated_year,
-                            'source', a.source
+                            'source', a.source,
+                            'valid_from', a.valid_from,
+                            'valid_until', a.valid_until,
+                            'source_url', a.source_url,
+                            'last_verified', a.last_verified,
+                            'derived_status', CASE
+                                WHEN a.valid_until IS NULL THEN 'DATE_NOT_AVAILABLE'
+                                WHEN a.valid_until >= CURRENT_DATE THEN 'CURRENTLY_VALID'
+                                ELSE 'EXPIRED'
+                            END
                         )
                         ORDER BY a.accreditation_type
                     ) AS accreditation
