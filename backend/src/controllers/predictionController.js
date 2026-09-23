@@ -30,41 +30,64 @@ const predictColleges = async (req, res) => {
         const values = [category];
         let parameterIndex = 2;
 
+        /*
+         * Get UPTAC cutoff data and attach NIRF information
+         * only when a verified college mapping exists.
+         */
         let query = `
             SELECT
-                institute,
-                program,
-                quota,
-                category,
-                round,
-                opening_rank,
-                closing_rank
-            FROM cutoffs
-            WHERE category = $1
+                c.institute,
+                c.program,
+                c.quota,
+                c.category,
+                c.round,
+                c.opening_rank,
+                c.closing_rank,
+                n.nirf_year,
+                n.rank AS nirf_rank,
+                n.rank_band AS nirf_rank_band,
+                n.score AS nirf_score
+            FROM cutoffs c
+            LEFT JOIN college_nirf_map m
+                ON c.institute = m.uptac_institute
+                AND m.verified = TRUE
+            LEFT JOIN nirf_rankings n
+                ON m.nirf_institute = n.institute_name
+                AND n.nirf_year = 2025
+                AND n.ranking_category = 'Engineering'
+            WHERE c.category = $1
         `;
 
+        // Filter by program
         if (program) {
-            query += ` AND program ILIKE $${parameterIndex}`;
+            query += ` AND c.program ILIKE $${parameterIndex}`;
             values.push(`%${program}%`);
             parameterIndex++;
         }
 
+        // Filter by quota
         if (quota) {
-            query += ` AND quota = $${parameterIndex}`;
+            query += ` AND c.quota = $${parameterIndex}`;
             values.push(quota);
             parameterIndex++;
         }
 
+        // Filter by round
         if (round) {
-            query += ` AND round = $${parameterIndex}`;
-            values.push(round);
+            const normalizedRound =
+            String(round).startsWith("Round ")
+            ? String(round)
+            : `Round ${round}`;
+            
+            query += ` AND c.round = $${parameterIndex}`;
+            values.push(normalizedRound);
             parameterIndex++;
         }
 
-        // Get historical cutoffs up to twice the student's rank
+        // Keep the existing prediction range
         query += `
-            AND closing_rank <= $${parameterIndex}
-            ORDER BY closing_rank ASC
+            AND c.closing_rank <= $${parameterIndex}
+            ORDER BY c.closing_rank ASC
             LIMIT 100
         `;
 
@@ -72,11 +95,12 @@ const predictColleges = async (req, res) => {
 
         const result = await pool.query(query, values);
 
-        // Classify each college
+        // Calculate prediction category
         const results = result.rows.map((college) => {
             const closingRank = Number(college.closing_rank);
 
             const difference = closingRank - studentRank;
+
             const percentageDifference =
                 (difference / studentRank) * 100;
 
@@ -91,12 +115,28 @@ const predictColleges = async (req, res) => {
             }
 
             return {
-                ...college,
-                prediction
+                institute: college.institute,
+                program: college.program,
+                quota: college.quota,
+                category: college.category,
+                round: college.round,
+                opening_rank: college.opening_rank,
+                closing_rank: college.closing_rank,
+                prediction,
+
+                // NIRF information
+                nirf: college.nirf_year
+                    ? {
+                        year: college.nirf_year,
+                        rank: college.nirf_rank,
+                        rank_band: college.nirf_rank_band,
+                        score: college.nirf_score
+                    }
+                    : null
             };
         });
 
-        // Sort by chance category
+        // Sort predictions
         const predictionOrder = {
             "Safer Chance": 1,
             "Moderate Chance": 2,
@@ -114,7 +154,10 @@ const predictColleges = async (req, res) => {
                 );
             }
 
-            return Number(a.closing_rank) - Number(b.closing_rank);
+            return (
+                Number(a.closing_rank) -
+                Number(b.closing_rank)
+            );
         });
 
         res.json({
