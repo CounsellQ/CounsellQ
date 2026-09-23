@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/predict";
+const API_URL = "https://counsellq-backend.onrender.com/api/predict";
 
 const categoryMap = {
   "General": "OPEN",
