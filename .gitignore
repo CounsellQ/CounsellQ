@@ -11,3 +11,5 @@ node_modules/
 # Build output
 dist/
 build/
+import_nirf.env
+import_nirf.js
