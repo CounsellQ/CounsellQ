@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CounsellQ — Your Rank. Your Choices. Your College.</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <button class="brand" data-page="home">
+        <span class="brand-icon"><i data-lucide="graduation-cap"></i></span>
+        <span>
+          <strong>Counsell<span>Q</span></strong>
+          <small>Your Rank. Your Choices. Your College.</small>
+        </span>
+      </button>
+
+      <nav class="nav-links">
+        <button data-page="home">Home</button>
+        <button data-page="predict">Predict Colleges</button>
+        <button data-page="results">Predictions Dashboard</button>
+        <button data-page="compare">Compare <span id="compareCount">(0)</span></button>
+      </nav>
+
+      <button class="primary-btn small" data-page="predict">
+        <i data-lucide="sparkles"></i> Start Prediction
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="home" class="page active">
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow"><i data-lucide="shield-check"></i> Smart Admission Insights</div>
+          <h1>Find the Colleges You Can <span>Actually Get</span>.</h1>
+          <p>Enter your rank, category, and preferred branch. CounsellQ analyzes UPTAC cutoff records to show colleges that match your rank.</p>
+          <button class="primary-btn" data-page="predict"><i data-lucide="compass"></i> Predict My Colleges</button>
+        </div>
+
+        <div class="preview-card">
+          <div class="preview-head">
+            <div class="avatar">CQ</div>
+            <div><strong>CounsellQ Prediction</strong><small>Rank-based UPTAC college matching</small></div>
+          </div>
+          <div class="preview-row"><span>Your Rank</span><strong id="previewRank">45,000</strong></div>
+          <div class="preview-row"><span>Category</span><strong id="previewCategory">General</strong></div>
+          <div class="preview-row"><span>Branch</span><strong id="previewBranch">Computer Science & Engineering</strong></div>
+          <div class="preview-foot"><span>Prediction source</span><strong>UPTAC cutoff database</strong></div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>How CounsellQ Works</h2>
+        <p>A simple workflow from rank to college options.</p>
+      </div>
+
+      <div class="steps">
+        <article><b>1</b><h3>Enter Your Details</h3><p>Provide your rank, category and preferred branch.</p></article>
+        <article><b>2</b><h3>Match Cutoffs</h3><p>CounsellQ queries historical UPTAC cutoff records.</p></article>
+        <article><b>3</b><h3>Categorize Options</h3><p>Results are grouped into safer, moderate and lower chance options.</p></article>
+        <article><b>4</b><h3>Compare Choices</h3><p>Review cutoff details and compare selected colleges.</p></article>
+      </div>
+    </section>
+
+    <section id="predict" class="page">
+      <div class="section-heading"><h2>Predict Your Colleges</h2><p>Enter your counselling details to generate personalized options.</p></div>
+      <form id="predictionForm" class="form-card">
+        <div class="form-grid">
+          <label>JEE Main Rank<input id="rank" type="number" min="1" value="45000" required></label>
+          <label>Category<select id="category"><option>General</option><option>OBC</option><option>SC</option><option>ST</option><option>EWS</option></select></label>
+          <label>Home State<select id="homeState"><option>UP Domicile</option><option>Other State</option></select></label>
+          <label>Preferred Branch<select id="branch">
+            <option>Computer Science & Engineering</option><option>Information Technology</option><option>Electronics & Communication</option><option>Electrical Engineering</option><option>Mechanical Engineering</option>
+          </select></label>
+          <label>Gender<select id="gender"><option>Male</option><option>Female</option></select></label>
+          <label>Round<select id="round"><option>Round 1</option><option>Round 2</option><option>Round 3</option></select></label>
+        </div>
+        <div id="formError" class="error hidden"></div>
+        <button id="predictBtn" class="primary-btn full" type="submit">Predict Colleges</button>
+      </form>
+    </section>
+
+    <section id="results" class="page">
+      <div class="results-header">
+        <div><h2>Predictions Dashboard</h2><p id="resultSummary">Run a prediction to see matching records.</p></div>
+        <button class="secondary-btn" data-page="predict">Modify Search</button>
+      </div>
+      <div id="filters" class="filters hidden"></div>
+      <div id="resultsGrid" class="cards"></div>
+    </section>
+
+    <section id="details" class="page">
+      <button class="back-btn" data-page="results">← Back to Results</button>
+      <div id="detailsCard"></div>
+    </section>
+
+    <section id="compare" class="page">
+      <div class="section-heading"><h2>College Comparison</h2><p>Compare up to three results from your prediction.</p></div>
+      <div id="compareContent"></div>
+    </section>
+  </main>
+
+  <footer>© 2026 CounsellQ • College prediction and counselling assistance system.</footer>
+  <script src="js/app.js"></script>
+</body>
+</html>
