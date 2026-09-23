@@ -27,7 +27,13 @@ require("dotenv").config({ path: path.join(__dirname, "../.env") });
 
 const pool = require("../src/db");
 
-const CSV_PATH = path.join(__dirname, "../../../data/counsellq_uptac_2025.csv");
+const candidatePaths = [
+    path.join(__dirname, "../../data/counsellq_uptac_2025.csv"),
+    path.join(__dirname, "../data/counsellq_uptac_2025.csv"),
+    path.join(process.cwd(), "data/counsellq_uptac_2025.csv"),
+    path.join(process.cwd(), "../data/counsellq_uptac_2025.csv")
+];
+const CSV_PATH = candidatePaths.find((p) => fs.existsSync(p)) || candidatePaths[0];
 
 /**
  * Parse one CSV line, respecting quoted fields with commas inside.

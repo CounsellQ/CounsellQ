@@ -7,6 +7,7 @@ const rateLimit = require("express-rate-limit");
 const morgan = require("morgan");
 const crypto = require("crypto");
 const path = require("path");
+const fs = require("fs");
 
 require("dotenv").config({ quiet: true });
 
@@ -109,13 +110,26 @@ app.use("/api", predictionRoutes);
 
 // ── Static Frontend Serving ───────────────────────────────────────────────────
 
-const FRONTEND_DIR = path.resolve(__dirname, "../../");
-const FRONTEND_FILE = path.join(FRONTEND_DIR, "councellQ_prototype.html");
+const candidateHtmlPaths = [
+    path.resolve(__dirname, "../../councellQ_prototype.html"),
+    path.resolve(__dirname, "../councellQ_prototype.html"),
+    path.resolve(process.cwd(), "councellQ_prototype.html"),
+    path.resolve(process.cwd(), "../councellQ_prototype.html")
+];
+const FRONTEND_FILE = candidateHtmlPaths.find((p) => fs.existsSync(p)) || candidateHtmlPaths[0];
+const FRONTEND_DIR = path.dirname(FRONTEND_FILE);
 
 app.use(express.static(FRONTEND_DIR));
 
 app.get("/", (req, res) => {
-    res.sendFile(FRONTEND_FILE);
+    if (fs.existsSync(FRONTEND_FILE)) {
+        res.sendFile(FRONTEND_FILE);
+    } else {
+        res.status(404).json({
+            success: false,
+            error: "Frontend prototype file 'councellQ_prototype.html' not found."
+        });
+    }
 });
 
 // ── 404 Handler ───────────────────────────────────────────────────────────────
