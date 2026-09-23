@@ -1,0 +1,13 @@
+# Local database backup
+counsellq_backup.dump
+
+# Environment variables / secrets
+.env
+.env.*
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
