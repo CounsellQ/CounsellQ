@@ -31,8 +31,17 @@ const predictColleges = async (req, res) => {
         let parameterIndex = 2;
 
         /*
-         * Get UPTAC cutoff data and attach NIRF information
-         * only when a verified college mapping exists.
+         * Get UPTAC cutoff data.
+         *
+         * NIRF:
+         * Attach only when a verified UPTAC -> NIRF mapping exists.
+         *
+         * Accreditation:
+         * - NAAC is institute-level.
+         * - NBA is program-level and is attached only when
+         *   the cutoff program exactly matches the accredited program.
+         *
+         * LATERAL aggregation keeps one row per cutoff.
          */
         let query = `
             SELECT
@@ -43,48 +52,89 @@ const predictColleges = async (req, res) => {
                 c.round,
                 c.opening_rank,
                 c.closing_rank,
+
                 n.nirf_year,
                 n.rank AS nirf_rank,
                 n.rank_band AS nirf_rank_band,
-                n.score AS nirf_score
+                n.score AS nirf_score,
+
+                COALESCE(acc.accreditation, '[]'::json) AS accreditation
+
             FROM cutoffs c
+
             LEFT JOIN college_nirf_map m
                 ON c.institute = m.uptac_institute
                 AND m.verified = TRUE
+
             LEFT JOIN nirf_rankings n
                 ON m.nirf_institute = n.institute_name
                 AND n.nirf_year = 2025
                 AND n.ranking_category = 'Engineering'
+
+            LEFT JOIN LATERAL (
+                SELECT
+                    json_agg(
+                        json_build_object(
+                            'type', a.accreditation_type,
+                            'status', a.accreditation_status,
+                            'grade', a.grade,
+                            'program', a.program,
+                            'validity', a.validity,
+                            'updated_year', a.updated_year,
+                            'source', a.source
+                        )
+                        ORDER BY a.accreditation_type
+                    ) AS accreditation
+
+                FROM college_accreditation_map cam
+
+                JOIN accreditations a
+                    ON cam.accreditation_institute = a.institute_name
+
+                WHERE cam.uptac_institute = c.institute
+                    AND cam.verified = TRUE
+
+                    AND (
+                        a.accreditation_type = 'NAAC'
+
+                        OR (
+                            a.accreditation_type = 'NBA'
+                            AND LOWER(TRIM(c.program))
+                                = LOWER(TRIM(a.program))
+                        )
+                    )
+            ) acc ON TRUE
+
             WHERE c.category = $1
         `;
 
-        // Filter by program
+        // Program filter
         if (program) {
             query += ` AND c.program ILIKE $${parameterIndex}`;
             values.push(`%${program}%`);
             parameterIndex++;
         }
 
-        // Filter by quota
+        // Quota filter
         if (quota) {
             query += ` AND c.quota = $${parameterIndex}`;
             values.push(quota);
             parameterIndex++;
         }
 
-        // Filter by round
+        // Round filter
         if (round) {
             const normalizedRound =
-            String(round).startsWith("Round ")
-            ? String(round)
-            : `Round ${round}`;
-            
+                String(round).startsWith("Round ")
+                    ? String(round)
+                    : `Round ${round}`;
+
             query += ` AND c.round = $${parameterIndex}`;
             values.push(normalizedRound);
             parameterIndex++;
         }
 
-        // Keep the existing prediction range
+        // Rank filter
         query += `
             AND c.closing_rank <= $${parameterIndex}
             ORDER BY c.closing_rank ASC
@@ -95,11 +145,12 @@ const predictColleges = async (req, res) => {
 
         const result = await pool.query(query, values);
 
-        // Calculate prediction category
+        // Format prediction results
         const results = result.rows.map((college) => {
             const closingRank = Number(college.closing_rank);
 
-            const difference = closingRank - studentRank;
+            const difference =
+                closingRank - studentRank;
 
             const percentageDifference =
                 (difference / studentRank) * 100;
@@ -122,9 +173,9 @@ const predictColleges = async (req, res) => {
                 round: college.round,
                 opening_rank: college.opening_rank,
                 closing_rank: college.closing_rank,
+
                 prediction,
 
-                // NIRF information
                 nirf: college.nirf_year
                     ? {
                         year: college.nirf_year,
@@ -132,11 +183,15 @@ const predictColleges = async (req, res) => {
                         rank_band: college.nirf_rank_band,
                         score: college.nirf_score
                     }
-                    : null
+                    : null,
+
+                accreditation:
+                    college.accreditation || []
             };
         });
 
-        // Sort predictions
+        // Sort by prediction category first,
+        // then by closing rank.
         const predictionOrder = {
             "Safer Chance": 1,
             "Moderate Chance": 2,
@@ -167,7 +222,10 @@ const predictColleges = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Prediction error:", error.message);
+        console.error(
+            "Prediction error:",
+            error.message
+        );
 
         res.status(500).json({
             success: false,
