@@ -265,6 +265,11 @@ const predictColleges = async (req, res) => {
         // ── Classify and sort ─────────────────────────────────────────────────
 
         const chanceOrder = { Safe: 1, Moderate: 2, Ambitious: 3 };
+        const predictionLabels = {
+            Safe: "Safer Chance",
+            Moderate: "Moderate Chance",
+            Ambitious: "Lower Chance"
+        };
 
         const results = dbResult.rows
             .map((row) => {
@@ -279,6 +284,7 @@ const predictColleges = async (req, res) => {
                     opening_rank: Number(row.opening_rank),
                     closing_rank: closingRank,
                     chance,
+                    prediction: predictionLabels[chance],
                     // Positive: closing rank is higher than student rank (better odds)
                     // Negative: closing rank is lower than student rank (historically harder)
                     rank_gap: closingRank - studentRank
