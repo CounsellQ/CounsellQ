@@ -331,4 +331,20 @@ ON CONFLICT (uptac_institute) DO UPDATE SET accreditation_institute=EXCLUDED.acc
 
 UPDATE accreditation_research_queue SET research_status='NBA_VERIFIED',notes='Official NBA record verified on 2026-09-24.',last_checked=CURRENT_DATE WHERE uptac_institute='DAYALBAGH EDUCATIONAL INSTITUTE,AGRA';
 
+
+-- 2026-09-24 verified Dronacharya Group of Institutions record.
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('Dronacharya Group of Institutions (Greater Noida)','NBA','Accredited','','Computer Science & Engineering','30-06-2027','2026','Official NBA Suo Moto disclosure','2024-07-01','2027-06-30','https://www.nbaind.org/files/rti/SuoMoto2025/4.5.8%28d%29.pdf','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
+
+INSERT INTO college_accreditation_map
+(uptac_institute, accreditation_institute, match_method, verified)
+VALUES
+('DRONACHARYA GROUP OF INSTITUTIONS,GAUTAM BUDDH NAGAR','Dronacharya Group of Institutions (Greater Noida)','official_nba_name_match',TRUE)
+ON CONFLICT (uptac_institute) DO UPDATE SET accreditation_institute=EXCLUDED.accreditation_institute,match_method=EXCLUDED.match_method,verified=EXCLUDED.verified;
+
+UPDATE accreditation_research_queue SET research_status='NBA_VERIFIED',notes='Official NBA record verified on 2026-09-24.',last_checked=CURRENT_DATE WHERE uptac_institute='DRONACHARYA GROUP OF INSTITUTIONS,GAUTAM BUDDH NAGAR';
+
 COMMIT;
