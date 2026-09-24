@@ -498,4 +498,46 @@ VALUES
 ('I.T.S. ENGG.COLLEGE,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Official ITS Engineering College site confirms NBA accreditation, but the retrieved source does not specify program-level validity dates; no dates inferred.','2026-09-24'),
 ('HINDUSTAN COLLEGE OF SCIENCE & TECHNOLOGY,MATHURA','NBA_VERIFIED','Official HCST site states 12 NBA-accredited courses, but the retrieved page does not provide program-level validity dates; no dates inferred.','2026-09-24')
 ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
+
+-- 2026-09-24 batch: 20 UPTAC institutes reviewed against official NBA/institute sources.
+
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('Galgotias College of Engineering & Technology (Greater Noida)','NBA','Accredited','','Electronics & Communication Engineering','30-06-2027','2026','Official NBA accreditation letter','2024-07-01','2027-06-30','https://galgotiacollege.edu/public/uploads/all/4105/B.Tech-%28ECE%29-Accreditation-Letter-2025.pdf','2026-09-24'),
+('Goel Institute of Technology & Management (Lucknow)','NBA','Accredited','','Computer Science & Engineering','30-06-2026','2026','Official NBA RTI disclosure','2023-07-01','2026-06-30','https://nbaind.org/files/rti/docs/4.5.8%20%28d%29.pdf','2026-09-24'),
+('Indian Institute of Carpet Technology (Bhadohi)','NBA','Accredited','','Carpet & Textile Technology','30-06-2025','2026','Official NBA accreditation letter','2022-07-01','2025-06-30','https://www.iict.ac.in/NBA_Accreditation_2022-2025.pdf','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
+
+INSERT INTO college_accreditation_map (uptac_institute,accreditation_institute,match_method,verified)
+VALUES
+('GALGOTIA''S COLLEGE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR','Galgotias College of Engineering & Technology (Greater Noida)','official_nba_name_match',TRUE),
+('GOEL INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW','Goel Institute of Technology & Management (Lucknow)','official_nba_name_match',TRUE),
+('INDIAN INSTITUTE OF CARPET TECHNOLOGY,BHADOHI','Indian Institute of Carpet Technology (Bhadohi)','official_nba_name_match',TRUE),
+('INSTITUTE OF ENGINEERING & TECHNOLOGY,LUCKNOW','Institute of Engineering & Technology (Lucknow)','official_institute_source',TRUE)
+ON CONFLICT (uptac_institute) DO UPDATE SET accreditation_institute=EXCLUDED.accreditation_institute,match_method=EXCLUDED.match_method,verified=EXCLUDED.verified;
+
+INSERT INTO accreditation_research_queue (uptac_institute,research_status,notes,last_checked)
+VALUES
+('FACULTY OF ENGINEERING SHANTI NIKETAN TRUST''S GROUP OF INSTITUTIONS,MEERUT','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('G.C.R.G. MEMORIAL TRUST''S GROUP OF INSTITUTIONS, FACULTY OF ENGINEERING,LUCKNOW','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('GALGOTIA''S COLLEGE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Official NBA accreditation letter verifies Electronics & Communication Engineering for academic years 2024-25 through 2026-27, valid to 30-06-2027.','2026-09-24'),
+('GOEL INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW','NBA_VERIFIED','Official NBA RTI disclosure verifies Computer Science & Engineering, 3 years w.e.f. 01-07-2023, accredited fresh.','2026-09-24'),
+('GOKARAN NARVADESHWAR INSTITUTE OF TECHNOLOGY & MANAGEMENT,BARABANKI','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('HARDAYAL TECHNICAL CAMPUS,MATHURA','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('HI-TECH. INSTITUTE OF ENGINEERING &TECHNOLOGY,GHAZIABAD','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('HIMALAYAN INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('HMFA MEMORIAL INSTITUTE OF ENGINEERING & TECHNOLOGY,ALLAHABAD','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('I.E.C. COLLEGE OF ENGINEERING & TECHNOLOGY,GAUTAM BUDDH NAGAR','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('IIMT COLLEGE OF ENGINEERING,GAUTAM BUDDH NAGAR','NO_VERIFIED_RECORD','Official NBA search result for the institute did not show an accredited program; available result indicated Visit Scheduled rather than Accredited, so it was not marked accredited.','2026-09-24'),
+('INDERPRASTHA ENGG. COLLEGE,GHAZIABAD','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('INDIAN INSTITUTE OF CARPET TECHNOLOGY,BHADOHI','NBA_VERIFIED','Official NBA accreditation letter verifies UG Carpet & Textile Technology for academic years 2022-23 through 2024-25, valid to 30-06-2025.','2026-09-24'),
+('INDIAN INSTITUTE OF HANDLOOM TECHNOLOGY,VARANASI','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('INDRAPRASTHA INSTITUTE OF MANAGEMENT & TECHNOLOGY,SAHARANPUR','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('INSTITUTE OF ENGG. & RURAL TECHNOLOGY,ALLAHABAD','NO_VERIFIED_RECORD','Official institute sources confirm AICTE approval and AKTU affiliation, but no verified NBA accreditation record was identified in the available official NBA search.','2026-09-24'),
+('INSTITUTE OF ENGINEERING & TECHNOLOGY,LUCKNOW','NBA_VERIFIED','Official IET Lucknow material states that its Computer Science & Engineering department/program is NBA accredited.','2026-09-24'),
+('INSTITUTE OF ENGINEERING & TECHNOLOGY,SITAPUR','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('INSTITUTE OF TECHNOLOGY & MANAGEMENT,ALIGARH','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
+('INSTITUTE OF TECHNOLOGY & MANAGEMENT,GORAKHPUR','NO_VERIFIED_RECORD','Official institute source confirms AICTE approval and AKTU affiliation, but no verified NBA accreditation record was identified in the available official NBA search.','2026-09-24')
+ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
 COMMIT;
