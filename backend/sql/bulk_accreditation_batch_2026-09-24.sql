@@ -347,4 +347,12 @@ ON CONFLICT (uptac_institute) DO UPDATE SET accreditation_institute=EXCLUDED.acc
 
 UPDATE accreditation_research_queue SET research_status='NBA_VERIFIED',notes='Official NBA record verified on 2026-09-24.',last_checked=CURRENT_DATE WHERE uptac_institute='DRONACHARYA GROUP OF INSTITUTIONS,GAUTAM BUDDH NAGAR';
 
+
+-- 2026-09-24 completion from official NBA RTI disclosure.
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('Sharda University (Gautam Bodda Nagar)','NBA','Accredited','','Civil Engineering','30-06-2026','2026','Official NBA RTI disclosure','2023-07-01','2026-06-30','https://www.nbaind.org/files/rti/docs/4.5.8%20%28d%29.pdf','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
+
 COMMIT;
