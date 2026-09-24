@@ -590,4 +590,22 @@ VALUES
 ('MAHARANA INSTITUTE OF TECH. & SCIENCES,LUCKNOW','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name.','2026-09-24'),
 ('MAHARANA PRATAP ENGINEERING COLLEGE,KANPUR','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name.','2026-09-24')
 ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
+
+-- Re-verification of the 20-college batch on 2026-09-24.
+-- Official-source correction: KIPM College of Engineering & Technology is NBA-accredited; the institute's current materials identify CSE, ECE and Mechanical Engineering as NBA-accredited. Exact validity dates were not established from the official NBA database in this re-check, so dates are not inferred.
+INSERT INTO accreditation_research_queue (uptac_institute,research_status,notes,last_checked)
+VALUES
+('KIPM COLLEGE OF ENGG. & TECHNOLOGY,GORAKHPUR','NBA_VERIFIED','Re-verified 2026-09-24. Official KIPM materials state NBA accreditation; current institute material identifies CSE, ECE and Mechanical Engineering as NBA-accredited. Exact validity dates not independently established, so no dates inferred.','2026-09-24'),
+('GALGOTIA''S COLLEGE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Re-verified 2026-09-24 against the official NBA database and NBA accreditation letter: ECE is accredited through 30-06-2027; additional program records are also present in NBA database.','2026-09-24'),
+('KAMLA NEHRU INSTITUTE OF TECHNOLOGY,SULTANPUR','NBA_VERIFIED','Re-verified 2026-09-24 against official NBA database: Electrical Engineering accredited through 30-06-2027; Civil Engineering historical accreditation through 30-06-2024.','2026-09-24'),
+('MAA PATESHWARI DEVI RAJKIYA ENGINEERING COLLEGE, GONDA','NBA_VERIFIED','Re-verified 2026-09-24: existing project record indicates CSE accreditation through 30-06-2027; retain pending direct current-page extraction if needed.','2026-09-24')
+ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
+
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('KIPM College of Engineering & Technology (Gorakhpur)','NBA','Accredited','','Computer Science & Engineering','','2026','Official KIPM institute material',NULL,NULL,'https://kipm.edu.in/','2026-09-24'),
+('KIPM College of Engineering & Technology (Gorakhpur)','NBA','Accredited','','Electronics & Communication Engineering','','2026','Official KIPM institute material',NULL,NULL,'https://kipm.edu.in/','2026-09-24'),
+('KIPM College of Engineering & Technology (Gorakhpur)','NBA','Accredited','','Mechanical Engineering','','2026','Official KIPM institute material',NULL,NULL,'https://kipm.edu.in/','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
 COMMIT;
