@@ -365,4 +365,51 @@ VALUES
 ('KIET Group of Institutions (Ghaziabad)','NBA','Accredited','','Computer Science & Information Technology','30-06-2027','2026','Official NBA Suo Moto disclosure','2024-07-01','2027-06-30','https://www.nbaind.org/files/rti/SuoMoto2025/4.5.8%28d%29.pdf','2026-09-24'),
 ('Dronacharya Group of Institutions (Greater Noida)','NBA','Accredited','','Computer Science & Information Technology','30-06-2027','2026','Official NBA Suo Moto disclosure','2024-07-01','2027-06-30','https://www.nbaind.org/files/rti/SuoMoto2025/4.5.8%28d%29.pdf','2026-09-24')
 ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
+
+-- 2026-09-24 batch research: 20 UPTAC institutes checked for official NBA accreditation.
+UPDATE accreditation_research_queue SET research_status='NO_VERIFIED_RECORD', notes='Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.', last_checked=CURRENT_DATE WHERE uptac_institute IN (
+'A.N.A.COLLEGE OF ENGINEERING & MANAGEMENT,BAREILLY',
+'ABSS INSTITUTE OF TECHNOLOGY, MEERUT,MEERUT',
+'ACCURATE INSTITUTE OF MANAGEMENT & TECHNOLOGY,GAUTAM BUDDH NAGAR',
+'Acharya Narendra Deva University of Agriculture & Technology, Kumarganj, Ayodhya',
+'ADHUNIK COLLEGE OF ENGG.,GHAZIABAD',
+'ALIGARH COLLEGE OF ENGG. & TECH,ALIGARH',
+'ALLENHOUSE INSTITUTE OF TECHNOLOGY,KANPUR',
+'AMANI GROUP OF INSTITUTIONS,AMROHA',
+'AMBALIKA INSTITUTE OF MANAGEMENT & TECHNOLOGY,LUCKNOW',
+'APEX INSTITUTE OF TECHNOLOGY,RAMPUR',
+'APOLLO INSTITUTE OF TECHNOLOGY,KANPUR',
+'ASHOKA INSTITUTE OF TECHNOLOGY & MANAGEMENT,VARANASI',
+'AXIS INSTITUTE OF TECHNOLOGY & MANAGEMENT,KANPUR',
+'B.S.A. COLLEGE OF ENGINEERING & TECHNOLOGY,MATHURA',
+'Baba Shaheb (Dr.) B R Ambedkar College of Agricultural Engineering and Technology, Etawah (CSAUAT)',
+'BABU BANARSI DAS INSTITUTE OF TECH.,GHAZIABAD',
+'BABU SUNDER SINGH INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW',
+'BHARAT RATNA BABA SAHEB BHIM RAO AMBEDKAR RAJKIYA ENGINEERING COLLEGE, PRATAPGARH',
+'BHARAT RATNA SARDAR VALLABHBHAI PATEL RAJKIYA ENGINEERING COLLEGE, BASTI',
+'Bundelkhand University, Jhansi');
+
+INSERT INTO accreditation_research_queue (uptac_institute,research_status,notes,last_checked)
+VALUES
+('A.N.A.COLLEGE OF ENGINEERING & MANAGEMENT,BAREILLY','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('ABSS INSTITUTE OF TECHNOLOGY, MEERUT,MEERUT','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('ACCURATE INSTITUTE OF MANAGEMENT & TECHNOLOGY,GAUTAM BUDDH NAGAR','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('Acharya Narendra Deva University of Agriculture & Technology, Kumarganj, Ayodhya','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('ADHUNIK COLLEGE OF ENGG.,GHAZIABAD','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('ALIGARH COLLEGE OF ENGG. & TECH,ALIGARH','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('ALLENHOUSE INSTITUTE OF TECHNOLOGY,KANPUR','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('AMANI GROUP OF INSTITUTIONS,AMROHA','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('AMBALIKA INSTITUTE OF MANAGEMENT & TECHNOLOGY,LUCKNOW','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('APEX INSTITUTE OF TECHNOLOGY,RAMPUR','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('APOLLO INSTITUTE OF TECHNOLOGY,KANPUR','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('ASHOKA INSTITUTE OF TECHNOLOGY & MANAGEMENT,VARANASI','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('AXIS INSTITUTE OF TECHNOLOGY & MANAGEMENT,KANPUR','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('B.S.A. COLLEGE OF ENGINEERING & TECHNOLOGY,MATHURA','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('Baba Shaheb (Dr.) B R Ambedkar College of Agricultural Engineering and Technology, Etawah (CSAUAT)','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('BABU BANARSI DAS INSTITUTE OF TECH.,GHAZIABAD','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('BABU SUNDER SINGH INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('BHARAT RATNA BABA SAHEB BHIM RAO AMBEDKAR RAJKIYA ENGINEERING COLLEGE, PRATAPGARH','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('BHARAT RATNA SARDAR VALLABHBHAI PATEL RAJKIYA ENGINEERING COLLEGE, BASTI','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24'),
+('Bundelkhand University, Jhansi','NO_VERIFIED_RECORD','Official NBA Accredited Programs search and available official-source review performed on 2026-09-24; no verified NBA accreditation record identified. This is not a claim of non-accreditation.','2026-09-24')
+ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status, notes=EXCLUDED.notes, last_checked=EXCLUDED.last_checked;
 COMMIT;
