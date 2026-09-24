@@ -355,4 +355,14 @@ VALUES
 ('Sharda University (Gautam Bodda Nagar)','NBA','Accredited','','Civil Engineering','30-06-2026','2026','Official NBA RTI disclosure','2023-07-01','2026-06-30','https://www.nbaind.org/files/rti/docs/4.5.8%20%28d%29.pdf','2026-09-24')
 ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
 
+
+-- 2026-09-24 verified continuation: official NBA RTI disclosure rows.
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('Meerut Institute of Engineering & Technology (Meerut)','NBA','Accredited','','Biotechnology','30-06-2027','2026','Official NBA Suo Moto disclosure','2024-07-01','2027-06-30','https://www.nbaind.org/files/rti/SuoMoto2025/4.5.8%28d%29.pdf','2026-09-24'),
+('KIET Group of Institutions (Ghaziabad)','NBA','Accredited','','Computer Science','30-06-2027','2026','Official NBA Suo Moto disclosure','2024-07-01','2027-06-30','https://www.nbaind.org/files/rti/SuoMoto2025/4.5.8%28d%29.pdf','2026-09-24'),
+('KIET Group of Institutions (Ghaziabad)','NBA','Accredited','','Computer Science & Information Technology','30-06-2027','2026','Official NBA Suo Moto disclosure','2024-07-01','2027-06-30','https://www.nbaind.org/files/rti/SuoMoto2025/4.5.8%28d%29.pdf','2026-09-24'),
+('Dronacharya Group of Institutions (Greater Noida)','NBA','Accredited','','Computer Science & Information Technology','30-06-2027','2026','Official NBA Suo Moto disclosure','2024-07-01','2027-06-30','https://www.nbaind.org/files/rti/SuoMoto2025/4.5.8%28d%29.pdf','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
 COMMIT;
