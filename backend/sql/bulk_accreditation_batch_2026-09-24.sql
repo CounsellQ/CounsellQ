@@ -221,4 +221,20 @@ notes='Official JSSATE accreditation disclosure verified on 2026-09-24.',
 last_checked=CURRENT_DATE
 WHERE uptac_institute='JSS ACADEMY OF TECHNICAL EDUCATION,NOIDA';
 
+
+-- 2026-09-24 correction/completion batch from the current official NBA database.
+-- Adds programs found in the official records that were not yet represented in this file.
+
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('Harcourt Butler Technical University (Kanpur)','NBA','Accredited','','Electronics Engineering','30-06-2025','2026','Official NBA','2022-07-01','2025-06-30','https://www.nbaind.org/accreditationprogram/AccreditedProgram','2026-09-24'),
+('Harcourt Butler Technical University (Kanpur)','NBA','Accredited','','Food Technology','30-06-2025','2026','Official NBA','2022-07-01','2025-06-30','https://www.nbaind.org/accreditationprogram/AccreditedProgram','2026-09-24'),
+('Harcourt Butler Technical University (Kanpur)','NBA','Accredited','','Oil Technology','30-06-2025','2026','Official NBA','2022-07-01','2025-06-30','https://www.nbaind.org/accreditationprogram/AccreditedProgram','2026-09-24'),
+('Harcourt Butler Technical University (Kanpur)','NBA','Accredited','','Paint Technology','30-06-2025','2026','Official NBA','2022-07-01','2025-06-30','https://www.nbaind.org/accreditationprogram/AccreditedProgram','2026-09-24'),
+('Harcourt Butler Technical University (Kanpur)','NBA','Accredited','','Plastics Technology','30-06-2025','2026','Official NBA','2022-07-01','2025-06-30','https://www.nbaind.org/accreditationprogram/AccreditedProgram','2026-09-24'),
+('Motilal Nehru National Institute of Technology (Allahabad)','NBA','Accredited','','Biotechnology','31-12-2028','2026','Official NBA','2026-01-01','2028-12-31','https://www.nbaind.org/accreditationprogram/AccreditedProgram','2026-09-24'),
+('Motilal Nehru National Institute of Technology (Allahabad)','NBA','Accredited','','Chemical Engineering','31-12-2028','2026','Official NBA','2026-01-01','2028-12-31','https://www.nbaind.org/accreditationprogram/AccreditedProgram','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
+
 COMMIT;
