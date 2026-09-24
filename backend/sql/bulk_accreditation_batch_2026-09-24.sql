@@ -659,4 +659,37 @@ VALUES
 ('NIGC INSTITUTE OF TECHNOLOGY AND MANAGEMENT, BIJNOR','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
 ('NITRA TECHNICAL CAMPUS,GHAZIABAD','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24')
 ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
+
+-- 2026-09-24 research batch: next 20 UPTAC institutes.
+INSERT INTO accreditation_research_queue (uptac_institute,research_status,notes,last_checked)
+VALUES
+('RAJ KUMAR GOEL INSTT. OF TECHNOLOGY,GHAZIABAD','NBA_VERIFIED','Official RKGIT IQAC material confirms NBA-accredited B.Tech ECE and IT programs; CSE was under NBA accreditation process in the cited 2025-26 record. Exact current validity dates were not established in the reviewed official source.','2026-09-24'),
+('RAJA BALWANT SINGH ENGINEERING TECHNICAL CAMPUS,AGRA','NO_VERIFIED_RECORD','Official-source review did not establish a current exact program-level NBA accreditation record for this UPTAC institute name.','2026-09-24'),
+('RAJARSHI RANANJAY SINGH INSTITUTE OF MANAGEMENT & TECHNOLOGY,SULTANPUR','NO_VERIFIED_RECORD','Official-source review did not establish a current exact engineering program-level NBA accreditation record.','2026-09-24'),
+('RAJKIYA ENGINEERING COLLEGE,AMBEDKAR NAGAR','NBA_VERIFIED','Official REC Ambedkar Nagar accreditation page confirms B.Tech Electrical Engineering and Information Technology are accredited for academic years 2024-25 through 2026-27, valid to 30-06-2027; earlier 2021-22 through 2023-24 periods are also listed.','2026-09-24'),
+('RAJKIYA ENGINEERING COLLEGE,AZAMGARH','NBA_VERIFIED','Official REC Azamgarh site has a dedicated notice for NBA Accreditation of the Civil Engineering Department. Exact validity period was not established in the reviewed source.','2026-09-24'),
+('RAJKIYA ENGINEERING COLLEGE,BANDA','NBA_VERIFIED','Official REC Banda site lists an NBA Accredited Program and publishes the NBA EE accreditation document; the reviewed NBA letter establishes EE accreditation for 2022-23 to 2023-24, valid to 30-06-2024. Current extension period was not established from the reviewed document.','2026-09-24'),
+('RAJKIYA ENGINEERING COLLEGE,BIJNOR','NO_VERIFIED_RECORD','Official-source review did not establish an exact current program-level NBA record.','2026-09-24'),
+('RAJKIYA ENGINEERING COLLEGE,KANNAUJ','NO_VERIFIED_RECORD','Official REC Kannauj disclosure reviewed; no exact NBA accreditation record was established.','2026-09-24'),
+('RAJKIYA ENGINEERING COLLEGE,MAINPURI','NO_VERIFIED_RECORD','Official-source review did not establish an exact current program-level NBA accreditation record.','2026-09-24'),
+('RAJKIYA ENGINEERING COLLEGE,SONEBHADRA','NO_VERIFIED_RECORD','Official REC Sonbhadra site reviewed; no exact NBA accreditation record was established.','2026-09-24'),
+('RAJSHREE INSTITUTE OF MANAGEMENT & TECHNOLOGY,BAREILLY','NO_VERIFIED_RECORD','Official-source review did not establish an engineering NBA accreditation record. An official NBA self-assessment report located was for MBA, not an engineering program.','2026-09-24'),
+('RAKSHPAL BAHADUR COLLEGE OF ENGINEERING & TECHNOLOGY,BAREILLY','NO_VERIFIED_RECORD','Official mandatory-disclosure material reviewed; it references the NBA requirement but does not establish a verified accredited engineering program/date.','2026-09-24'),
+('RAMESHWARAM INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW','NO_VERIFIED_RECORD','Official-source review did not establish an exact current program-level NBA accreditation record.','2026-09-24'),
+('S R GROUP OF INSTITUTIONS (COLLEGE OF SCIENCE AND ENGINEERING),JHANSI','NO_VERIFIED_RECORD','Official-source review did not establish an exact current program-level NBA accreditation record.','2026-09-24'),
+('S.D.COLLEGE OF ENGINEERING & TECHNOLOGY,MUZAFFARNAGAR','NBA_VERIFIED','Official SDCET site states the institute has NBA accreditation, but the reviewed page does not identify the exact accredited engineering program or validity period; therefore no program row/date is added yet.','2026-09-24'),
+('S.R.INSTITUTE OF MANAGEMENT & TECHNOLOGY,LUCKNOW','NO_VERIFIED_RECORD','Official-source review did not establish an exact current program-level NBA accreditation record.','2026-09-24'),
+('SAGAR INSTITUTE OF TECHNOLOGY & MANAGEMENT,BARABANKI','NO_VERIFIED_RECORD','Official SITM source reviewed for institute/program information, but an exact current program-level NBA accreditation record and validity period were not established from an official source.','2026-09-24'),
+('SAMRAT ASHOK RAJKIYA ENGINEERING COLLEGE, MIRZAPUR','NO_VERIFIED_RECORD','Official SAREC Mirzapur site confirms the institute was established in 2023 and offers CSE/IT/EE/EL; no NBA accreditation record was identified.','2026-09-24'),
+('SANSKAR COLLEGE OF ENGINEERING & TECHNOLOGY,GHAZIABAD','NO_VERIFIED_RECORD','Official Sanskar-group disclosure reviewed; the accreditation table reports no NBA certificate/data for the reviewed institution record.','2026-09-24'),
+('SARASWATI HIGHER EDUCATION & TECHNICAL COLLEGE OF ENGINEERING,VARANASI','NO_VERIFIED_RECORD','Official-source review did not establish an exact current program-level NBA accreditation record.','2026-09-24')
+ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
+
+-- Verified program-level rows supported by the reviewed official sources.
+INSERT INTO accreditations (institute_name,accreditation_type,accreditation_status,grade,program,validity,updated_year,source,valid_from,valid_until,source_url,last_verified)
+VALUES
+('Rajkiya Engineering College, Ambedkar Nagar','NBA','Accredited','','Electrical Engineering','2024-25 to 2026-27','2026','Official REC Ambedkar Nagar accreditation page','2024-07-01','2027-06-30','https://www.recabn.ac.in/en/pages/accreditations','2026-09-24'),
+('Rajkiya Engineering College, Ambedkar Nagar','NBA','Accredited','','Information Technology','2024-25 to 2026-27','2026','Official REC Ambedkar Nagar accreditation page','2024-07-01','2027-06-30','https://www.recabn.ac.in/en/pages/accreditations','2026-09-24'),
+('Rajkiya Engineering College, Azamgarh','NBA','Accredited','','Civil Engineering','','2026','Official REC Azamgarh NBA accreditation notice',NULL,NULL,'https://gecazamgarh.ac.in/news-category/circular/page/2/','2026-09-24'),
+('Rajkiya Engineering College, Banda','NBA','Accredited','','Electrical Engineering','2022-23 to 2023-24','2024','Official NBA accreditation letter published by REC Banda','2022-07-01','2024-06-30','https://recbanda.ac.in/wp-content/uploads/2024/09/nba-EE-department.pdf','2026-09-24');
 COMMIT;
