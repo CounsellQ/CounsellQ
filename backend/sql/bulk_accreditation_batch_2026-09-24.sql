@@ -473,4 +473,29 @@ VALUES
 ('GALGOTIA''S COLLEGE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Official NBA record verifies ECE accreditation through 30-06-2027.','2026-09-24'),
 ('GLOBAL INSTITUTE OF INFORMATION TECHNOLOGY,GAUTAM BUDDH NAGAR','NO_VERIFIED_RECORD','Official NBA search did not identify a verified accreditation record for this exact UPTAC institute name; this is not a claim of non-accreditation.','2026-09-24')
 ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
+
+-- 2026-09-24 batch: additional official-source verification.
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('Greater Noida Institute of Technology (GNIOT)','NBA','Accredited','','Computer Science and Engineering','','2026','Official GNIOT accreditation status','2025-12-31',NULL,'https://mail.gniot.net.in/accreditation-status.php','2026-09-24'),
+('Greater Noida Institute of Technology (GNIOT)','NBA','Accredited','','Electronics and Communication Engineering','','2026','Official GNIOT accreditation status','2025-12-31',NULL,'https://mail.gniot.net.in/accreditation-status.php','2026-09-24'),
+('Greater Noida Institute of Technology (GNIOT)','NBA','Accredited','','Information Technology','','2026','Official GNIOT accreditation status','2025-12-31',NULL,'https://mail.gniot.net.in/accreditation-status.php','2026-09-24'),
+('IMS Engineering College (Ghaziabad)','NBA','Accredited','','Information Technology','30-06-2027','2026','Official IMS Engineering College','2024-07-01','2027-06-30','https://imsec.ac.in/about/about-imsec','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
+
+INSERT INTO college_accreditation_map (uptac_institute,accreditation_institute,match_method,verified)
+VALUES
+('GREATER NOIDA INSTITUTE OF TECHNOLOGY,GAUTAM BUDDH NAGAR','Greater Noida Institute of Technology (GNIOT)','official_institute_source',TRUE),
+('I.M.S. ENGINEERING COLLEGE,GHAZIABAD','IMS Engineering College (Ghaziabad)','official_institute_source',TRUE)
+ON CONFLICT (uptac_institute) DO UPDATE SET accreditation_institute=EXCLUDED.accreditation_institute,match_method=EXCLUDED.match_method,verified=EXCLUDED.verified;
+
+INSERT INTO accreditation_research_queue (uptac_institute,research_status,notes,last_checked)
+VALUES
+('GREATER NOIDA INSTITUTE OF TECHNOLOGY,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Official GNIOT accreditation page states NBA accreditation for CSE, EC and IT, obtained for three years from 31-12-2025. End date not independently stated on the source, so valid_until is left NULL.','2026-09-24'),
+('I.M.S. ENGINEERING COLLEGE,GHAZIABAD','NBA_VERIFIED','Official IMS Engineering College source states Information Technology is NBA accredited up to 2027; recorded through 30-06-2027.','2026-09-24'),
+('I.I.M.T. ENGG. COLLEGE,MEERUT','NO_VERIFIED_RECORD','Official IIMT Engineering College accreditation-status document states current no branch is accredited; historical CSE/IT/EC and Mechanical records are listed, but no current accreditation is claimed.','2026-09-24'),
+('I.T.S. ENGG.COLLEGE,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Official ITS Engineering College site confirms NBA accreditation, but the retrieved source does not specify program-level validity dates; no dates inferred.','2026-09-24'),
+('HINDUSTAN COLLEGE OF SCIENCE & TECHNOLOGY,MATHURA','NBA_VERIFIED','Official HCST site states 12 NBA-accredited courses, but the retrieved page does not provide program-level validity dates; no dates inferred.','2026-09-24')
+ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
 COMMIT;
