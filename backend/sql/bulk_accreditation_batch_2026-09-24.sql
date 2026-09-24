@@ -237,4 +237,35 @@ VALUES
 ('Motilal Nehru National Institute of Technology (Allahabad)','NBA','Accredited','','Chemical Engineering','31-12-2028','2026','Official NBA','2026-01-01','2028-12-31','https://www.nbaind.org/accreditationprogram/AccreditedProgram','2026-09-24')
 ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
 
+
+-- 2026-09-24 official NBA RTI/Suo Moto verification batch.
+-- Source: NBA Suo Moto disclosure 4.5.8(d), plus current Accredited Programs database.
+
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('Raj Kumar Goel Institute of Technology (Ghaziabad)','NBA','Accredited','','Electronics & Communication Engineering','30-06-2027','2026','Official NBA Suo Moto disclosure','2024-07-01','2027-06-30','https://www.nbaind.org/files/rti/SuoMoto2025/4.5.8%28d%29.pdf','2026-09-24'),
+('Kamla Nehru Institute of Technology Sultanpur -228118 u.p. (Sultanpur)','NBA','Accredited','','Electrical Engineering','30-06-2027','2026','Official NBA Accredited Programs','2024-07-01','2027-06-30','https://www.nbaind.org/accreditationprogram/AccreditedProgram','2026-09-24'),
+('Kamla Nehru Institute of Technology Sultanpur -228118 u.p. (Sultanpur)','NBA','Accredited','','Civil Engineering','30-06-2024','2026','Official NBA Accredited Programs','2021-07-01','2024-06-30','https://www.nbaind.org/accreditationprogram/AccreditedProgram','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
+
+INSERT INTO college_accreditation_map
+(uptac_institute, accreditation_institute, match_method, verified)
+VALUES
+('RAJ KUMAR GOEL INSTITUTE OF TECHNOLOGY & MANAGEMENT,GHAZIABAD','Raj Kumar Goel Institute of Technology (Ghaziabad)','official_nba_name_match',TRUE),
+('KAMLA NEHRU INSTITUTE OF TECHNOLOGY,SULTANPUR','Kamla Nehru Institute of Technology Sultanpur -228118 u.p. (Sultanpur)','official_nba_name_match',TRUE)
+ON CONFLICT (uptac_institute) DO UPDATE SET
+accreditation_institute=EXCLUDED.accreditation_institute,
+match_method=EXCLUDED.match_method,
+verified=EXCLUDED.verified;
+
+UPDATE accreditation_research_queue
+SET research_status='NBA_VERIFIED',
+notes='Official NBA record verified on 2026-09-24.',
+last_checked=CURRENT_DATE
+WHERE uptac_institute IN (
+'RAJ KUMAR GOEL INSTITUTE OF TECHNOLOGY & MANAGEMENT,GHAZIABAD',
+'KAMLA NEHRU INSTITUTE OF TECHNOLOGY,SULTANPUR'
+);
+
 COMMIT;
