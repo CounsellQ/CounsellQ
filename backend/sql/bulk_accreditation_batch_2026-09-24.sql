@@ -540,4 +540,29 @@ VALUES
 ('INSTITUTE OF TECHNOLOGY & MANAGEMENT,ALIGARH','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in the available official NBA search; not a claim of non-accreditation.','2026-09-24'),
 ('INSTITUTE OF TECHNOLOGY & MANAGEMENT,GORAKHPUR','NO_VERIFIED_RECORD','Official institute source confirms AICTE approval and AKTU affiliation, but no verified NBA accreditation record was identified in the available official NBA search.','2026-09-24')
 ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
+
+-- 2026-09-24 batch: 20 UPTAC institutes reviewed against official NBA/institute sources.
+INSERT INTO accreditation_research_queue (uptac_institute,research_status,notes,last_checked)
+VALUES
+('FACULTY OF ENGINEERING SHANTI NIKETAN TRUST''S GROUP OF INSTITUTIONS,MEERUT','NO_VERIFIED_RECORD','No verified NBA record for the exact UPTAC institute name found in available official NBA results; not a claim of non-accreditation.','2026-09-24'),
+('G.C.R.G. MEMORIAL TRUST''S GROUP OF INSTITUTIONS, FACULTY OF ENGINEERING,LUCKNOW','NO_VERIFIED_RECORD','No verified NBA record for the exact UPTAC institute name found in available official NBA results; not a claim of non-accreditation.','2026-09-24'),
+('GALGOTIA''S COLLEGE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Official NBA accreditation for ECE through 30-06-2027 was verified; existing accreditation record retained.','2026-09-24'),
+('INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW','NO_VERIFIED_RECORD','No verified NBA record for the exact UPTAC institute name found in available official NBA results.','2026-09-24'),
+('INSTITUTE OF TECHNOLOGY & MANAGEMENT,MAHARAJGANJ','NO_VERIFIED_RECORD','No verified NBA record for the exact UPTAC institute name found in available official NBA results.','2026-09-24'),
+('ISABELLA THOBURN COLLEGE (PROFESSIONAL STUDIES),LUCKNOW','NO_VERIFIED_RECORD','No verified NBA engineering accreditation record found for the exact institute/program in available official NBA results.','2026-09-24'),
+('J.P..INSTITUTE OF ENGINEERING & TECHNOLOGY,MEERUT','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in available official NBA results.','2026-09-24'),
+('J.S.S. ACADEMY OF TECHNICAL EDUCATION,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Official NBA RTI disclosure verifies ECE and CSE, 3 years w.e.f. 01-07-2023; existing JSS historical records retained.','2026-09-24'),
+('JAHANGIRABAD EDUCATIONAL TRUST''S GROUP OF INSTITUTIONS, FACULTY OF ENGINEERING,BARABANKI','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in available official NBA results.','2026-09-24'),
+('JMS GROUP OF INSTITUTIONS,GHAZIABAD','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in available official NBA results.','2026-09-24'),
+('JMS INSTITUTE OF TECHNOLOGY, GHAZIABAD','NO_VERIFIED_RECORD','Official JMS/AICTE sources confirm the institute and programs, but no NBA accreditation record was verified.','2026-09-24'),
+('KALICHARAN NIGAM INSTITUTE OF TECHNOLOGY,BANDA','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in available official NBA results.','2026-09-24'),
+('KAMLA NEHRU INSTITUTE OF PHYSICAL & SOCIAL SCIENCES,SULTANPUR','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in available official NBA results.','2026-09-24'),
+('KAMLA NEHRU INSTITUTE OF TECHNOLOGY,SULTANPUR','NBA_VERIFIED','Official NBA database verifies Electrical Engineering through 30-06-2027 and historical Civil Engineering through 30-06-2024.','2026-09-24'),
+('KANPUR INSTITUTE OF TECHNOLOGY,KANPUR','NO_VERIFIED_RECORD','Official institute self-study material references accreditation processes but does not establish a specific verified NBA accreditation program/date in the retrieved source.','2026-09-24'),
+('KASHI INSTITUTE OF TECHNOLOGY,VARANASI','NO_VERIFIED_RECORD','Official institute sources confirm AICTE/AKTU status; no specific NBA engineering program/date was verified from the retrieved official sources.','2026-09-24'),
+('KCC INSTITUTE OF TECHNOLOGY & MANAGEMENT,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Official KCC source states Computer Science & Engineering is NBA accredited; no validity date was stated in the retrieved official source.','2026-09-24'),
+('KCMT CAMPUS 2 PREM PRAKASH GUPTA INSTITUTE OF ENGINEERING,BAREILLY','NO_VERIFIED_RECORD','No verified NBA accreditation record identified for the exact UPTAC institute name in available official NBA results.','2026-09-24'),
+('Khwaja Moinuddin Chishti Language University, Lucknow','NO_VERIFIED_RECORD','No verified NBA engineering accreditation record identified for the exact university/program in available official NBA results.','2026-09-24'),
+('KIET GROUP OF INSTITUTIONS(KRISHNA INSTT. OF ENGG. & TECHNOLOGY),GHAZIABAD','NBA_VERIFIED','Official KIET/NBA material states eligible engineering programs are NBA accredited; existing program-level records are retained.','2026-09-24')
+ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
 COMMIT;
