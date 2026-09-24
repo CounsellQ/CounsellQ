@@ -290,4 +290,28 @@ ON CONFLICT (uptac_institute) DO UPDATE SET accreditation_institute=EXCLUDED.acc
 
 UPDATE accreditation_research_queue SET research_status='NBA_VERIFIED',notes='Official NBA record verified on 2026-09-24.',last_checked=CURRENT_DATE WHERE uptac_institute IN ('PSIT-PRANVEER SINGH INSTITUTE OF TECHNOLOGY,KANPUR','SHARDA UNIVERSITY,GREATER NOIDA');
 
+
+-- 2026-09-24 bulk Uttar Pradesh records from official NBA RTI disclosure.
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('Goel Institute of Technology & Management (Lucknow)','NBA','Accredited','','Computer Science & Engineering','30-06-2026','2026','Official NBA Suo Moto disclosure','2023-07-01','2026-06-30','https://nbaind.org/files/rti/docs/4.5.8%20%28d%29.pdf','2026-09-24'),
+('KIMP – College of Engineering & Technology (Gorakhpur)','NBA','Accredited','','Computer Science & Engineering','30-06-2026','2026','Official NBA Suo Moto disclosure','2023-07-01','2026-06-30','https://nbaind.org/files/rti/docs/4.5.8%20%28d%29.pdf','2026-09-24'),
+('KIMP – College of Engineering & Technology (Gorakhpur)','NBA','Accredited','','Electronics & Communication Engineering','30-06-2026','2026','Official NBA Suo Moto disclosure','2023-07-01','2026-06-30','https://nbaind.org/files/rti/docs/4.5.8%20%28d%29.pdf','2026-09-24'),
+('KIMP – College of Engineering & Technology (Gorakhpur)','NBA','Accredited','','Mechanical Engineering','30-06-2026','2026','Official NBA Suo Moto disclosure','2023-07-01','2026-06-30','https://nbaind.org/files/rti/docs/4.5.8%20%28d%29.pdf','2026-09-24'),
+('Institute of Technology and Management (Gorakhpur)','NBA','Accredited','','Computer Science & Engineering','30-06-2026','2026','Official NBA Suo Moto disclosure','2023-07-01','2026-06-30','https://nbaind.org/files/rti/docs/4.5.8%20%28d%29.pdf','2026-09-24'),
+('Delhi Technical Campus (Greater Noida)','NBA','Accredited','','Computer Science & Engineering','30-06-2027','2026','Official NBA Suo Moto disclosure','2024-07-01','2027-06-30','https://nbaind.org/files/rti/docs/4.5.8%20%28d%29.pdf','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
+
+INSERT INTO college_accreditation_map
+(uptac_institute, accreditation_institute, match_method, verified)
+VALUES
+('GOEL INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW','Goel Institute of Technology & Management (Lucknow)','official_nba_name_match',TRUE),
+('K.I.M.P. COLLEGE OF ENGINEERING & TECHNOLOGY,GORAKHPUR','KIMP – College of Engineering & Technology (Gorakhpur)','official_nba_name_match',TRUE),
+('INSTITUTE OF TECHNOLOGY AND MANAGEMENT,GORAKHPUR','Institute of Technology and Management (Gorakhpur)','official_nba_name_match',TRUE),
+('DELHI TECHNICAL CAMPUS,GREATER NOIDA','Delhi Technical Campus (Greater Noida)','official_nba_name_match',TRUE)
+ON CONFLICT (uptac_institute) DO UPDATE SET accreditation_institute=EXCLUDED.accreditation_institute,match_method=EXCLUDED.match_method,verified=EXCLUDED.verified;
+
+UPDATE accreditation_research_queue SET research_status='NBA_VERIFIED',notes='Official NBA RTI disclosure verified on 2026-09-24.',last_checked=CURRENT_DATE WHERE uptac_institute IN ('GOEL INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW','K.I.M.P. COLLEGE OF ENGINEERING & TECHNOLOGY,GORAKHPUR','INSTITUTE OF TECHNOLOGY AND MANAGEMENT,GORAKHPUR','DELHI TECHNICAL CAMPUS,GREATER NOIDA');
+
 COMMIT;
