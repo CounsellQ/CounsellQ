@@ -314,4 +314,21 @@ ON CONFLICT (uptac_institute) DO UPDATE SET accreditation_institute=EXCLUDED.acc
 
 UPDATE accreditation_research_queue SET research_status='NBA_VERIFIED',notes='Official NBA RTI disclosure verified on 2026-09-24.',last_checked=CURRENT_DATE WHERE uptac_institute IN ('GOEL INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW','K.I.M.P. COLLEGE OF ENGINEERING & TECHNOLOGY,GORAKHPUR','INSTITUTE OF TECHNOLOGY AND MANAGEMENT,GORAKHPUR','DELHI TECHNICAL CAMPUS,GREATER NOIDA');
 
+
+-- 2026-09-24 verified Dayalbagh Educational Institute records.
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('Dayalbagh Educational Institute (Agra)','NBA','Accredited','','Mechanical Engineering','30-06-2025','2026','Official NBA Accredited Programs','2022-07-01','2025-06-30','https://www.nbaind.org/accreditationprogram/AccreditedProgram','2026-09-24'),
+('Dayalbagh Educational Institute (Agra)','NBA','Accredited','','Electrical Engineering','30-06-2025','2026','Official NBA Accredited Programs','2022-07-01','2025-06-30','https://www.nbaind.org/accreditationprogram/AccreditedProgram','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
+
+INSERT INTO college_accreditation_map
+(uptac_institute, accreditation_institute, match_method, verified)
+VALUES
+('DAYALBAGH EDUCATIONAL INSTITUTE,AGRA','Dayalbagh Educational Institute (Agra)','official_nba_name_match',TRUE)
+ON CONFLICT (uptac_institute) DO UPDATE SET accreditation_institute=EXCLUDED.accreditation_institute,match_method=EXCLUDED.match_method,verified=EXCLUDED.verified;
+
+UPDATE accreditation_research_queue SET research_status='NBA_VERIFIED',notes='Official NBA record verified on 2026-09-24.',last_checked=CURRENT_DATE WHERE uptac_institute='DAYALBAGH EDUCATIONAL INSTITUTE,AGRA';
+
 COMMIT;
