@@ -130,4 +130,28 @@ SET research_status='NBA_VERIFIED',
     last_checked=CURRENT_DATE
 WHERE uptac_institute='RAJKIYA ENGINEERING COLLEGE,BANDA';
 
+-- Verified from the official Rajkiya Engineering College, Ambedkar Nagar accreditation page.
+-- The institute states Electrical Engineering and Information Technology are NBA accredited for 2024-2027, valid through 30-06-2027.
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('Rajkiya Engineering College, Ambedkar Nagar (Ambedkar Nagar)','NBA','Accredited','','Electrical Engineering','30-06-2027','2026','Official REC Ambedkar Nagar accreditation page','2024-07-01','2027-06-30','https://www.recabn.ac.in/en/pages/accreditations-naac-nba-nirf-sirf','2026-09-24'),
+('Rajkiya Engineering College, Ambedkar Nagar (Ambedkar Nagar)','NBA','Accredited','','Information Technology','30-06-2027','2026','Official REC Ambedkar Nagar accreditation page','2024-07-01','2027-06-30','https://www.recabn.ac.in/en/pages/accreditations-naac-nba-nirf-sirf','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
+
+INSERT INTO college_accreditation_map
+(uptac_institute, accreditation_institute, match_method, verified)
+VALUES
+('RAJKIYA ENGINEERING COLLEGE,AMBEDKAR NAGAR','Rajkiya Engineering College, Ambedkar Nagar (Ambedkar Nagar)','official_institute_nba_page',TRUE)
+ON CONFLICT (uptac_institute) DO UPDATE SET
+  accreditation_institute=EXCLUDED.accreditation_institute,
+  match_method=EXCLUDED.match_method,
+  verified=EXCLUDED.verified;
+
+UPDATE accreditation_research_queue
+SET research_status='NBA_VERIFIED',
+    notes='Official REC Ambedkar Nagar accreditation page verified on 2026-09-24.',
+    last_checked=CURRENT_DATE
+WHERE uptac_institute='RAJKIYA ENGINEERING COLLEGE,AMBEDKAR NAGAR';
+
 COMMIT;
