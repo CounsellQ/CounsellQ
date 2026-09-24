@@ -633,4 +633,30 @@ VALUES
 ('NIGC INSTITUTE OF TECHNOLOGY AND MANAGEMENT, BIJNOR','NO_VERIFIED_RECORD','Re-checked against available official NBA/institute sources on 2026-09-24. No verified NBA record identified for the exact UPTAC institute name; this is not a claim of non-accreditation.','2026-09-24'),
 ('NITRA TECHNICAL CAMPUS,GHAZIABAD','NO_VERIFIED_RECORD','Re-checked against available official NBA/institute sources on 2026-09-24. No verified NBA record identified for the exact UPTAC institute name; this is not a claim of non-accreditation.','2026-09-24')
 ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
+
+-- 2026-09-24 re-verification of the preceding 20-college batch.
+-- Official-source review results are recorded without inferring accreditation from absence.
+INSERT INTO accreditation_research_queue (uptac_institute,research_status,notes,last_checked)
+VALUES
+('FACULTY OF ENGINEERING SHANTI NIKETAN TRUST''S GROUP OF INSTITUTIONS,MEERUT','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources on 2026-09-24; no verified NBA engineering accreditation record identified for the exact UPTAC institute name. Not a claim of non-accreditation.','2026-09-24'),
+('G.C.R.G. MEMORIAL TRUST''S GROUP OF INSTITUTIONS, FACULTY OF ENGINEERING,LUCKNOW','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources on 2026-09-24; no verified NBA engineering accreditation record identified for the exact UPTAC institute name. Not a claim of non-accreditation.','2026-09-24'),
+('GALGOTIA''S COLLEGE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Reverified against official NBA records; ECE accreditation through 30-06-2027 remains supported.','2026-09-24'),
+('JAHANGIRABAD EDUCATIONAL TRUST''S GROUP OF INSTITUTIONS, FACULTY OF ENGINEERING,BARABANKI','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified for the exact UPTAC institute name.','2026-09-24'),
+('MAHARANA PRATAP INSTITUE OF TECHNOLOGY, GORAKHPUR','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
+('MAHATAMA GANDHI MISSION COLLEGE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
+('MANGALMAY INSTITUTE OF ENGINEERING AND TECHNOLOGY ,GAUTAM BUDDHA NAGAR','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
+('MANGALMAY INSTITUTE OF MANAGEMENT AND TECHNOLOGY, GAUTAM BUDDHA NAGAR','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified for the exact institute.','2026-09-24'),
+('MARATHWADA INSTT. OF TECHNOLOGY,BULANDSHAHAR','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
+('MEERUT INSTITUTE OF ENGINEERING & TECHNOLOGY,MEERUT','NBA_VERIFIED','Reverified against official NBA disclosure; ECE and IT accreditation records remain supported, with the project retaining their historical/current periods as recorded.','2026-09-24'),
+('MEERUT INSTITUTE OF TECHNOLOGY,MEERUT','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified for this exact institute name.','2026-09-24'),
+('MEERUT INTERNATIONAL INSTITUTE OF TECHNOLOGY,MEERUT','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
+('MG INSTITUTE OF MANAGEMENT & TECHNOLOGY,LUCKNOW','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
+('MODERN COLLEGE, JHANSI','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
+('MORADABAD INSTITUTE OF TECHNOLOGY,MORADABAD','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
+('NARAINA COLLEGE OF ENGINEERING & TECHNOLOGY,KANPUR','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
+('NEELAM COLLEGE OF ENGINEERING & TECHNOLOGY,AGRA','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
+('NEELKANTH INSTITUTE OF TECHNOLOGY,MEERUT','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
+('NIGC INSTITUTE OF TECHNOLOGY AND MANAGEMENT, BIJNOR','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24'),
+('NITRA TECHNICAL CAMPUS,GHAZIABAD','NO_VERIFIED_RECORD','Reverified against available official NBA/institute sources; no verified NBA engineering accreditation record identified.','2026-09-24')
+ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
 COMMIT;
