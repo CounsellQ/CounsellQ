@@ -196,4 +196,29 @@ WHERE uptac_institute IN (
 'BABU BANARASI DAS NORTHERN INDIA INSTITUTE OF TECHNOLOGY,LUCKNOW'
 );
 
+
+-- 2026-09-24 additional official-institute verification: JSSATE Noida CSE.
+-- JSSATE's official site states NBA accreditation from 01-07-2023 to 30-06-2026.
+
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('JSS Academy of Technical Education, Noida','NBA','Accredited','','Computer Science and Engineering','30-06-2026','2026','Official JSSATE Mandatory Disclosure','2023-07-01','2026-06-30','https://www.jssaten.ac.in/assets/images/governance/Mandatory%20Disclosure.pdf','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
+
+INSERT INTO college_accreditation_map
+(uptac_institute, accreditation_institute, match_method, verified)
+VALUES
+('JSS ACADEMY OF TECHNICAL EDUCATION,NOIDA','JSS Academy of Technical Education, Noida','official_institute_name_match',TRUE)
+ON CONFLICT (uptac_institute) DO UPDATE SET
+accreditation_institute=EXCLUDED.accreditation_institute,
+match_method=EXCLUDED.match_method,
+verified=EXCLUDED.verified;
+
+UPDATE accreditation_research_queue
+SET research_status='NBA_VERIFIED',
+notes='Official JSSATE accreditation disclosure verified on 2026-09-24.',
+last_checked=CURRENT_DATE
+WHERE uptac_institute='JSS ACADEMY OF TECHNICAL EDUCATION,NOIDA';
+
 COMMIT;
