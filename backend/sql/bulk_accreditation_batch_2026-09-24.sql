@@ -268,4 +268,26 @@ WHERE uptac_institute IN (
 'KAMLA NEHRU INSTITUTE OF TECHNOLOGY,SULTANPUR'
 );
 
+
+-- 2026-09-24 verified continuation from official NBA records.
+INSERT INTO accreditations
+(institute_name, accreditation_type, accreditation_status, grade, program, validity, updated_year, source, valid_from, valid_until, source_url, last_verified)
+VALUES
+('PSIT-Pranveer Singh Institute of Technology (Kanpur(Nagar))','NBA','Accredited','','Computer Science and Engineering','30-06-2027','2026','Official NBA Suo Moto disclosure','2024-07-01','2027-06-30','https://www.nbaind.org/files/rti/SuoMoto2025/4.5.8%28d%29.pdf','2026-09-24'),
+('PSIT-Pranveer Singh Institute of Technology (Kanpur(Nagar))','NBA','Accredited','','Information Technology','30-06-2027','2026','Official NBA Suo Moto disclosure','2024-07-01','2027-06-30','https://www.nbaind.org/files/rti/SuoMoto2025/4.5.8%28d%29.pdf','2026-09-24'),
+('B.N. College of Engineering and Technology (BNCET) (Lucknow)','NBA','Accredited','','Computer Science and Engineering','30-06-2027','2026','Official NBA Suo Moto disclosure','2024-07-01','2027-06-30','https://www.nbaind.org/files/rti/SuoMoto2025/4.5.8%28d%29.pdf','2026-09-24'),
+('Sharda University (Gautam Bodda Nagar)','NBA','Accredited','','Computer Science & Engineering','30-06-2026','2026','Official NBA Suo Moto disclosure','2023-07-01','2026-06-30','https://www.nbaind.org/files/rti/docs/4.5.8%20%28d%29.pdf','2026-09-24'),
+('Sharda University (Gautam Bodda Nagar)','NBA','Accredited','','Civil Engineering','30-06-2026','2026','Official NBA Suo Moto disclosure','2023-07-01','2026-06-30','https://www.nbaind.org/files/rti/docs/4.5.8%20%28d%29.pdf','2026-09-24'),
+('Sharda University (Gautam Bodda Nagar)','NBA','Accredited','','Mechanical Engineering','30-06-2026','2026','Official NBA Suo Moto disclosure','2023-07-01','2026-06-30','https://www.nbaind.org/files/rti/docs/4.5.8%20%28d%29.pdf','2026-09-24')
+ON CONFLICT (institute_name, accreditation_type, program, validity) DO NOTHING;
+
+INSERT INTO college_accreditation_map
+(uptac_institute, accreditation_institute, match_method, verified)
+VALUES
+('PSIT-PRANVEER SINGH INSTITUTE OF TECHNOLOGY,KANPUR','PSIT-Pranveer Singh Institute of Technology (Kanpur(Nagar))','official_nba_name_match',TRUE),
+('SHARDA UNIVERSITY,GREATER NOIDA','Sharda University (Gautam Bodda Nagar)','official_nba_name_match',TRUE)
+ON CONFLICT (uptac_institute) DO UPDATE SET accreditation_institute=EXCLUDED.accreditation_institute,match_method=EXCLUDED.match_method,verified=EXCLUDED.verified;
+
+UPDATE accreditation_research_queue SET research_status='NBA_VERIFIED',notes='Official NBA record verified on 2026-09-24.',last_checked=CURRENT_DATE WHERE uptac_institute IN ('PSIT-PRANVEER SINGH INSTITUTE OF TECHNOLOGY,KANPUR','SHARDA UNIVERSITY,GREATER NOIDA');
+
 COMMIT;
