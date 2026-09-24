@@ -447,4 +447,30 @@ VALUES ('CENTRAL INSTITUTE OF PETROCHEMICALS ENGINEERING & TECHNOLOGY (CIPET), L
 ('FACULTY OF ENGINEERING SHANTI NIKETAN TRUST''S GROUP OF INSTITUTIONS,MEERUT','NO_VERIFIED_RECORD','Official NBA Accredited Programs search performed on 2026-09-24; no verified NBA accreditation record identified in the available search results. This is not a claim of non-accreditation.','2026-09-24'),
 ('FEROZE GANDHI INSTITUTE OF ENGG AND TECHNOLOGY, RAIBAREILLY','NO_VERIFIED_RECORD','Official NBA Accredited Programs search performed on 2026-09-24; no verified NBA accreditation record identified in the available search results. This is not a claim of non-accreditation.','2026-09-24')
 ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
+
+-- 2026-09-24 batch: next 20 UPTAC institutes reviewed.
+-- Accreditation records already verified in earlier batches are referenced here; no duplicate accreditation periods are inserted.
+INSERT INTO accreditation_research_queue (uptac_institute,research_status,notes,last_checked)
+VALUES
+('ABES ENGG.COLLEGE,GHAZIABAD','NBA_VERIFIED','ABES Engineering College has verified NBA-accredited programs in the official NBA database; current/historical periods are retained in the accreditation dataset.','2026-09-24'),
+('ABES INSTITUTE OF TECHNOLOGY,GHAZIABAD','NBA_VERIFIED','ABES Institute of Technology has verified NBA-accredited CSE, ECE and IT records in the official NBA database.','2026-09-24'),
+('AJAY KUMAR GARG ENGG. COLLEGE,GHAZIABAD','NBA_VERIFIED','Official NBA database verifies accreditation records for AKGEC programs; historical periods are retained.','2026-09-24'),
+('B.B.S.COLLEGE OF ENGGINERING AND TECHNOLOGY,ALLAHABAD','NBA_VERIFIED','Official NBA records in the project dataset verify historical NBA accreditation for B.B.S. College programs.','2026-09-24'),
+('B.N.COLLEGE OF ENGINEERING & TECHNOLOGY(BNCET),LUCKNOW','NBA_VERIFIED','Official NBA disclosure verifies the CSE accreditation period recorded in the project dataset.','2026-09-24'),
+('BABU BANARASI DAS INSTITUTE OF TECHNOLOGY AND MANAGEMENT, LUCKNOW','NBA_VERIFIED','Official NBA database verifies CSE, ECE and IT accreditation through 30-06-2026.','2026-09-24'),
+('BABU BANARASI DAS NORTHERN INDIA INSTITUTE OF TECHNOLOGY,LUCKNOW','NBA_VERIFIED','Official NBA database verifies CSE and IT accreditation through 30-06-2026.','2026-09-24'),
+('BANSAL INSTITUTE OF ENGINEERING & TECHNOLOGY,LUCKNOW','NBA_VERIFIED','Official NBA disclosure verifies IT accreditation and the project dataset retains additional historical program records.','2026-09-24'),
+('BHAGWANT INSTITUTE OF TECHNOLOGY,MUZAFFARNAGAR','NBA_VERIFIED','Official NBA records in the project dataset verify historical program accreditation.','2026-09-24'),
+('BHARAT INSTITUTE OF TECHNOLOGY,MEERUT','NBA_VERIFIED','Official NBA records in the project dataset verify historical ECE, Electrical & Electronics, CSE, IT and Mechanical accreditation.','2026-09-24'),
+('BUDDHA INSTITUTE OF TECHNOLOGY,GORAKHPUR','NBA_VERIFIED','Official NBA record verifies CSE accreditation through 30-06-2027.','2026-09-24'),
+('BUNDELKHAND INSTITUTE OF ENGINEERING & TECHNOLOGY,JHANSI','NBA_VERIFIED','Official NBA records verify historical CSE, Civil and Chemical Engineering accreditation.','2026-09-24'),
+('DRONACHARYA GROUP OF INSTITUTIONS,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Official NBA record verifies Computer Science & Engineering accreditation through 30-06-2027.','2026-09-24'),
+('FACULTY OF ENGINEERING SHANTI NIKETAN TRUST''S GROUP OF INSTITUTIONS,MEERUT','NO_VERIFIED_RECORD','Official NBA search did not identify a verified accreditation record for this exact UPTAC institute name; this is not a claim of non-accreditation.','2026-09-24'),
+('FIT ENGINEERING COLLEGE,MEERUT','NO_VERIFIED_RECORD','Official NBA search did not identify a verified accreditation record for this exact UPTAC institute name; this is not a claim of non-accreditation.','2026-09-24'),
+('G.C.R.G. MEMORIAL TRUST''S GROUP OF INSTITUTIONS, FACULTY OF ENGINEERING,LUCKNOW','NO_VERIFIED_RECORD','Official NBA search did not identify a verified accreditation record for this exact UPTAC institute name; this is not a claim of non-accreditation.','2026-09-24'),
+('G.L. BAJAJ INSTITUTE OF TECHNOLOGY & MANAGEMENT,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Official NBA database verifies multiple GL Bajaj program records; historical periods are retained.','2026-09-24'),
+('G.L.BAJAJ GROUP OF INSTITUTIONS,MATHURA','NO_VERIFIED_RECORD','Official NBA search did not identify a verified accreditation record for this exact Mathura institute name; this is not a claim of non-accreditation.','2026-09-24'),
+('GALGOTIA''S COLLEGE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR','NBA_VERIFIED','Official NBA record verifies ECE accreditation through 30-06-2027.','2026-09-24'),
+('GLOBAL INSTITUTE OF INFORMATION TECHNOLOGY,GAUTAM BUDDH NAGAR','NO_VERIFIED_RECORD','Official NBA search did not identify a verified accreditation record for this exact UPTAC institute name; this is not a claim of non-accreditation.','2026-09-24')
+ON CONFLICT (uptac_institute) DO UPDATE SET research_status=EXCLUDED.research_status,notes=EXCLUDED.notes,last_checked=EXCLUDED.last_checked;
 COMMIT;
