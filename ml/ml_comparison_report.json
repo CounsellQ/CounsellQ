@@ -1,0 +1,174 @@
+{
+  "generated_at": "2026-10-20T12:03:03Z",
+  "dataset": {
+    "source": "counsellq_uptac_2025.csv",
+    "total_cutoff_records": 8058,
+    "total_evaluation_samples": 24174,
+    "train_samples": 19339,
+    "test_samples": 4835,
+    "features": [
+      "rel_rank_diff",
+      "rank_ratio",
+      "norm_dist_from_open",
+      "rel_spread",
+      "inst_tier",
+      "round",
+      "cat_id"
+    ],
+    "classes": {
+      "0": "Ambitious Chance",
+      "1": "Moderate Chance",
+      "2": "Safer Chance"
+    }
+  },
+  "models": {
+    "Rule-Based Baseline": {
+      "Accuracy": 0.8616339193381592,
+      "Precision (Macro)": 0.8903479406952634,
+      "Recall (Macro)": 0.8616625310173697,
+      "F1 (Macro)": 0.8516390183765955,
+      "F1 (Weighted)": 0.8516369794297854,
+      "ROC-AUC (ovr)": null,
+      "Inference Latency (ms/sample)": 0.000805938626026047,
+      "Confusion Matrix": [
+        [
+          1611,
+          0,
+          0
+        ],
+        [
+          518,
+          943,
+          151
+        ],
+        [
+          0,
+          0,
+          1612
+        ]
+      ]
+    },
+    "Logistic Regression": {
+      "Accuracy": 1.0,
+      "Precision (Macro)": 1.0,
+      "Recall (Macro)": 1.0,
+      "F1 (Macro)": 1.0,
+      "F1 (Weighted)": 1.0,
+      "ROC-AUC (ovr)": 1.0,
+      "Inference Latency (ms/sample)": 0.00025424740307086996,
+      "Confusion Matrix": [
+        [
+          1611,
+          0,
+          0
+        ],
+        [
+          0,
+          1612,
+          0
+        ],
+        [
+          0,
+          0,
+          1612
+        ]
+      ]
+    },
+    "Decision Tree": {
+      "Accuracy": 1.0,
+      "Precision (Macro)": 1.0,
+      "Recall (Macro)": 1.0,
+      "F1 (Macro)": 1.0,
+      "F1 (Weighted)": 1.0,
+      "ROC-AUC (ovr)": 1.0,
+      "Inference Latency (ms/sample)": 0.000542864557875719,
+      "Confusion Matrix": [
+        [
+          1611,
+          0,
+          0
+        ],
+        [
+          0,
+          1612,
+          0
+        ],
+        [
+          0,
+          0,
+          1612
+        ]
+      ]
+    },
+    "Random Forest": {
+      "Accuracy": 1.0,
+      "Precision (Macro)": 1.0,
+      "Recall (Macro)": 1.0,
+      "F1 (Macro)": 1.0,
+      "F1 (Weighted)": 1.0,
+      "ROC-AUC (ovr)": 1.0,
+      "Inference Latency (ms/sample)": 0.011092701766951993,
+      "Confusion Matrix": [
+        [
+          1611,
+          0,
+          0
+        ],
+        [
+          0,
+          1612,
+          0
+        ],
+        [
+          0,
+          0,
+          1612
+        ]
+      ],
+      "Feature Importance": {
+        "rel_rank_diff": 0.43450283846559307,
+        "rank_ratio": 0.3998046200975604,
+        "norm_dist_from_open": 0.16244765530876756,
+        "rel_spread": 0.002975804929626469,
+        "inst_tier": 7.747628406433992e-05,
+        "round": 3.896262209919252e-05,
+        "cat_id": 0.0001526422922889861
+      }
+    },
+    "Gradient Boosting": {
+      "Accuracy": 1.0,
+      "Precision (Macro)": 1.0,
+      "Recall (Macro)": 1.0,
+      "F1 (Macro)": 1.0,
+      "F1 (Weighted)": 1.0,
+      "ROC-AUC (ovr)": 1.0,
+      "Inference Latency (ms/sample)": 0.0033601979805000562,
+      "Confusion Matrix": [
+        [
+          1611,
+          0,
+          0
+        ],
+        [
+          0,
+          1612,
+          0
+        ],
+        [
+          0,
+          0,
+          1612
+        ]
+      ],
+      "Feature Importance": {
+        "rel_rank_diff": 0.35679879077314836,
+        "rank_ratio": 0.6432012092268036,
+        "norm_dist_from_open": 3.1235865443082263e-14,
+        "rel_spread": 1.6784540825360687e-14,
+        "inst_tier": -8.571170218047182e-19,
+        "round": 0.0,
+        "cat_id": 0.0
+      }
+    }
+  }
+}

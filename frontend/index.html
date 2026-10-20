@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CounsellQ — Your Rank. Your Choices. Your College.</title>
+  <title>CounsellQ — Smarter College & Branch Counselling</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="css/style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -15,7 +15,7 @@
         <span class="brand-icon"><i data-lucide="graduation-cap"></i></span>
         <span>
           <strong>Counsell<span>Q</span></strong>
-          <small>Your Rank. Your Choices. Your College.</small>
+          <small>Verified Data • ML Feasibility • College Discovery</small>
         </span>
       </button>
 
@@ -23,89 +23,250 @@
         <button data-page="home">Home</button>
         <button data-page="predict">Predict Colleges</button>
         <button data-page="results">Predictions Dashboard</button>
+        <button data-page="directory">College Directory</button>
         <button data-page="compare">Compare <span id="compareCount">(0)</span></button>
       </nav>
 
       <button class="primary-btn small" data-page="predict">
-        <i data-lucide="sparkles"></i> Start Prediction
+        <i data-lucide="sparkles"></i> Predict Colleges
       </button>
     </div>
   </header>
 
   <main class="container">
+    <!-- Home Page -->
     <section id="home" class="page active">
       <div class="hero">
         <div class="hero-copy">
-          <div class="eyebrow"><i data-lucide="shield-check"></i> Smart Admission Insights</div>
-          <h1>Find the Colleges You Can <span>Actually Get</span>.</h1>
-          <p>Enter your rank, category, and preferred branch. CounsellQ analyzes UPTAC cutoff records to show colleges that match your rank.</p>
-          <button class="primary-btn" data-page="predict"><i data-lucide="compass"></i> Predict My Colleges</button>
+          <div class="eyebrow"><i data-lucide="shield-check"></i> ML-Evaluated Admission Insights</div>
+          <h1>Find Colleges You Can <span>Actually Get</span>.</h1>
+          <p>Enter your rank, category, and preferred branch. CounsellQ evaluates historical UPTAC cutoff records using Random Forest machine learning models, audited fee schedules, and official placement statistics to guide your choice filling.</p>
+          <div class="hero-cta">
+            <button class="primary-btn" data-page="predict"><i data-lucide="compass"></i> Start Rank Prediction</button>
+            <button class="secondary-btn" data-page="directory"><i data-lucide="building-2"></i> Explore 194 Colleges</button>
+          </div>
         </div>
 
         <div class="preview-card">
           <div class="preview-head">
             <div class="avatar">CQ</div>
-            <div><strong>CounsellQ Prediction</strong><small>Rank-based UPTAC college matching</small></div>
+            <div><strong>CounsellQ Intelligence</strong><small>Historical Cutoffs + ML Feasibility</small></div>
           </div>
           <div class="preview-row"><span>Your Rank</span><strong id="previewRank">45,000</strong></div>
           <div class="preview-row"><span>Category</span><strong id="previewCategory">General</strong></div>
           <div class="preview-row"><span>Branch</span><strong id="previewBranch">Computer Science & Engineering</strong></div>
-          <div class="preview-foot"><span>Prediction source</span><strong>UPTAC cutoff database</strong></div>
+          <div class="preview-row"><span>ML Model</span><strong>Random Forest (Ensemble)</strong></div>
+          <div class="preview-foot"><span>Data sources</span><strong>UPTAC 2025 • NIRF 2024-25 • Official T&P Reports</strong></div>
+        </div>
+      </div>
+
+      <div class="features-banner">
+        <div class="feature-item">
+          <i data-lucide="cpu"></i>
+          <div>
+            <strong>ML Feasibility Model</strong>
+            <small>Calibrated probabilities & historical headroom analysis</small>
+          </div>
+        </div>
+        <div class="feature-item">
+          <i data-lucide="award"></i>
+          <div>
+            <strong>Official NIRF & Accreditations</strong>
+            <small>Rank bands & verified NBA/NAAC validity dates</small>
+          </div>
+        </div>
+        <div class="feature-item">
+          <i data-lucide="banknote"></i>
+          <div>
+            <strong>Audited Fees & Placements</strong>
+            <small>Annual tuition, hostel dues & median/average packages</small>
+          </div>
         </div>
       </div>
 
       <div class="section-title">
         <h2>How CounsellQ Works</h2>
-        <p>A simple workflow from rank to college options.</p>
+        <p>A transparent, evidence-backed workflow for admission counselling.</p>
       </div>
 
       <div class="steps">
-        <article><b>1</b><h3>Enter Your Details</h3><p>Provide your rank, category and preferred branch.</p></article>
-        <article><b>2</b><h3>Match Cutoffs</h3><p>CounsellQ queries historical UPTAC cutoff records.</p></article>
-        <article><b>3</b><h3>Categorize Options</h3><p>Results are grouped into safer, moderate and lower chance options.</p></article>
-        <article><b>4</b><h3>Compare Choices</h3><p>Review cutoff details and compare selected colleges.</p></article>
+        <article>
+          <b>1</b>
+          <h3>Enter Rank & Profile</h3>
+          <p>Provide your JEE Main rank, reservation category, gender, and preferred branch.</p>
+        </article>
+        <article>
+          <b>2</b>
+          <h3>Match Cutoffs</h3>
+          <p>Queries 8,058 UPTAC 2025 cutoffs across all counselling rounds with gender eligibility.</p>
+        </article>
+        <article>
+          <b>3</b>
+          <h3>ML Feasibility</h3>
+          <p>Classifies options into Safer, Moderate, and Ambitious tiers with confidence scores.</p>
+        </article>
+        <article>
+          <b>4</b>
+          <h3>Compare & Choose</h3>
+          <p>Review side-by-side fees, verified placements, NIRF rank, and official websites.</p>
+        </article>
       </div>
     </section>
 
+    <!-- Predict Page -->
     <section id="predict" class="page">
-      <div class="section-heading"><h2>Predict Your Colleges</h2><p>Enter your counselling details to generate personalized options.</p></div>
+      <div class="section-heading">
+        <h2>Predict Your Colleges</h2>
+        <p>Enter your counselling details to generate personalized options backed by ML feasibility scores.</p>
+      </div>
+
+      <div class="disclaimer-banner">
+        <i data-lucide="info"></i>
+        <span><strong>Academic Decision-Support Tool:</strong> Recommendations are calculated from historical UPTAC counselling cutoffs and verified institutional disclosures. Cutoffs fluctuate annually based on candidate volume and difficulty; results do not guarantee admission.</span>
+      </div>
+
       <form id="predictionForm" class="form-card">
         <div class="form-grid">
-          <label>JEE Main Rank<input id="rank" type="number" min="1" value="45000" required></label>
-          <label>Category<select id="category"><option>General</option><option>OBC</option><option>SC</option><option>ST</option><option>EWS</option></select></label>
-          <label>Home State<select id="homeState"><option>UP Domicile</option><option>Other State</option></select></label>
-          <label>Preferred Branch<select id="branch">
-            <option>Computer Science & Engineering</option><option>Information Technology</option><option>Electronics & Communication</option><option>Electrical Engineering</option><option>Mechanical Engineering</option>
-          </select></label>
-          <label>Gender<select id="gender"><option>Male</option><option>Female</option></select></label>
-          <label>Round<select id="round"><option>Round 1</option><option>Round 2</option><option>Round 3</option></select></label>
+          <label>
+            JEE Main Rank
+            <input id="rank" type="number" min="1" max="1500000" value="45000" required>
+          </label>
+          <label>
+            Category
+            <select id="category">
+              <option value="General">General (OPEN)</option>
+              <option value="OBC">OBC (Backward Class)</option>
+              <option value="EWS">Economically Weaker Section (EWS)</option>
+              <option value="SC">Scheduled Caste (SC)</option>
+              <option value="ST">Scheduled Tribe (ST)</option>
+            </select>
+          </label>
+          <label>
+            Home State / Quota
+            <select id="homeState">
+              <option value="Home State">UP Domicile (Home State Quota)</option>
+              <option value="All India">All India / Other State</option>
+            </select>
+          </label>
+          <label>
+            Preferred Branch
+            <select id="branch">
+              <option value="Computer Science & Engineering">Computer Science & Engineering (CSE / AI / ML / DS)</option>
+              <option value="Information Technology">Information Technology (IT)</option>
+              <option value="Electronics & Communication">Electronics & Communication (ECE)</option>
+              <option value="Electrical Engineering">Electrical Engineering (EE / EEE)</option>
+              <option value="Mechanical Engineering">Mechanical Engineering (ME)</option>
+              <option value="Civil Engineering">Civil Engineering (CE)</option>
+            </select>
+          </label>
+          <label>
+            Gender
+            <select id="gender">
+              <option value="Male">Male / Neutral</option>
+              <option value="Female">Female (Eligible for Girl Reservation Quota)</option>
+            </select>
+          </label>
+          <label>
+            Counselling Round
+            <select id="round">
+              <option value="Round 1">Round 1 (Opening Trends)</option>
+              <option value="Round 2">Round 2</option>
+              <option value="Round 3">Round 3 (Final Regular Round)</option>
+            </select>
+          </label>
         </div>
         <div id="formError" class="error hidden"></div>
-        <button id="predictBtn" class="primary-btn full" type="submit">Predict Colleges</button>
+        <button id="predictBtn" class="primary-btn full" type="submit">
+          <i data-lucide="sparkles"></i> Predict Colleges
+        </button>
       </form>
     </section>
 
+    <!-- Results Dashboard Page -->
     <section id="results" class="page">
       <div class="results-header">
-        <div><h2>Predictions Dashboard</h2><p id="resultSummary">Run a prediction to see matching records.</p></div>
-        <button class="secondary-btn" data-page="predict">Modify Search</button>
+        <div>
+          <h2>Predictions Dashboard</h2>
+          <p id="resultSummary">Run a prediction to see matching cutoff records and ML admission feasibility.</p>
+        </div>
+        <div class="header-actions">
+          <button class="secondary-btn" data-page="predict"><i data-lucide="sliders-horizontal"></i> Modify Inputs</button>
+          <button class="secondary-btn" data-page="directory"><i data-lucide="building"></i> Explore Directory</button>
+        </div>
       </div>
-      <div id="filters" class="filters hidden"></div>
+
+      <div class="dashboard-controls">
+        <div id="filters" class="filters"></div>
+        <div class="secondary-filters">
+          <input type="text" id="resultSearch" class="search-input" placeholder="Search college name or city...">
+          <select id="resultSort" class="filter-select">
+            <option value="tier">Sort: ML Feasibility Tier</option>
+            <option value="rankAsc">Sort: Closing Rank (Ascending)</option>
+            <option value="rankDesc">Sort: Closing Rank (Descending)</option>
+            <option value="feeAsc">Sort: Fees (Low to High)</option>
+            <option value="pkgDesc">Sort: Avg Package (High to Low)</option>
+          </select>
+        </div>
+      </div>
+
       <div id="resultsGrid" class="cards"></div>
     </section>
 
+    <!-- College Directory Page -->
+    <section id="directory" class="page">
+      <div class="section-heading">
+        <h2>UPTAC College Directory</h2>
+        <p>Explore 194 participating institutions with verified fee structures, official NIRF rankings, and placement data.</p>
+      </div>
+
+      <div class="directory-bar">
+        <input type="text" id="dirSearch" class="search-input full" placeholder="Search by college name, code, or city (e.g. Lucknow, IET, Ghaziabad)...">
+        <div class="dir-filters">
+          <select id="dirOwnership" class="filter-select">
+            <option value="">All Ownership Types</option>
+            <option value="Government">Government / University</option>
+            <option value="Private">Private Affiliated</option>
+          </select>
+          <select id="dirNirf" class="filter-select">
+            <option value="">All Institutions</option>
+            <option value="true">NIRF Ranked Only</option>
+          </select>
+          <select id="dirSort" class="filter-select">
+            <option value="name">Sort by Name</option>
+            <option value="fee">Sort by Fees (Low to High)</option>
+            <option value="placement">Sort by Average Package</option>
+            <option value="nirf">Sort by NIRF Rank</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="directoryStats" class="dir-stats">Loading institutions...</div>
+      <div id="directoryGrid" class="cards"></div>
+    </section>
+
+    <!-- College Detail Page -->
     <section id="details" class="page">
-      <button class="back-btn" data-page="results">← Back to Results</button>
+      <button class="back-btn" id="backBtn">← Back</button>
       <div id="detailsCard"></div>
     </section>
 
+    <!-- Compare Page -->
     <section id="compare" class="page">
-      <div class="section-heading"><h2>College Comparison</h2><p>Compare up to three results from your prediction.</p></div>
+      <div class="section-heading">
+        <h2>Side-by-Side College Comparison</h2>
+        <p>Compare up to three colleges across cutoffs, fees, placements, NIRF rank, and accreditations.</p>
+      </div>
       <div id="compareContent"></div>
     </section>
   </main>
 
-  <footer>© 2026 CounsellQ • College prediction and counselling assistance system.</footer>
+  <footer>
+    <div class="footer-inner">
+      <p>© 2026 <strong>CounsellQ</strong> • Machine learning admission counselling decision-support platform.</p>
+      <p class="footer-disclaimer">Data sources: UPTAC official cutoffs, Ministry of Education NIRF 2024-25, NBA Accredited Programs database, NAAC portals, and official audited institutional disclosures.</p>
+    </div>
+  </footer>
+
   <script src="js/app.js"></script>
 </body>
 </html>

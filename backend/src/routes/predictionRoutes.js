@@ -7,7 +7,23 @@ const {
     predictColleges
 } = require("../controllers/predictionController");
 
+const {
+    getColleges,
+    getCollegeDetails,
+    getMLInfo
+} = require("../controllers/collegeController");
+
+// College prediction endpoint (historical cutoffs + ML inference)
 router.post("/predict", predictColleges);
+
+// College discovery and directory search
+router.get("/colleges", getColleges);
+
+// Individual college profile with fees, placements, NIRF, and accreditations
+router.get("/colleges/:id", getCollegeDetails);
+
+// ML model metadata and evaluation benchmarks
+router.get("/ml/info", getMLInfo);
 
 // Read-only institute list used for data-audit workflows.
 router.get("/institutes", async (req, res) => {

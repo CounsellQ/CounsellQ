@@ -1,4 +1,12 @@
+/**
+ * CounsellQ Prediction Controller
+ * Integrates historical UPTAC cutoff records, verified college profiles,
+ * fees, placements, NIRF rankings, NBA/NAAC accreditations, and
+ * Random Forest ML admission feasibility inference.
+ */
+
 const pool = require("../db");
+const { predictAdmissionFeasibility } = require("../ml/modelInference");
 
 const predictColleges = async (req, res) => {
     try {
@@ -7,7 +15,8 @@ const predictColleges = async (req, res) => {
             category,
             program,
             quota,
-            round
+            round,
+            gender
         } = req.body;
 
         // Validate required fields
@@ -27,22 +36,43 @@ const predictColleges = async (req, res) => {
             });
         }
 
-        const values = [category];
-        let parameterIndex = 2;
+        // Category mapping and gender-inclusive eligibility:
+        // In UPTAC, female candidates are eligible for OPEN, OPEN(GIRL), and category-specific girl quotas.
+        // Reserved candidates are also eligible for unreserved OPEN seats based on rank merit.
+        const isFemale = String(gender || "").toLowerCase().includes("female") || String(gender || "").toLowerCase() === "f";
+        const catUpper = String(category).trim().toUpperCase();
 
-        /*
-         * Get UPTAC cutoff data.
-         *
-         * NIRF:
-         * Attach only when a verified UPTAC -> NIRF mapping exists.
-         *
-         * Accreditation:
-         * - NAAC is institute-level.
-         * - NBA is program-level and is attached only when
-         *   the cutoff program exactly matches the accredited program.
-         *
-         * LATERAL aggregation keeps one row per cutoff.
-         */
+        let eligibleCategories = [category];
+
+        if (catUpper === "OPEN" || catUpper === "GENERAL") {
+            eligibleCategories = isFemale ? ["OPEN", "OPEN(GIRL)"] : ["OPEN"];
+        } else if (catUpper === "BC" || catUpper === "OBC") {
+            eligibleCategories = isFemale
+                ? ["BC", "BC(Girl)", "BC(GL)", "OPEN", "OPEN(GIRL)"]
+                : ["BC", "BC(OPEN)", "OPEN"];
+        } else if (catUpper === "SC") {
+            eligibleCategories = isFemale
+                ? ["SC", "SC(Girl)", "SC(GL)", "OPEN", "OPEN(GIRL)"]
+                : ["SC", "OPEN"];
+        } else if (catUpper === "ST") {
+            eligibleCategories = isFemale
+                ? ["ST", "ST(Girl)", "ST(GL)", "OPEN", "OPEN(GIRL)"]
+                : ["ST", "OPEN"];
+        } else if (catUpper === "EWS" || catUpper.includes("EWS")) {
+            eligibleCategories = isFemale
+                ? ["EWS(OPEN)", "EWS(GL)", "EWS", "OPEN", "OPEN(GIRL)"]
+                : ["EWS(OPEN)", "EWS", "OPEN"];
+        }
+
+        // Build SQL Query
+        // Lower bound for realistic ambitious options (allow options up to 45% better than student's rank)
+        const minClosingRank = Math.max(1, Math.round(studentRank * 0.55));
+        // Upper bound for safe options (ensure safety schools are never hidden)
+        const maxClosingRank = Math.max(Math.round(studentRank * 3.5), 250000);
+
+        const values = [eligibleCategories, minClosingRank, maxClosingRank];
+        let pIndex = 4;
+
         let query = `
             SELECT
                 c.institute,
@@ -53,14 +83,51 @@ const predictColleges = async (req, res) => {
                 c.opening_rank,
                 c.closing_rank,
 
+                -- College Profile
+                col.id AS college_id,
+                col.display_name AS college_display_name,
+                col.college_code,
+                col.institution_type,
+                col.ownership,
+                col.city,
+                col.website,
+                col.approval,
+
+                -- Fees
+                cf.total_annual_fee AS annual_fee,
+                cf.tuition_fee_annual,
+                cf.academic_year AS fee_academic_year,
+                cf.source_url AS fee_source_url,
+
+                -- Placements
+                cp.average_package_lpa,
+                cp.median_package_lpa,
+                cp.highest_package_lpa,
+                cp.placement_percentage,
+                cp.placement_year,
+                cp.source_url AS placement_source_url,
+
+                -- NIRF
                 n.nirf_year,
                 n.rank AS nirf_rank,
                 n.rank_band AS nirf_rank_band,
                 n.score AS nirf_score,
 
+                -- Accreditations (Aggregated)
                 COALESCE(acc.accreditation, '[]'::json) AS accreditation
 
             FROM cutoffs c
+
+            LEFT JOIN colleges col
+                ON c.institute = col.uptac_name
+
+            LEFT JOIN college_fees cf
+                ON cf.college_id = col.id
+                AND cf.fee_type = 'Regular'
+
+            LEFT JOIN college_placements cp
+                ON cp.college_id = col.id
+                AND cp.placement_year = 2024
 
             LEFT JOIN college_nirf_map m
                 ON c.institute = m.uptac_institute
@@ -68,7 +135,6 @@ const predictColleges = async (req, res) => {
 
             LEFT JOIN nirf_rankings n
                 ON m.nirf_institute = n.institute_name
-                AND n.nirf_year = 2025
                 AND n.ranking_category = 'Engineering'
 
             LEFT JOIN LATERAL (
@@ -80,12 +146,10 @@ const predictColleges = async (req, res) => {
                             'grade', a.grade,
                             'program', a.program,
                             'validity', a.validity,
-                            'updated_year', a.updated_year,
-                            'source', a.source,
                             'valid_from', a.valid_from,
                             'valid_until', a.valid_until,
+                            'source', a.source,
                             'source_url', a.source_url,
-                            'last_verified', a.last_verified,
                             'derived_status', CASE
                                 WHEN a.valid_until IS NULL THEN 'DATE_NOT_AVAILABLE'
                                 WHEN a.valid_until >= CURRENT_DATE THEN 'CURRENTLY_VALID'
@@ -94,148 +158,182 @@ const predictColleges = async (req, res) => {
                         )
                         ORDER BY a.accreditation_type
                     ) AS accreditation
-
                 FROM college_accreditation_map cam
-
                 JOIN accreditations a
                     ON cam.accreditation_institute = a.institute_name
-
                 WHERE cam.uptac_institute = c.institute
                     AND cam.verified = TRUE
-
                     AND (
                         a.accreditation_type = 'NAAC'
-
                         OR (
                             a.accreditation_type = 'NBA'
-                            AND LOWER(TRIM(c.program))
-                                = LOWER(TRIM(a.program))
+                            AND LOWER(TRIM(c.program)) = LOWER(TRIM(a.program))
                         )
                     )
             ) acc ON TRUE
 
-            WHERE c.category = $1
+            WHERE c.category = ANY($1)
+              AND c.closing_rank >= $2
+              AND c.closing_rank <= $3
         `;
 
         // Program filter
         if (program) {
-            query += ` AND c.program ILIKE $${parameterIndex}`;
+            query += ` AND c.program ILIKE $${pIndex}`;
             values.push(`%${program}%`);
-            parameterIndex++;
+            pIndex++;
         }
 
-        // Quota filter
+        // Quota filter (default Home State)
         if (quota) {
-            query += ` AND c.quota = $${parameterIndex}`;
+            query += ` AND c.quota = $${pIndex}`;
             values.push(quota);
-            parameterIndex++;
+            pIndex++;
         }
 
         // Round filter
         if (round) {
-            const normalizedRound =
-                String(round).startsWith("Round ")
-                    ? String(round)
-                    : `Round ${round}`;
-
-            query += ` AND c.round = $${parameterIndex}`;
+            const normalizedRound = String(round).startsWith("Round ")
+                ? String(round)
+                : `Round ${round}`;
+            query += ` AND c.round = $${pIndex}`;
             values.push(normalizedRound);
-            parameterIndex++;
+            pIndex++;
         }
 
-        // Rank filter
         query += `
-            AND c.closing_rank <= $${parameterIndex}
             ORDER BY c.closing_rank ASC
-            LIMIT 100
+            LIMIT 150
         `;
-
-        values.push(studentRank * 2);
 
         const result = await pool.query(query, values);
 
-        // Format prediction results
-        const results = result.rows.map((college) => {
-            const closingRank = Number(college.closing_rank);
+        // Process rows and execute ML inference
+        const results = result.rows.map((row) => {
+            const closingRank = Number(row.closing_rank);
+            const openingRank = Number(row.opening_rank);
 
-            const difference =
-                closingRank - studentRank;
+            // Execute ML inference
+            const mlResult = predictAdmissionFeasibility({
+                studentRank,
+                openingRank,
+                closingRank,
+                institute: row.institute,
+                category: row.category,
+                round: row.round
+            });
 
-            const percentageDifference =
-                (difference / studentRank) * 100;
-
-            let prediction;
-
-            if (percentageDifference >= 20) {
-                prediction = "Safer Chance";
-            } else if (percentageDifference >= 0) {
-                prediction = "Moderate Chance";
-            } else {
-                prediction = "Lower Chance";
+            // Map tier to backwards-compatible prediction label
+            let legacyPrediction = "Moderate Chance";
+            if (mlResult.tier === "SAFE") {
+                legacyPrediction = "Safer Chance";
+            } else if (mlResult.tier === "AMBITIOUS") {
+                legacyPrediction = "Lower Chance";
             }
 
             return {
-                institute: college.institute,
-                program: college.program,
-                quota: college.quota,
-                category: college.category,
-                round: college.round,
-                opening_rank: college.opening_rank,
-                closing_rank: college.closing_rank,
+                institute: row.institute,
+                program: row.program,
+                quota: row.quota,
+                category: row.category,
+                round: row.round,
+                opening_rank: row.opening_rank,
+                closing_rank: row.closing_rank,
 
-                prediction,
+                // Legacy compatibility
+                prediction: legacyPrediction,
 
-                nirf: college.nirf_year
-                    ? {
-                        year: college.nirf_year,
-                        rank: college.nirf_rank,
-                        rank_band: college.nirf_rank_band,
-                        score: college.nirf_score
-                    }
-                    : null,
+                // Enhanced ML Prediction
+                ml_prediction: mlResult,
+                admission_feasibility: mlResult.tier === "SAFE" ? "High" : mlResult.tier === "MODERATE" ? "Moderate" : "Reach / Ambitious",
+                feasibility_score: mlResult.feasibilityScore,
+                explanation: mlResult.explanation,
 
-                accreditation:
-                    college.accreditation || []
+                // College entity metadata
+                college: row.college_id ? {
+                    id: row.college_id,
+                    display_name: row.college_display_name || row.institute,
+                    code: row.college_code,
+                    type: row.institution_type,
+                    ownership: row.ownership,
+                    city: row.city,
+                    website: row.website,
+                    approval: row.approval
+                } : {
+                    id: null,
+                    display_name: row.institute,
+                    code: null,
+                    type: "UPTAC Institution",
+                    ownership: "Affiliated",
+                    city: "Uttar Pradesh",
+                    website: null,
+                    approval: null
+                },
+
+                // Fee data
+                fee: row.annual_fee !== null ? {
+                    annual_total: Number(row.annual_fee),
+                    tuition: row.tuition_fee_annual !== null ? Number(row.tuition_fee_annual) : null,
+                    academic_year: row.fee_academic_year,
+                    source_url: row.fee_source_url
+                } : null,
+
+                // Placement data
+                placement: row.average_package_lpa !== null ? {
+                    average_lpa: Number(row.average_package_lpa),
+                    median_lpa: row.median_package_lpa !== null ? Number(row.median_package_lpa) : null,
+                    highest_lpa: row.highest_package_lpa !== null ? Number(row.highest_package_lpa) : null,
+                    placement_percentage: row.placement_percentage !== null ? Number(row.placement_percentage) : null,
+                    year: row.placement_year,
+                    source_url: row.placement_source_url
+                } : null,
+
+                // NIRF
+                nirf: row.nirf_year ? {
+                    year: row.nirf_year,
+                    rank: row.nirf_rank,
+                    rank_band: row.nirf_rank_band,
+                    score: row.nirf_score ? Number(row.nirf_score) : null
+                } : null,
+
+                // Accreditations
+                accreditation: row.accreditation || []
             };
         });
 
-        // Sort by prediction category first,
-        // then by closing rank.
-        const predictionOrder = {
-            "Safer Chance": 1,
-            "Moderate Chance": 2,
-            "Lower Chance": 3
+        // Sort by tier order (Safe -> Moderate -> Ambitious), then by closing rank
+        const tierPriority = {
+            "SAFE": 1,
+            "MODERATE": 2,
+            "AMBITIOUS": 3
         };
 
         results.sort((a, b) => {
-            if (
-                predictionOrder[a.prediction] !==
-                predictionOrder[b.prediction]
-            ) {
-                return (
-                    predictionOrder[a.prediction] -
-                    predictionOrder[b.prediction]
-                );
+            const pA = tierPriority[a.ml_prediction.tier] || 2;
+            const pB = tierPriority[b.ml_prediction.tier] || 2;
+            if (pA !== pB) {
+                return pA - pB;
             }
-
-            return (
-                Number(a.closing_rank) -
-                Number(b.closing_rank)
-            );
+            return Number(a.closing_rank) - Number(b.closing_rank);
         });
 
         res.json({
             success: true,
             count: results.length,
+            student_rank: studentRank,
+            evaluated_category: category,
+            eligible_categories_searched: eligibleCategories,
+            model_info: {
+                version: "v1.0.0-rf-ensemble",
+                algorithm: "Random Forest Classifier (Ensemble)",
+                evaluated_against_baseline: "Rule-Based Cutoff Baseline"
+            },
+            disclaimer: "CounsellQ is an academic decision-support tool based on historical UPTAC counselling cutoffs and verified institutional disclosures. Cutoff boundaries vary annually based on seat matrix, applicant volume, and exam difficulty; recommendations do not constitute an admission guarantee.",
             results
         });
 
     } catch (error) {
-        console.error(
-            "Prediction error:",
-            error.message
-        );
-
+        console.error("Prediction error:", error.message);
         res.status(500).json({
             success: false,
             error: "Internal server error"

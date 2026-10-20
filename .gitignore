@@ -13,3 +13,8 @@ dist/
 build/
 import_nirf.env
 import_nirf.js
+
+# Local backup files
+*.local-backup.js
+*_backup_*.js
+

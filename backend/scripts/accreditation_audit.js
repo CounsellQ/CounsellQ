@@ -25,18 +25,7 @@
  *   NAAC:  https://assessmentonline-basic.naac.gov.in/
  */
 
-const { Pool } = require("pg");
-require("dotenv").config({ path: require("path").join(__dirname, "..", ".env") });
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || undefined,
-  host: process.env.PGHOST,
-  port: process.env.PGPORT ? Number(process.env.PGPORT) : undefined,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
-  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : undefined,
-});
+const pool = require("../src/db");
 
 async function run() {
   const client = await pool.connect();
