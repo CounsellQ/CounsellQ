@@ -397,11 +397,14 @@ const getMLInfo = async (req, res) => {
     try {
         const fs = require("fs");
         const path = require("path");
-        const reportPath = path.resolve(__dirname, "../../../ml/ml_comparison_report.json");
+        const localReportPath = path.resolve(__dirname, "../ml/ml_comparison_report.json");
+        const rootReportPath = path.resolve(__dirname, "../../../ml/ml_comparison_report.json");
 
         let reportData = null;
-        if (fs.existsSync(reportPath)) {
-            reportData = JSON.parse(fs.readFileSync(reportPath, "utf8"));
+        if (fs.existsSync(localReportPath)) {
+            reportData = JSON.parse(fs.readFileSync(localReportPath, "utf8"));
+        } else if (fs.existsSync(rootReportPath)) {
+            reportData = JSON.parse(fs.readFileSync(rootReportPath, "utf8"));
         }
 
         res.json({

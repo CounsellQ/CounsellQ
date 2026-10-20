@@ -184,8 +184,9 @@ const predictColleges = async (req, res) => {
             pIndex++;
         }
 
-        // Quota filter (default Home State)
-        if (quota) {
+        // Quota filter (default Home State in UPTAC data)
+        // If "All India" or "All" is selected, avoid zeroing out results since UPTAC cutoffs are recorded under Home State
+        if (quota && quota !== "All" && quota !== "All India") {
             query += ` AND c.quota = $${pIndex}`;
             values.push(quota);
             pIndex++;
