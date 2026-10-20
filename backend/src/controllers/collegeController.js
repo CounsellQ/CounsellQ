@@ -225,7 +225,7 @@ const getColleges = async (req, res) => {
         console.error("Error in getColleges:", err.message);
         res.status(500).json({
             success: false,
-            error: "Failed to retrieve colleges"
+            error: err.message || "Failed to retrieve colleges"
         });
     }
 };

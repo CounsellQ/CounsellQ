@@ -336,7 +336,7 @@ const predictColleges = async (req, res) => {
         console.error("Prediction error:", error.message);
         res.status(500).json({
             success: false,
-            error: "Internal server error"
+            error: error.message || "Internal server error"
         });
     }
 };

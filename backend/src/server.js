@@ -46,12 +46,14 @@ app.use("/api", predictionRoutes);
 // Health check endpoint
 app.get("/api/health", async (req, res) => {
     try {
-        const result = await pool.query("SELECT NOW()");
+        const result = await pool.query("SELECT NOW(), current_database(), (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'colleges') AS has_colleges");
 
         res.json({
             status: "OK",
             message: "CounsellQ backend is running",
             database: "PostgreSQL connected",
+            db_name: result.rows[0].current_database,
+            has_colleges_table: Number(result.rows[0].has_colleges) > 0,
             time: result.rows[0].now,
             features: [
                 "historical_cutoffs",
