@@ -4,7 +4,13 @@ const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const pool = require("./db");
+const { initDatabase } = require("./dbBootstrap");
 const predictionRoutes = require("./routes/predictionRoutes");
+
+// Trigger database bootstrap
+initDatabase(pool).catch(err => {
+    console.error("Startup DB initialization error:", err.message);
+});
 
 const app = express();
 
@@ -46,14 +52,22 @@ app.use("/api", predictionRoutes);
 // Health check endpoint
 app.get("/api/health", async (req, res) => {
     try {
-        const result = await pool.query("SELECT NOW(), current_database(), (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'colleges') AS has_colleges");
+        let result = await pool.query("SELECT NOW(), current_database(), (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'colleges') AS has_colleges");
+        let hasColleges = Number(result.rows[0].has_colleges) > 0;
+
+        if (!hasColleges) {
+            console.log("Health check triggered auto-bootstrap...");
+            await initDatabase(pool);
+            result = await pool.query("SELECT NOW(), current_database(), (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'colleges') AS has_colleges");
+            hasColleges = Number(result.rows[0].has_colleges) > 0;
+        }
 
         res.json({
             status: "OK",
             message: "CounsellQ backend is running",
             database: "PostgreSQL connected",
             db_name: result.rows[0].current_database,
-            has_colleges_table: Number(result.rows[0].has_colleges) > 0,
+            has_colleges_table: hasColleges,
             time: result.rows[0].now,
             features: [
                 "historical_cutoffs",
