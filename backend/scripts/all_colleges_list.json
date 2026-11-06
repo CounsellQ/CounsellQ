@@ -1,0 +1,972 @@
+[
+  {
+    "index": 1,
+    "id": "c-a-n-a-college-of-engineering-management-barei",
+    "uptac_name": "A.N.A.COLLEGE OF ENGINEERING & MANAGEMENT,BAREILLY"
+  },
+  {
+    "index": 2,
+    "id": "abes-ghaziabad",
+    "uptac_name": "ABES ENGG.COLLEGE,GHAZIABAD"
+  },
+  {
+    "index": 3,
+    "id": "c-abes-institute-of-technology-ghaziabad",
+    "uptac_name": "ABES INSTITUTE OF TECHNOLOGY,GHAZIABAD"
+  },
+  {
+    "index": 4,
+    "id": "c-abss-institute-of-technology-meerut-meerut",
+    "uptac_name": "ABSS INSTITUTE OF TECHNOLOGY, MEERUT,MEERUT"
+  },
+  {
+    "index": 5,
+    "id": "c-accurate-institute-of-management-technology-g",
+    "uptac_name": "ACCURATE INSTITUTE OF MANAGEMENT & TECHNOLOGY,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 6,
+    "id": "c-acharya-narendra-deva-university-of-agricultu",
+    "uptac_name": "Acharya Narendra Deva University of Agriculture & Technology, Kumarganj, Ayodhya"
+  },
+  {
+    "index": 7,
+    "id": "c-adhunik-college-of-engg-ghaziabad",
+    "uptac_name": "ADHUNIK COLLEGE OF ENGG.,GHAZIABAD"
+  },
+  {
+    "index": 8,
+    "id": "akgec-ghaziabad",
+    "uptac_name": "AJAY KUMAR GARG ENGG. COLLEGE,GHAZIABAD"
+  },
+  {
+    "index": 9,
+    "id": "c-aligarh-college-of-engg-tech-aligarh",
+    "uptac_name": "ALIGARH COLLEGE OF ENGG. & TECH,ALIGARH"
+  },
+  {
+    "index": 10,
+    "id": "c-allenhouse-institute-of-technology-kanpur",
+    "uptac_name": "ALLENHOUSE INSTITUTE OF TECHNOLOGY,KANPUR"
+  },
+  {
+    "index": 11,
+    "id": "c-amani-group-of-institutions-amroha",
+    "uptac_name": "AMANI GROUP OF INSTITUTIONS,AMROHA"
+  },
+  {
+    "index": 12,
+    "id": "c-ambalika-institute-of-management-technology-l",
+    "uptac_name": "AMBALIKA INSTITUTE OF MANAGEMENT & TECHNOLOGY,LUCKNOW"
+  },
+  {
+    "index": 13,
+    "id": "c-apex-institute-of-technology-rampur",
+    "uptac_name": "APEX INSTITUTE OF TECHNOLOGY,RAMPUR"
+  },
+  {
+    "index": 14,
+    "id": "c-apollo-institute-of-technology-kanpur",
+    "uptac_name": "APOLLO INSTITUTE OF TECHNOLOGY,KANPUR"
+  },
+  {
+    "index": 15,
+    "id": "c-ashoka-institute-of-technology-management-var",
+    "uptac_name": "ASHOKA INSTITUTE OF TECHNOLOGY & MANAGEMENT,VARANASI"
+  },
+  {
+    "index": 16,
+    "id": "c-axis-institute-of-technology-management-kanpu",
+    "uptac_name": "AXIS INSTITUTE OF TECHNOLOGY & MANAGEMENT,KANPUR"
+  },
+  {
+    "index": 17,
+    "id": "c-b-b-s-college-of-engginering-and-technology-a",
+    "uptac_name": "B.B.S.COLLEGE OF ENGGINERING AND TECHNOLOGY,ALLAHABAD"
+  },
+  {
+    "index": 18,
+    "id": "c-b-n-college-of-engineering-technology-bncet-l",
+    "uptac_name": "B.N.COLLEGE OF ENGINEERING & TECHNOLOGY(BNCET),LUCKNOW"
+  },
+  {
+    "index": 19,
+    "id": "c-b-s-a-college-of-engineering-technology-mathu",
+    "uptac_name": "B.S.A. COLLEGE OF ENGINEERING & TECHNOLOGY,MATHURA"
+  },
+  {
+    "index": 20,
+    "id": "c-baba-shaheb-dr-b-r-ambedkar-college-of-agricu",
+    "uptac_name": "Baba Shaheb (Dr.) B R Ambedkar College of Agricultural Engineering and Technology, Etawah (CSAUAT)"
+  },
+  {
+    "index": 21,
+    "id": "c-babu-banarasi-das-institute-of-technology-and",
+    "uptac_name": "BABU BANARASI DAS INSTITUTE OF TECHNOLOGY AND MANAGEMENT, LUCKNOW"
+  },
+  {
+    "index": 22,
+    "id": "c-babu-banarasi-das-northern-india-institute-of",
+    "uptac_name": "BABU BANARASI DAS NORTHERN INDIA INSTITUTE OF TECHNOLOGY,LUCKNOW"
+  },
+  {
+    "index": 23,
+    "id": "c-babu-banarsi-das-institute-of-tech-ghaziabad",
+    "uptac_name": "BABU BANARSI DAS INSTITUTE OF TECH.,GHAZIABAD"
+  },
+  {
+    "index": 24,
+    "id": "c-babu-sunder-singh-institute-of-technology-man",
+    "uptac_name": "BABU SUNDER SINGH INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW"
+  },
+  {
+    "index": 25,
+    "id": "c-bansal-institute-of-engineering-technology-lu",
+    "uptac_name": "BANSAL INSTITUTE OF ENGINEERING & TECHNOLOGY,LUCKNOW"
+  },
+  {
+    "index": 26,
+    "id": "c-bhagwant-institute-of-technology-muzaffarnaga",
+    "uptac_name": "BHAGWANT INSTITUTE OF TECHNOLOGY,MUZAFFARNAGAR"
+  },
+  {
+    "index": 27,
+    "id": "c-bharat-institute-of-technology-meerut",
+    "uptac_name": "BHARAT INSTITUTE OF TECHNOLOGY,MEERUT"
+  },
+  {
+    "index": 28,
+    "id": "c-bharat-ratna-baba-saheb-bhim-rao-ambedkar-raj",
+    "uptac_name": "BHARAT RATNA BABA SAHEB BHIM RAO AMBEDKAR RAJKIYA ENGINEERING COLLEGE, PRATAPGARH"
+  },
+  {
+    "index": 29,
+    "id": "c-bharat-ratna-sardar-vallabhbhai-patel-rajkiya",
+    "uptac_name": "BHARAT RATNA SARDAR VALLABHBHAI PATEL RAJKIYA ENGINEERING COLLEGE, BASTI"
+  },
+  {
+    "index": 30,
+    "id": "c-buddha-institute-of-technology-gorakhpur",
+    "uptac_name": "BUDDHA INSTITUTE OF TECHNOLOGY,GORAKHPUR"
+  },
+  {
+    "index": 31,
+    "id": "biet-jhansi",
+    "uptac_name": "BUNDELKHAND INSTITUTE OF ENGINEERING & TECHNOLOGY,JHANSI"
+  },
+  {
+    "index": 32,
+    "id": "c-bundelkhand-university-jhansi",
+    "uptac_name": "Bundelkhand University, Jhansi"
+  },
+  {
+    "index": 33,
+    "id": "c-central-institute-of-petrochemicals-engineeri",
+    "uptac_name": "CENTRAL INSTITUTE OF PETROCHEMICALS ENGINEERING & TECHNOLOGY (CIPET), LUCKNOW"
+  },
+  {
+    "index": 34,
+    "id": "c-centre-for-advance-studies-lucknow",
+    "uptac_name": "CENTRE FOR ADVANCE STUDIES,LUCKNOW"
+  },
+  {
+    "index": 35,
+    "id": "c-ch-charan-singh-university-campus-scriet-meer",
+    "uptac_name": "Ch. Charan Singh University Campus (SCRIET) Meerut"
+  },
+  {
+    "index": 36,
+    "id": "c-chaudhary-beeri-singh-college-of-engineering-",
+    "uptac_name": "CHAUDHARY BEERI SINGH COLLEGE OF ENGINEERING & MANAGEMENT,AGRA"
+  },
+  {
+    "index": 37,
+    "id": "c-college-of-engg-rural-technology-meerut",
+    "uptac_name": "COLLEGE OF ENGG. & RURAL TECHNOLOGY,MEERUT"
+  },
+  {
+    "index": 38,
+    "id": "c-d-d-u-gorakhpur-university-gorakhpur",
+    "uptac_name": "D. D. U. Gorakhpur University, Gorakhpur"
+  },
+  {
+    "index": 39,
+    "id": "dei-agra",
+    "uptac_name": "DAYALBAGH EDUCATIONAL INSTITUTE,AGRA"
+  },
+  {
+    "index": 40,
+    "id": "c-deewan-v-s-institute-of-engineering-technolog",
+    "uptac_name": "DEEWAN V.S. INSTITUTE OF ENGINEERING & TECHNOLOGY, MEERUT,MEERUT"
+  },
+  {
+    "index": 41,
+    "id": "c-delhi-institute-of-engineering-technology-mee",
+    "uptac_name": "DELHI INSTITUTE OF ENGINEERING & TECHNOLOGY,MEERUT"
+  },
+  {
+    "index": 42,
+    "id": "c-dev-bhoomi-group-of-institutions-saharanpur",
+    "uptac_name": "DEV BHOOMI GROUP OF INSTITUTIONS,SAHARANPUR"
+  },
+  {
+    "index": 43,
+    "id": "c-dr-bhim-rao-ambedkar-university-agra",
+    "uptac_name": "Dr. Bhim Rao Ambedkar University, Agra"
+  },
+  {
+    "index": 44,
+    "id": "c-dr-k-n-modi-institute-of-engg-technology-ghaz",
+    "uptac_name": "DR. K.N. MODI INSTITUTE OF ENGG. & TECHNOLOGY,GHAZIABAD"
+  },
+  {
+    "index": 45,
+    "id": "c-dr-rammanohar-lohia-avadh-university-faizabad",
+    "uptac_name": "Dr. Rammanohar Lohia Avadh University, Faizabad"
+  },
+  {
+    "index": 46,
+    "id": "c-dr-rizvi-college-of-engineering-kaushambi",
+    "uptac_name": "DR. RIZVI COLLEGE OF ENGINEERING,,KAUSHAMBI"
+  },
+  {
+    "index": 47,
+    "id": "c-dr-shakuntala-misra-national-rehabilitation-u",
+    "uptac_name": "Dr. Shakuntala Misra National Rehabilitation University, Lucknow"
+  },
+  {
+    "index": 48,
+    "id": "c-dr-virendra-swarup-memorial-trust-group-of-in",
+    "uptac_name": "DR. VIRENDRA SWARUP MEMORIAL TRUST GROUP OF INSTITUTIONS,UNNAO"
+  },
+  {
+    "index": 49,
+    "id": "c-dr-ambedkar-institute-of-technology-for-divya",
+    "uptac_name": "DR.AMBEDKAR INSTITUTE OF TECHNOLOGY FOR DIVYANGJAN, U.P., KANPUR"
+  },
+  {
+    "index": 50,
+    "id": "c-dr-m-c-saxena-college-of-engg-technology-luck",
+    "uptac_name": "DR.M.C.SAXENA COLLEGE OF ENGG. & TECHNOLOGY,LUCKNOW"
+  },
+  {
+    "index": 51,
+    "id": "c-dronacharya-group-of-institutions-gautam-budd",
+    "uptac_name": "DRONACHARYA GROUP OF INSTITUTIONS,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 52,
+    "id": "c-eshan-college-of-engineering-mathura",
+    "uptac_name": "ESHAN COLLEGE OF ENGINEERING,MATHURA"
+  },
+  {
+    "index": 53,
+    "id": "c-faculty-of-engg-agra-college-agra",
+    "uptac_name": "FACULTY OF ENGG, AGRA COLLEGE,AGRA"
+  },
+  {
+    "index": 54,
+    "id": "c-faculty-of-engineering-shanti-niketan-trust-s",
+    "uptac_name": "FACULTY OF ENGINEERING SHANTI NIKETAN TRUST'S GROUP OF INSTITUTIONS,MEERUT"
+  },
+  {
+    "index": 55,
+    "id": "c-feroze-gandhi-institute-of-engg-and-technolog",
+    "uptac_name": "FEROZE GANDHI INSTITUTE OF ENGG AND TECHNOLOGY, RAIBAREILLY"
+  },
+  {
+    "index": 56,
+    "id": "c-fit-engineering-college-meerut",
+    "uptac_name": "FIT ENGINEERING COLLEGE,MEERUT"
+  },
+  {
+    "index": 57,
+    "id": "c-g-c-r-g-memorial-trust-s-group-of-institution",
+    "uptac_name": "G.C.R.G. MEMORIAL TRUST'S GROUP OF INSTITUTIONS, FACULTY OF ENGINEERING,LUCKNOW"
+  },
+  {
+    "index": 58,
+    "id": "gl-bajaj-noida",
+    "uptac_name": "G.L. BAJAJ INSTITUTE OF TECHNOLOGY & MANAGEMENT,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 59,
+    "id": "c-g-l-bajaj-group-of-institutions-mathura",
+    "uptac_name": "G.L.BAJAJ GROUP OF INSTITUTIONS,MATHURA"
+  },
+  {
+    "index": 60,
+    "id": "gcet-noida",
+    "uptac_name": "GALGOTIA'S COLLEGE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 61,
+    "id": "c-global-institute-of-information-technology-ga",
+    "uptac_name": "GLOBAL INSTITUTE OF INFORMATION TECHNOLOGY,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 62,
+    "id": "c-goel-institute-of-technology-management-luckn",
+    "uptac_name": "GOEL INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW"
+  },
+  {
+    "index": 63,
+    "id": "c-gokaran-narvadeshwar-institute-of-technology-",
+    "uptac_name": "GOKARAN NARVADESHWAR INSTITUTE OF TECHNOLOGY & MANAGEMENT,BARABANKI"
+  },
+  {
+    "index": 64,
+    "id": "c-greater-noida-college",
+    "uptac_name": "GREATER NOIDA COLLEGE"
+  },
+  {
+    "index": 65,
+    "id": "c-greater-noida-institute-of-technology-gautam-",
+    "uptac_name": "GREATER NOIDA INSTITUTE OF TECHNOLOGY,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 66,
+    "id": "c-hardayal-technical-campus-mathura",
+    "uptac_name": "HARDAYAL TECHNICAL CAMPUS,MATHURA"
+  },
+  {
+    "index": 67,
+    "id": "c-hi-tech-institute-of-engineering-technology-g",
+    "uptac_name": "HI-TECH. INSTITUTE OF ENGINEERING &TECHNOLOGY,GHAZIABAD"
+  },
+  {
+    "index": 68,
+    "id": "c-himalayan-institute-of-technology-management-",
+    "uptac_name": "HIMALAYAN INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW"
+  },
+  {
+    "index": 69,
+    "id": "c-hindustan-college-of-science-technology-mathu",
+    "uptac_name": "HINDUSTAN COLLEGE OF SCIENCE & TECHNOLOGY,MATHURA"
+  },
+  {
+    "index": 70,
+    "id": "c-hmfa-memorial-institute-of-engineering-techno",
+    "uptac_name": "HMFA MEMORIAL INSTITUTE OF ENGINEERING & TECHNOLOGY,ALLAHABAD"
+  },
+  {
+    "index": 71,
+    "id": "c-i-e-c-college-of-engineering-technology-gauta",
+    "uptac_name": "I.E.C. COLLEGE OF ENGINEERING & TECHNOLOGY,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 72,
+    "id": "c-i-i-m-t-engg-college-meerut",
+    "uptac_name": "I.I.M.T. ENGG. COLLEGE,MEERUT"
+  },
+  {
+    "index": 73,
+    "id": "c-i-m-s-engineering-college-ghaziabad",
+    "uptac_name": "I.M.S. ENGINEERING COLLEGE,GHAZIABAD"
+  },
+  {
+    "index": 74,
+    "id": "c-i-t-s-engg-college-gautam-buddh-nagar",
+    "uptac_name": "I.T.S. ENGG.COLLEGE,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 75,
+    "id": "c-iimt-college-of-engineering-gautam-buddh-naga",
+    "uptac_name": "IIMT COLLEGE OF ENGINEERING,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 76,
+    "id": "c-inderprastha-engg-college-ghaziabad",
+    "uptac_name": "INDERPRASTHA ENGG. COLLEGE,GHAZIABAD"
+  },
+  {
+    "index": 77,
+    "id": "c-indian-institute-of-carpet-technology-bhadohi",
+    "uptac_name": "INDIAN INSTITUTE OF CARPET TECHNOLOGY,BHADOHI"
+  },
+  {
+    "index": 78,
+    "id": "c-indian-institute-of-handloom-technology-varan",
+    "uptac_name": "INDIAN INSTITUTE OF HANDLOOM TECHNOLOGY,VARANASI"
+  },
+  {
+    "index": 79,
+    "id": "c-indraprastha-institute-of-management-technolo",
+    "uptac_name": "INDRAPRASTHA INSTITUTE OF MANAGEMENT & TECHNOLOGY,SAHARANPUR"
+  },
+  {
+    "index": 80,
+    "id": "c-institute-of-engg-rural-technology-allahabad",
+    "uptac_name": "INSTITUTE OF ENGG. & RURAL TECHNOLOGY,ALLAHABAD"
+  },
+  {
+    "index": 81,
+    "id": "iet-lucknow",
+    "uptac_name": "INSTITUTE OF ENGINEERING & TECHNOLOGY,LUCKNOW"
+  },
+  {
+    "index": 82,
+    "id": "c-institute-of-engineering-technology-sitapur",
+    "uptac_name": "INSTITUTE OF ENGINEERING & TECHNOLOGY,SITAPUR"
+  },
+  {
+    "index": 83,
+    "id": "c-institute-of-technology-management-aligarh",
+    "uptac_name": "INSTITUTE OF TECHNOLOGY & MANAGEMENT,ALIGARH"
+  },
+  {
+    "index": 84,
+    "id": "c-institute-of-technology-management-gorakhpur",
+    "uptac_name": "INSTITUTE OF TECHNOLOGY & MANAGEMENT,GORAKHPUR"
+  },
+  {
+    "index": 85,
+    "id": "c-institute-of-technology-management-lucknow",
+    "uptac_name": "INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW"
+  },
+  {
+    "index": 86,
+    "id": "c-institute-of-technology-management-maharajgan",
+    "uptac_name": "INSTITUTE OF TECHNOLOGY & MANAGEMENT,MAHARAJGANJ"
+  },
+  {
+    "index": 87,
+    "id": "c-isabella-thoburn-college-professional-studies",
+    "uptac_name": "ISABELLA THOBURN COLLEGE (PROFESSIONAL STUDIES),LUCKNOW"
+  },
+  {
+    "index": 88,
+    "id": "c-j-p-institute-of-engineering-technology-meeru",
+    "uptac_name": "J.P..INSTITUTE OF ENGINEERING & TECHNOLOGY,MEERUT"
+  },
+  {
+    "index": 89,
+    "id": "jssate-noida",
+    "uptac_name": "J.S.S. ACADEMY OF TECHNICAL EDUCATION,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 90,
+    "id": "c-jahangirabad-educational-trust-s-group-of-ins",
+    "uptac_name": "JAHANGIRABAD EDUCATIONAL TRUST'S GROUP OF INSTITUTIONS, FACULTY OF ENGINEERING,BARABANKI"
+  },
+  {
+    "index": 91,
+    "id": "c-jms-group-of-institutions-ghaziabad",
+    "uptac_name": "JMS GROUP OF INSTITUTIONS,GHAZIABAD"
+  },
+  {
+    "index": 92,
+    "id": "c-jms-institute-of-technology-ghaziabad",
+    "uptac_name": "JMS INSTITUTE OF TECHNOLOGY, GHAZIABAD"
+  },
+  {
+    "index": 93,
+    "id": "c-kalicharan-nigam-institute-of-technology-band",
+    "uptac_name": "KALICHARAN NIGAM INSTITUTE OF TECHNOLOGY,BANDA"
+  },
+  {
+    "index": 94,
+    "id": "c-kamla-nehru-institute-of-physical-social-scie",
+    "uptac_name": "KAMLA NEHRU INSTITUTE OF PHYSICAL & SOCIAL SCIENCES,SULTANPUR"
+  },
+  {
+    "index": 95,
+    "id": "knit-sultanpur",
+    "uptac_name": "KAMLA NEHRU INSTITUTE OF TECHNOLOGY,SULTANPUR"
+  },
+  {
+    "index": 96,
+    "id": "c-kanpur-institute-of-technology-kanpur",
+    "uptac_name": "KANPUR INSTITUTE OF TECHNOLOGY,KANPUR"
+  },
+  {
+    "index": 97,
+    "id": "c-kashi-institute-of-technology-varanasi",
+    "uptac_name": "KASHI INSTITUTE OF TECHNOLOGY,VARANASI"
+  },
+  {
+    "index": 98,
+    "id": "c-kcc-institute-of-technology-management-gautam",
+    "uptac_name": "KCC INSTITUTE OF TECHNOLOGY & MANAGEMENT,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 99,
+    "id": "c-kcmt-campus-2-prem-prakash-gupta-institute-of",
+    "uptac_name": "KCMT CAMPUS 2 PREM PRAKASH GUPTA INSTITUTE OF ENGINEERING,BAREILLY"
+  },
+  {
+    "index": 100,
+    "id": "c-khwaja-moinuddin-chishti-language-university-",
+    "uptac_name": "Khwaja Moinuddin Chishti Language University, Lucknow"
+  },
+  {
+    "index": 101,
+    "id": "kiet-ghaziabad",
+    "uptac_name": "KIET GROUP OF INSTITUTIONS(KRISHNA INSTT. OF ENGG. & TECHNOLOGY),GHAZIABAD"
+  },
+  {
+    "index": 102,
+    "id": "c-kipm-college-of-engg-technology-gorakhpur",
+    "uptac_name": "KIPM COLLEGE OF ENGG. & TECHNOLOGY,GORAKHPUR"
+  },
+  {
+    "index": 103,
+    "id": "c-kothiwal-institute-of-technology-professional",
+    "uptac_name": "KOTHIWAL INSTITUTE OF TECHNOLOGY & PROFESSIONAL STUDIES,MORADABAD"
+  },
+  {
+    "index": 104,
+    "id": "c-krishna-institute-of-technology-kanpur",
+    "uptac_name": "KRISHNA INSTITUTE OF TECHNOLOGY,KANPUR"
+  },
+  {
+    "index": 105,
+    "id": "c-kunwar-satya-veera-college-of-engg-management",
+    "uptac_name": "KUNWAR SATYA VEERA COLLEGE OF ENGG. & MANAGEMENT,BIJNAUR"
+  },
+  {
+    "index": 106,
+    "id": "c-landmark-technical-campus-j-p-nagar",
+    "uptac_name": "LANDMARK TECHNICAL CAMPUS,J.P.NAGAR"
+  },
+  {
+    "index": 107,
+    "id": "c-ldc-institute-of-technical-studies-allahabad",
+    "uptac_name": "LDC INSTITUTE OF TECHNICAL STUDIES,ALLAHABAD"
+  },
+  {
+    "index": 108,
+    "id": "c-lloyd-institute-of-engineering-and-technology",
+    "uptac_name": "LLOYD INSTITUTE OF ENGINEERING AND TECHNOLOGY"
+  },
+  {
+    "index": 109,
+    "id": "c-lloyd-institute-of-management-technology-gaut",
+    "uptac_name": "LLOYD INSTITUTE OF MANAGEMENT & TECHNOLOGY,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 110,
+    "id": "c-lucknow-institute-of-technology-lucknow",
+    "uptac_name": "LUCKNOW INSTITUTE OF TECHNOLOGY,LUCKNOW"
+  },
+  {
+    "index": 111,
+    "id": "lu-foet-lucknow",
+    "uptac_name": "Lucknow University, Lucknow"
+  },
+  {
+    "index": 112,
+    "id": "c-m-j-p-ruhelkhand-university-bareilly",
+    "uptac_name": "M. J. P. Ruhelkhand University, Bareilly"
+  },
+  {
+    "index": 113,
+    "id": "c-maa-pateshwari-devi-rajkiya-engineering-colle",
+    "uptac_name": "MAA PATESHWARI DEVI RAJKIYA ENGINEERING COLLEGE, GONDA"
+  },
+  {
+    "index": 114,
+    "id": "c-madhu-vachaspati-institute-of-engineering-tec",
+    "uptac_name": "MADHU VACHASPATI INSTITUTE OF ENGINEERING & TECHNOLOGY,KAUSHAMBI"
+  },
+  {
+    "index": 115,
+    "id": "c-maharaja-agrasen-college-of-engineering-techn",
+    "uptac_name": "MAHARAJA AGRASEN COLLEGE OF ENGINEERING & TECHNOLOGY,J.P.NAGAR"
+  },
+  {
+    "index": 116,
+    "id": "c-maharaja-suhel-dev-state-university-azamgarh",
+    "uptac_name": "Maharaja Suhel Dev State University Azamgarh."
+  },
+  {
+    "index": 117,
+    "id": "c-maharana-institute-of-professional-studies-ka",
+    "uptac_name": "MAHARANA INSTITUTE OF PROFESSIONAL STUDIES,KANPUR"
+  },
+  {
+    "index": 118,
+    "id": "c-maharana-institute-of-tech-sciences-lucknow",
+    "uptac_name": "MAHARANA INSTITUTE OF TECH. & SCIENCES,LUCKNOW"
+  },
+  {
+    "index": 119,
+    "id": "c-maharana-pratap-engineering-college-kanpur",
+    "uptac_name": "MAHARANA PRATAP ENGINEERING COLLEGE,KANPUR"
+  },
+  {
+    "index": 120,
+    "id": "c-maharana-pratap-institue-of-technology-gorakh",
+    "uptac_name": "MAHARANA PRATAP INSTITUE OF TECHNOLOGY, GORAKHPUR"
+  },
+  {
+    "index": 121,
+    "id": "c-mahatama-gandhi-mission-college-of-engg-techn",
+    "uptac_name": "MAHATAMA GANDHI MISSION COLLEGE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 122,
+    "id": "c-mangalmay-institute-of-engineering-and-techno",
+    "uptac_name": "MANGALMAY INSTITUTE OF ENGINEERING AND TECHNOLOGY ,GAUTAM BUDDHA NAGAR"
+  },
+  {
+    "index": 123,
+    "id": "c-mangalmay-institute-of-management-and-technol",
+    "uptac_name": "MANGALMAY INSTITUTE OF MANAGEMENT AND TECHNOLOGY, GAUTAM BUDDHA NAGAR"
+  },
+  {
+    "index": 124,
+    "id": "c-marathwada-instt-of-technology-bulandshahar",
+    "uptac_name": "MARATHWADA INSTT. OF TECHNOLOGY,BULANDSHAHAR"
+  },
+  {
+    "index": 125,
+    "id": "c-meerut-institute-of-engineering-technology-me",
+    "uptac_name": "MEERUT INSTITUTE OF ENGINEERING & TECHNOLOGY,MEERUT"
+  },
+  {
+    "index": 126,
+    "id": "c-meerut-institute-of-technology-meerut",
+    "uptac_name": "MEERUT INSTITUTE OF TECHNOLOGY,MEERUT"
+  },
+  {
+    "index": 127,
+    "id": "c-meerut-international-institute-of-technology-",
+    "uptac_name": "MEERUT INTERNATIONAL INSTITUTE OF TECHNOLOGY,MEERUT"
+  },
+  {
+    "index": 128,
+    "id": "c-mg-institute-of-management-technology-lucknow",
+    "uptac_name": "MG INSTITUTE OF MANAGEMENT & TECHNOLOGY,LUCKNOW"
+  },
+  {
+    "index": 129,
+    "id": "c-modern-college-jhansi",
+    "uptac_name": "MODERN COLLEGE, JHANSI"
+  },
+  {
+    "index": 130,
+    "id": "c-moradabad-institute-of-technology-moradabad",
+    "uptac_name": "MORADABAD INSTITUTE OF TECHNOLOGY,MORADABAD"
+  },
+  {
+    "index": 131,
+    "id": "c-naraina-college-of-engineering-technology-kan",
+    "uptac_name": "NARAINA COLLEGE OF ENGINEERING & TECHNOLOGY,KANPUR"
+  },
+  {
+    "index": 132,
+    "id": "c-neelam-college-of-engineering-technology-agra",
+    "uptac_name": "NEELAM COLLEGE OF ENGINEERING & TECHNOLOGY,AGRA"
+  },
+  {
+    "index": 133,
+    "id": "c-neelkanth-institute-of-technology-meerut",
+    "uptac_name": "NEELKANTH INSTITUTE OF TECHNOLOGY,MEERUT"
+  },
+  {
+    "index": 134,
+    "id": "c-nigc-institute-of-technology-and-management-b",
+    "uptac_name": "NIGC INSTITUTE OF TECHNOLOGY AND MANAGEMENT, BIJNOR"
+  },
+  {
+    "index": 135,
+    "id": "c-nitra-technical-campus-ghaziabad",
+    "uptac_name": "NITRA TECHNICAL CAMPUS,GHAZIABAD"
+  },
+  {
+    "index": 136,
+    "id": "niet-noida",
+    "uptac_name": "NOIDA INSTITUTE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 137,
+    "id": "c-panchwati-institute-of-engineering-technology",
+    "uptac_name": "PANCHWATI INSTITUTE OF ENGINEERING & TECHNOLOGY,MEERUT"
+  },
+  {
+    "index": 138,
+    "id": "c-prabhat-engineering-college-kanpur-dehat",
+    "uptac_name": "PRABHAT ENGINEERING COLLEGE,KANPUR DEHAT"
+  },
+  {
+    "index": 139,
+    "id": "psit-kanpur",
+    "uptac_name": "PRANVEER SINGH INSTITUTE OF TECHNOLOGY,KANPUR"
+  },
+  {
+    "index": 140,
+    "id": "c-prasad-institute-of-technology-jaunpur",
+    "uptac_name": "PRASAD INSTITUTE OF TECHNOLOGY,JAUNPUR"
+  },
+  {
+    "index": 141,
+    "id": "c-prayag-institute-of-technology-management-all",
+    "uptac_name": "PRAYAG INSTITUTE OF TECHNOLOGY & MANAGEMENT,ALLAHABAD"
+  },
+  {
+    "index": 142,
+    "id": "c-r-d-engineering-college-research-centre-ghazi",
+    "uptac_name": "R.D.ENGINEERING COLLEGE RESEARCH CENTRE,GHAZIABAD"
+  },
+  {
+    "index": 143,
+    "id": "c-r-d-engineering-college-ghaziabad",
+    "uptac_name": "R.D.ENGINEERING COLLEGE,GHAZIABAD"
+  },
+  {
+    "index": 144,
+    "id": "c-r-r-institute-of-modern-technology-lucknow",
+    "uptac_name": "R.R.INSTITUTE OF MODERN TECHNOLOGY,LUCKNOW"
+  },
+  {
+    "index": 145,
+    "id": "c-r-v-institute-of-technology-bijnaur",
+    "uptac_name": "R.V.INSTITUTE OF TECHNOLOGY,BIJNAUR"
+  },
+  {
+    "index": 146,
+    "id": "c-radha-govind-group-of-institutions-meerut",
+    "uptac_name": "RADHA GOVIND GROUP OF INSTITUTIONS,MEERUT"
+  },
+  {
+    "index": 147,
+    "id": "c-raj-kumar-goel-institute-of-technology-manage",
+    "uptac_name": "RAJ KUMAR GOEL INSTITUTE OF TECHNOLOGY & MANAGEMENT,GHAZIABAD"
+  },
+  {
+    "index": 148,
+    "id": "c-raj-kumar-goel-instt-of-technology-ghaziabad",
+    "uptac_name": "RAJ KUMAR GOEL INSTT. OF TECHNOLOGY,GHAZIABAD"
+  },
+  {
+    "index": 149,
+    "id": "c-raja-balwant-singh-engineering-technical-camp",
+    "uptac_name": "RAJA BALWANT SINGH ENGINEERING TECHNICAL CAMPUS,AGRA"
+  },
+  {
+    "index": 150,
+    "id": "c-rajarshi-rananjay-singh-institute-of-manageme",
+    "uptac_name": "RAJARSHI RANANJAY SINGH INSTITUTE OF MANAGEMENT & TECHNOLOGY,SULTANPUR"
+  },
+  {
+    "index": 151,
+    "id": "rec-ambedkar-nagar",
+    "uptac_name": "RAJKIYA ENGINEERING COLLEGE,AMBEDKAR NAGAR"
+  },
+  {
+    "index": 152,
+    "id": "c-rajkiya-engineering-college-azamgarh",
+    "uptac_name": "RAJKIYA ENGINEERING COLLEGE,AZAMGARH"
+  },
+  {
+    "index": 153,
+    "id": "rec-banda",
+    "uptac_name": "RAJKIYA ENGINEERING COLLEGE,BANDA"
+  },
+  {
+    "index": 154,
+    "id": "c-rajkiya-engineering-college-bijnor",
+    "uptac_name": "RAJKIYA ENGINEERING COLLEGE,BIJNOR"
+  },
+  {
+    "index": 155,
+    "id": "c-rajkiya-engineering-college-kannauj",
+    "uptac_name": "RAJKIYA ENGINEERING COLLEGE,KANNAUJ"
+  },
+  {
+    "index": 156,
+    "id": "c-rajkiya-engineering-college-mainpuri",
+    "uptac_name": "RAJKIYA ENGINEERING COLLEGE,MAINPURI"
+  },
+  {
+    "index": 157,
+    "id": "c-rajkiya-engineering-college-sonebhadra",
+    "uptac_name": "RAJKIYA ENGINEERING COLLEGE,SONEBHADRA"
+  },
+  {
+    "index": 158,
+    "id": "c-rajshree-institute-of-management-technology-b",
+    "uptac_name": "RAJSHREE INSTITUTE OF MANAGEMENT & TECHNOLOGY,BAREILLY"
+  },
+  {
+    "index": 159,
+    "id": "c-rakshpal-bahadur-college-of-engineering-techn",
+    "uptac_name": "RAKSHPAL BAHADUR COLLEGE OF ENGINEERING & TECHNOLOGY,BAREILLY"
+  },
+  {
+    "index": 160,
+    "id": "c-rameshwaram-institute-of-technology-managemen",
+    "uptac_name": "RAMESHWARAM INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW"
+  },
+  {
+    "index": 161,
+    "id": "c-s-r-group-of-institutions-college-of-science-",
+    "uptac_name": "S R GROUP OF INSTITUTIONS (COLLEGE OF SCIENCE AND ENGINEERING),JHANSI"
+  },
+  {
+    "index": 162,
+    "id": "c-s-d-college-of-engineering-technology-muzaffa",
+    "uptac_name": "S.D.COLLEGE OF ENGINEERING & TECHNOLOGY,MUZAFFARNAGAR"
+  },
+  {
+    "index": 163,
+    "id": "c-s-r-institute-of-management-technology-luckno",
+    "uptac_name": "S.R.INSTITUTE OF MANAGEMENT & TECHNOLOGY,LUCKNOW"
+  },
+  {
+    "index": 164,
+    "id": "c-sagar-institute-of-technology-management-bara",
+    "uptac_name": "SAGAR INSTITUTE OF TECHNOLOGY & MANAGEMENT,BARABANKI"
+  },
+  {
+    "index": 165,
+    "id": "c-samrat-ashok-rajkiya-engineering-college-mirz",
+    "uptac_name": "SAMRAT ASHOK RAJKIYA ENGINEERING COLLEGE, MIRZAPUR"
+  },
+  {
+    "index": 166,
+    "id": "c-sanskar-college-of-engineering-technology-gha",
+    "uptac_name": "SANSKAR COLLEGE OF ENGINEERING & TECHNOLOGY,GHAZIABAD"
+  },
+  {
+    "index": 167,
+    "id": "c-saraswati-higher-education-technical-college-",
+    "uptac_name": "SARASWATI HIGHER EDUCATION & TECHNICAL COLLEGE OF ENGINEERING,VARANASI"
+  },
+  {
+    "index": 168,
+    "id": "c-sardar-vallabhbhai-patel-university-of-agricu",
+    "uptac_name": "Sardar Vallabhbhai Patel University of Agriculture & Technology, Meerut"
+  },
+  {
+    "index": 169,
+    "id": "c-saroj-institute-of-tech-management-lucknow",
+    "uptac_name": "SAROJ INSTITUTE OF TECH. & MANAGEMENT,LUCKNOW"
+  },
+  {
+    "index": 170,
+    "id": "c-school-of-management-science-sms-institute-of",
+    "uptac_name": "SCHOOL OF MANAGEMENT SCIENCE (SMS INSTITUTE OF TECHNOLOGY),LUCKNOW"
+  },
+  {
+    "index": 171,
+    "id": "c-seth-vishambhar-nath-institute-of-engg-techno",
+    "uptac_name": "SETH VISHAMBHAR NATH INSTITUTE OF ENGG. & TECHNOLOGY,BARABANKI"
+  },
+  {
+    "index": 172,
+    "id": "c-shambhu-nath-institute-of-engg-technolgy-alla",
+    "uptac_name": "SHAMBHU NATH INSTITUTE OF ENGG. & TECHNOLGY,ALLAHABAD"
+  },
+  {
+    "index": 173,
+    "id": "c-shanti-institute-of-technology-meerut",
+    "uptac_name": "SHANTI INSTITUTE OF TECHNOLOGY,MEERUT"
+  },
+  {
+    "index": 174,
+    "id": "c-shivdan-singh-institute-of-technology-managem",
+    "uptac_name": "SHIVDAN SINGH INSTITUTE OF TECHNOLOGY & MANAGEMENT,ALIGARH"
+  },
+  {
+    "index": 175,
+    "id": "c-shri-ram-swaroop-memorial-college-of-engg-man",
+    "uptac_name": "SHRI RAM SWAROOP MEMORIAL COLLEGE OF ENGG. & MANAGEMENT,LUCKNOW"
+  },
+  {
+    "index": 176,
+    "id": "c-shri-rammurti-smarak-college-of-engg-and-tech",
+    "uptac_name": "SHRI RAMMURTI SMARAK COLLEGE OF ENGG AND TECHNOLOGY,BAREILLY"
+  },
+  {
+    "index": 177,
+    "id": "c-shri-sidhi-vinayak-institute-of-technology-ba",
+    "uptac_name": "SHRI SIDHI VINAYAK INSTITUTE OF TECHNOLOGY,BAREILLY"
+  },
+  {
+    "index": 178,
+    "id": "c-sri-ram-group-of-colleges-muzaffarnagar",
+    "uptac_name": "SRI RAM GROUP OF COLLEGES,MUZAFFARNAGAR"
+  },
+  {
+    "index": 179,
+    "id": "c-sri-rammurti-smarak-college-of-engineering-te",
+    "uptac_name": "SRI RAMMURTI SMARAK COLLEGE OF ENGINEERING TECHNOLOGY & RESEARCH,BAREILLY"
+  },
+  {
+    "index": 180,
+    "id": "c-ssld-varshney-engineering-college-aligarh",
+    "uptac_name": "SSLD VARSHNEY ENGINEERING COLLEGE,ALIGARH"
+  },
+  {
+    "index": 181,
+    "id": "c-sunderdeep-engineering-college-ghaziabad",
+    "uptac_name": "SUNDERDEEP ENGINEERING COLLEGE,GHAZIABAD"
+  },
+  {
+    "index": 182,
+    "id": "c-sunrise-institute-of-engineering-technical-ma",
+    "uptac_name": "SUNRISE INSTITUTE OF ENGINEERING TECHNICAL & MANAGEMENT,UNNAO"
+  },
+  {
+    "index": 183,
+    "id": "c-suyash-institute-of-information-technology-go",
+    "uptac_name": "SUYASH INSTITUTE OF INFORMATION TECHNOLOGY,GORAKHPUR"
+  },
+  {
+    "index": 184,
+    "id": "c-united-college-of-engiineering-research-great",
+    "uptac_name": "UNITED COLLEGE OF ENGIINEERING & RESEARCH,GREATER NOIDA,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 185,
+    "id": "c-united-college-of-engineering-research-allaha",
+    "uptac_name": "UNITED COLLEGE OF ENGINEERING & RESEARCH,ALLAHABAD"
+  },
+  {
+    "index": 186,
+    "id": "c-united-institute-of-technology-allahabad",
+    "uptac_name": "UNITED INSTITUTE OF TECHNOLOGY,ALLAHABAD"
+  },
+  {
+    "index": 187,
+    "id": "c-uttar-pradesh-textile-technology-institute-ka",
+    "uptac_name": "UTTAR PRADESH TEXTILE TECHNOLOGY INSTITUTE,KANPUR"
+  },
+  {
+    "index": 188,
+    "id": "c-veer-bahadur-singh-purvanchal-university-jaun",
+    "uptac_name": "Veer Bahadur Singh Purvanchal University, Jaunpur"
+  },
+  {
+    "index": 189,
+    "id": "c-veer-kunwar-institute-of-technology-bijnaur",
+    "uptac_name": "VEER KUNWAR INSTITUTE OF TECHNOLOGY,BIJNAUR"
+  },
+  {
+    "index": 190,
+    "id": "c-vishveshwarya-group-of-institutions-gautam-bu",
+    "uptac_name": "VISHVESHWARYA GROUP OF INSTITUTIONS,GAUTAM BUDDH NAGAR"
+  },
+  {
+    "index": 191,
+    "id": "c-vision-institute-of-technology-aligarh",
+    "uptac_name": "VISION INSTITUTE OF TECHNOLOGY,ALIGARH"
+  },
+  {
+    "index": 192,
+    "id": "c-vision-institute-of-technology-kanpur",
+    "uptac_name": "VISION INSTITUTE OF TECHNOLOGY,KANPUR"
+  },
+  {
+    "index": 193,
+    "id": "c-vivekanand-institute-of-technology-science-gh",
+    "uptac_name": "VIVEKANAND INSTITUTE OF TECHNOLOGY & SCIENCE,GHAZIABAD"
+  },
+  {
+    "index": 194,
+    "id": "c-vivekananda-college-of-technology-management-",
+    "uptac_name": "VIVEKANANDA COLLEGE OF TECHNOLOGY & MANAGEMENT,ALIGARH"
+  }
+]

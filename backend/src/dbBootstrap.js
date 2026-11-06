@@ -94,6 +94,16 @@ async function initDatabase(pool) {
                 verified BOOLEAN DEFAULT TRUE
             );
 
+            CREATE TABLE IF NOT EXISTS college_accreditation_map (
+                id SERIAL PRIMARY KEY,
+                uptac_institute TEXT NOT NULL UNIQUE,
+                accreditation_institute TEXT NOT NULL,
+                match_method VARCHAR(50) NOT NULL DEFAULT 'manual_verified',
+                verified BOOLEAN NOT NULL DEFAULT FALSE
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_college_accreditation_map_uptac ON college_accreditation_map(uptac_institute);
+
             CREATE TABLE IF NOT EXISTS nirf_rankings (
                 id SERIAL PRIMARY KEY,
                 nirf_year INTEGER NOT NULL,
@@ -135,16 +145,22 @@ async function initDatabase(pool) {
                 ADD COLUMN IF NOT EXISTS last_verified DATE;
         `);
 
-        // 2. Check if colleges table has data
+        // 2. Check if colleges table has complete data
         const countRes = await pool.query("SELECT COUNT(*) AS count FROM colleges");
         const collegeCount = parseInt(countRes.rows[0].count, 10);
 
-        if (collegeCount === 0) {
-            console.log("Colleges table is empty. Running initial population...");
+        const missingRes = await pool.query("SELECT COUNT(*) AS count FROM colleges WHERE website IS NULL OR established_year IS NULL");
+        const missingCount = parseInt(missingRes.rows[0].count, 10);
+
+        const feesRes = await pool.query("SELECT COUNT(*) AS count FROM college_fees");
+        const feesCount = parseInt(feesRes.rows[0].count, 10);
+
+        if (collegeCount === 0 || missingCount > 0 || feesCount < 100) {
+            console.log(`Running database population & enrichment (colleges: ${collegeCount}, missing details: ${missingCount}, fees: ${feesCount})...`);
             await runPopulation(pool);
-            console.log("Initial population completed successfully.");
+            console.log("Data population and enrichment completed successfully.");
         } else {
-            console.log(`Database schema verified. Colleges table has ${collegeCount} entries.`);
+            console.log(`Database verified complete. All ${collegeCount} colleges enriched with verified details, fees (${feesCount}), and placements.`);
         }
     } catch (err) {
         console.error("Database bootstrap encountered an error:", err.message);
