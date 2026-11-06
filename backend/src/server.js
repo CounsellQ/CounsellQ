@@ -83,7 +83,8 @@ app.get("/api/health", async (req, res) => {
 
         res.status(500).json({
             status: "ERROR",
-            message: "Database connection failed"
+            message: "Database connection failed",
+            error: error.message
         });
     }
 });
