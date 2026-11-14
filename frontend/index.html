@@ -95,18 +95,18 @@
       <button class="brand" data-page="home" aria-label="CounsellQ Home">
         <span class="brand-icon"><i data-lucide="graduation-cap"></i></span>
         <span>
-          <strong>AKTU <span>Predictor</span></strong>
-          <small>CounsellQ • Verified Admission Companion</small>
+          <strong>Counsell<span>Q</span></strong>
+          <small>Verified Data • ML Feasibility • College Discovery</small>
         </span>
       </button>
 
       <nav class="nav-links" id="navLinks" aria-label="Main Navigation">
-        <button data-page="directory"><i data-lucide="compass" style="width:15px;height:15px;display:inline-block;vertical-align:middle;margin-right:4px"></i> Explore</button>
-        <button data-page="predict"><i data-lucide="sparkles" style="width:15px;height:15px;display:inline-block;vertical-align:middle;margin-right:4px"></i> Predictor</button>
-        <button id="navChoiceBtn"><i data-lucide="clipboard-list" style="width:15px;height:15px;display:inline-block;vertical-align:middle;margin-right:4px"></i> Choice Sheet <span id="navChoiceCount">(0)</span></button>
-        <button data-page="results"><i data-lucide="bar-chart-2" style="width:15px;height:15px;display:inline-block;vertical-align:middle;margin-right:4px"></i> Analytics</button>
-        <button data-page="home"><i data-lucide="info" style="width:15px;height:15px;display:inline-block;vertical-align:middle;margin-right:4px"></i> About</button>
-        <button data-page="compare"><i data-lucide="copy" style="width:15px;height:15px;display:inline-block;vertical-align:middle;margin-right:4px"></i> Compare <span id="compareCount">(0)</span></button>
+        <button data-page="home">Home</button>
+        <button data-page="predict">Predict Colleges</button>
+        <button data-page="results">Predictions Dashboard</button>
+        <button data-page="directory">College Directory</button>
+        <button id="navChoiceBtn"><i data-lucide="clipboard-list" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:4px"></i> Choice Sheet <span id="navChoiceCount">(0)</span></button>
+        <button data-page="compare">Compare <span id="compareCount">(0)</span></button>
       </nav>
 
       <div class="nav-actions">
@@ -126,24 +126,9 @@
       <div class="hero">
         <div class="hero-copy">
           <div class="eyebrow"><i data-lucide="shield-check"></i> ML-Evaluated Admission Insights</div>
-          <h1>Find • <span>Predict</span> • Shortlist</h1>
-          <p>Your smart companion for AKTU (UPTAC) counselling</p>
-
-          <div class="hero-search-wrap">
-            <div class="hero-search-box">
-              <i data-lucide="search" style="width:18px;height:18px;color:#94a3b8;flex-shrink:0"></i>
-              <input type="text" id="heroOmniboxInput" placeholder='Search college, branch (e.g. "IET Lucknow", "CSE")...'>
-              <span class="ctrl-k-badge">Ctrl + K</span>
-            </div>
-            <div class="quick-filter-chips">
-              <button class="filter-chip active" data-dir-chip="">All Colleges</button>
-              <button class="filter-chip" data-dir-chip="Government">Government</button>
-              <button class="filter-chip" data-dir-chip="Autonomous">Autonomous</button>
-              <button class="filter-chip" data-dir-chip="Private">Private</button>
-            </div>
-          </div>
-
-          <div class="hero-cta" style="margin-top:20px">
+          <h1>Find Colleges You Can <span>Actually Get</span>.</h1>
+          <p>Enter your rank, category, and preferred branch. CounsellQ evaluates historical UPTAC cutoff records using Random Forest machine learning models, audited fee schedules, and official placement statistics to guide your choice filling.</p>
+          <div class="hero-cta">
             <button class="primary-btn" data-page="predict"><i data-lucide="compass"></i> Start Rank Prediction</button>
             <button class="secondary-btn" data-page="directory"><i data-lucide="building-2"></i> Explore 194 Colleges</button>
           </div>
