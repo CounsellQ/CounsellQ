@@ -171,8 +171,7 @@ function predictAdmissionFeasibility({
         tier = "SAFE";
         label = "Safer Historical Option";
         feasibilityScore = Math.min(99, Math.round(75 + pSafe * 24));
-        const headroomPct = Math.round(relRankDiff * 100);
-        explanation = `Your rank ${rank.toLocaleString()} is comfortably within historical closing rank ${close.toLocaleString()} (headroom +${headroomPct}%). Candidates with similar ranks historically secured seats in this branch.`;
+        explanation = `Your rank ${rank.toLocaleString()} is comfortably within historical closing rank ${close.toLocaleString()}. Candidates with similar ranks historically secured seats in this branch.`;
     } else if (pModerate >= pSafe && pModerate >= pAmbitious) {
         tier = "MODERATE";
         label = "Moderate Historical Option";

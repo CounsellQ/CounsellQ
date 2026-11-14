@@ -79,7 +79,35 @@ button, input, select {
   gap: 4px;
 }
 
-.nav-links button, .back-btn {
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-toggle {
+  display: none;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  padding: 8px 10px;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.menu-toggle:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.menu-toggle svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.nav-links button {
   background: none;
   border: 0;
   padding: 8px 14px;
@@ -91,9 +119,36 @@ button, input, select {
   transition: all 0.2s;
 }
 
-.nav-links button:hover, .back-btn:hover {
+.nav-links button:hover {
   background: #f1f5f9;
   color: #0f172a;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.back-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 .nav-links button.active {
@@ -199,8 +254,29 @@ button, input, select {
 }
 
 .primary-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.7;
   cursor: not-allowed;
+}
+
+/* Loading Spinner Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spin,
+svg.spin,
+i.spin,
+.lucide-loader-2,
+.lucide-loader {
+  animation: spin 0.85s linear infinite !important;
+  display: inline-block !important;
+  transform-origin: 50% 50% !important;
+  vertical-align: middle !important;
 }
 
 .primary-btn.small {
@@ -782,6 +858,10 @@ button, input, select {
 
 .detail-card {
   padding: 34px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 .detail-head-actions {
@@ -789,13 +869,22 @@ button, input, select {
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
 .detail-card h1 {
   font-size: 28px;
   margin: 8px 0 6px;
   color: #0f172a;
+  line-height: 1.3;
+}
+
+.detail-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .detail-website-btn {
@@ -807,12 +896,316 @@ button, input, select {
   font-weight: 600;
   text-decoration: none;
   background: #eef2ff;
+  border: 1px solid #c7d2fe;
   padding: 8px 14px;
-  border-radius: 8px;
+  border-radius: 9px;
+  transition: all 0.2s;
 }
 
 .detail-website-btn:hover {
   background: #e0e7ff;
+  color: #3730a3;
+}
+
+.detail-compare-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 600;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 8px 14px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.detail-compare-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.detail-compare-btn.added {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+/* Profile Executive Highlights (4-Stat Ribbon) */
+.profile-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.stat-card.safe-stat {
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #a7f3d0;
+}
+
+.stat-card.mod-stat {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border-color: #fde68a;
+}
+
+.stat-card.amb-stat {
+  background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+  border-color: #fecdd3;
+}
+
+.stat-card.fee-stat {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-color: #cbd5e1;
+}
+
+.stat-card.pkg-stat {
+  background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+  border-color: #bfdbfe;
+}
+
+.stat-card.roi-stat {
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  border-color: #e9d5ff;
+}
+
+.stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+}
+
+.stat-icon {
+  width: 20px;
+  height: 20px;
+  color: #64748b;
+}
+
+.stat-card.safe-stat .stat-icon { color: #059669; }
+.stat-card.mod-stat .stat-icon { color: #d97706; }
+.stat-card.amb-stat .stat-icon { color: #e11d48; }
+.stat-card.fee-stat .stat-icon { color: #475569; }
+.stat-card.pkg-stat .stat-icon { color: #2563eb; }
+.stat-card.roi-stat .stat-icon { color: #7c3aed; }
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.stat-card.safe-stat .stat-value { color: #047857; }
+.stat-card.mod-stat .stat-value { color: #b45309; }
+.stat-card.amb-stat .stat-value { color: #be123c; }
+.stat-card.pkg-stat .stat-value { color: #1d4ed8; }
+.stat-card.roi-stat .stat-value { color: #6d28d9; }
+
+.stat-subtext {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* Cutoff Spectrum Visualizer */
+.spectrum-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.spectrum-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.spectrum-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.spectrum-track-box {
+  position: relative;
+  padding: 40px 10px 30px;
+}
+
+.spectrum-track {
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #10b981 0%, #34d399 45%, #fbbf24 75%, #f87171 100%);
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.spectrum-pin-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.spectrum-pin-marker .pin-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  background: #475569;
+}
+
+.spectrum-pin-marker.candidate-marker .pin-dot {
+  width: 22px;
+  height: 22px;
+  background: #4f46e5;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.3), 0 3px 8px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  animation: pulse-pin 2s infinite ease-in-out;
+}
+
+@keyframes pulse-pin {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.3), 0 3px 8px rgba(0, 0, 0, 0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(79, 70, 229, 0.15), 0 3px 12px rgba(0, 0, 0, 0.3); }
+}
+
+.spectrum-pin-marker .pin-label-top {
+  position: absolute;
+  bottom: 24px;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.spectrum-pin-marker.candidate-marker .pin-label-top {
+  background: #4f46e5;
+  color: #ffffff;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  bottom: 28px;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+}
+
+.spectrum-pin-marker .pin-label-bottom {
+  position: absolute;
+  top: 24px;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.spectrum-cushion-banner {
+  margin-top: 24px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.spectrum-cushion-banner.safe {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.spectrum-cushion-banner.moderate {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.spectrum-cushion-banner.ambitious {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #9f1239;
+}
+
+.spectrum-cushion-banner svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Expandable Scientific ML Diagnostic Accordion */
+.ml-tech-drawer {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.ml-tech-drawer summary {
+  padding: 14px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+.ml-tech-drawer summary:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.ml-tech-content {
+  padding: 16px 20px 20px;
+  border-top: 1px solid #e2e8f0;
+  background: #ffffff;
 }
 
 .detail-sections {
@@ -829,6 +1222,15 @@ button, input, select {
   border-bottom: 2px solid #f1f5f9;
   padding-bottom: 8px;
   margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-section-title svg {
+  width: 18px;
+  height: 18px;
+  color: #4f46e5;
 }
 
 .detail-grid {
@@ -853,6 +1255,9 @@ button, input, select {
 .detail-item strong {
   display: block;
   margin-top: 6px;
+  font-size: 15px;
+  color: #0f172a;
+}
   font-size: 15px;
   color: #0f172a;
 }
@@ -952,9 +1357,100 @@ footer {
   margin: 10px auto 0 !important;
 }
 
+/* Compare Table Customizations */
+.compare-th-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.remove-compare-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.remove-compare-btn:hover {
+  background: #fca5a5;
+  color: #991b1b;
+}
+
+.remove-compare-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Toast Notification */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+  max-width: 90vw;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.toast.hidden {
+  display: none;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .nav-links {
+    display: none;
+  }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    padding: 12px 20px;
+    gap: 6px;
+    z-index: 100;
+  }
+  .nav-links.open button {
+    text-align: left;
+    width: 100%;
+    padding: 10px 14px;
+  }
+  .nav-cta {
     display: none;
   }
   .hero {
@@ -973,16 +1469,39 @@ footer {
   .detail-grid {
     grid-template-columns: 1fr 1fr;
   }
+  .profile-hero-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 600px) {
   .container {
     padding: 20px 14px;
   }
+  .detail-card {
+    padding: 20px 16px;
+  }
+  .spectrum-track-box {
+    padding: 50px 6px 36px;
+  }
+  .spectrum-pin-marker .pin-label-top {
+    font-size: 10px;
+    padding: 2px 6px;
+    bottom: 22px;
+  }
+  .spectrum-pin-marker.candidate-marker .pin-label-top {
+    font-size: 11px;
+    padding: 4px 8px;
+    bottom: 28px;
+  }
+  .spectrum-pin-marker .pin-label-bottom {
+    font-size: 11px;
+    top: 22px;
+  }
   .hero h1 {
     font-size: 34px;
   }
-  .steps, .form-grid, .detail-grid {
+  .steps, .form-grid, .detail-grid, .profile-hero-stats {
     grid-template-columns: 1fr;
   }
   .results-header {

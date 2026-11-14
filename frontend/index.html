@@ -3,15 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CounsellQ — Smarter College & Branch Counselling</title>
+  <title>CounsellQ — UPTAC College Predictor, Cutoffs & Counselling Support</title>
+  
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="CounsellQ — UPTAC College Predictor, Cutoffs & Counselling Support">
+  <meta name="description" content="CounsellQ is an evidence-backed college admission counselling decision-support platform for UPTAC / AKTU. Predict admission chances using 8,058 historical cutoffs, Random Forest ML feasibility, audited fees, NIRF rankings, and placement statistics.">
+  <meta name="keywords" content="CounsellQ, counsellq, counsell q, UPTAC college predictor, AKTU college predictor, UPTAC 2025 cutoffs, JEE Main rank predictor, AKTU counselling, college comparison, NIRF rankings AKTU, BTech college predictor UP">
+  <meta name="author" content="CounsellQ">
+  <meta name="application-name" content="CounsellQ">
+  <meta name="apple-mobile-web-app-title" content="CounsellQ">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://counsell-q.vercel.app/">
+
+  <!-- OpenSearch Discovery (Browser Address Bar Search) -->
+  <link rel="search" type="application/opensearchdescription+xml" href="opensearch.xml" title="CounsellQ">
+
+  <!-- Web App Manifest & Favicon -->
+  <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="favicon.svg">
+
+  <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+  <meta property="og:site_name" content="CounsellQ">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://counsell-q.vercel.app/">
+  <meta property="og:title" content="CounsellQ — UPTAC College Predictor & Counselling Support">
+  <meta property="og:description" content="Find colleges you can actually get. Predict UPTAC / AKTU admission chances with Random Forest ML feasibility, historical cutoffs, verified fees, and placement reports.">
+  <meta property="og:image" content="https://counsell-q.vercel.app/favicon.svg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://counsell-q.vercel.app/">
+  <meta name="twitter:title" content="CounsellQ — UPTAC College Predictor & Decision Support">
+  <meta name="twitter:description" content="Predict your UPTAC / AKTU admission feasibility with Random Forest ML models, 8,000+ historical cutoffs, audited fees, and verified placements.">
+  <meta name="twitter:image" content="https://counsell-q.vercel.app/favicon.svg">
+
+  <!-- Structured Data / JSON-LD for Search Engine Direct Name Indexing -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://counsell-q.vercel.app/#website",
+        "url": "https://counsell-q.vercel.app/",
+        "name": "CounsellQ",
+        "alternateName": ["Counsell-Q", "Counsell Q", "counsellq.vercel.app", "CounsellQ Predictor"],
+        "description": "Evidence-backed college admission counselling decision-support platform for UPTAC / AKTU.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://counsell-q.vercel.app/#directory?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://counsell-q.vercel.app/#webapp",
+        "name": "CounsellQ College Predictor",
+        "url": "https://counsell-q.vercel.app/",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "INR"
+        },
+        "featureList": [
+          "UPTAC 2025 Cutoff Matching",
+          "Random Forest ML Admission Feasibility Scoring",
+          "194 Participating Engineering Colleges Directory",
+          "Side-by-Side College Comparison",
+          "Audited Fee Schedules and Placement Outcomes",
+          "Official NIRF Rankings and NBA/NAAC Accreditations"
+        ]
+      }
+    ]
+  }
+  </script>
+
   <link rel="stylesheet" href="css/style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <header class="navbar">
     <div class="nav-inner">
-      <button class="brand" data-page="home">
+      <button class="brand" data-page="home" aria-label="CounsellQ Home">
         <span class="brand-icon"><i data-lucide="graduation-cap"></i></span>
         <span>
           <strong>Counsell<span>Q</span></strong>
@@ -19,7 +100,7 @@
         </span>
       </button>
 
-      <nav class="nav-links">
+      <nav class="nav-links" id="navLinks" aria-label="Main Navigation">
         <button data-page="home">Home</button>
         <button data-page="predict">Predict Colleges</button>
         <button data-page="results">Predictions Dashboard</button>
@@ -27,9 +108,14 @@
         <button data-page="compare">Compare <span id="compareCount">(0)</span></button>
       </nav>
 
-      <button class="primary-btn small" data-page="predict">
-        <i data-lucide="sparkles"></i> Predict Colleges
-      </button>
+      <div class="nav-actions">
+        <button class="primary-btn small nav-cta" data-page="predict" aria-label="Predict Colleges">
+          <i data-lucide="sparkles"></i> Predict Colleges
+        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -127,11 +213,11 @@
 
       <form id="predictionForm" class="form-card">
         <div class="form-grid">
-          <label>
+          <label for="rank">
             JEE Main Rank
-            <input id="rank" type="number" min="1" max="1500000" value="45000" required>
+            <input id="rank" type="number" min="1" max="1500000" value="45000" placeholder="e.g. 45000" required>
           </label>
-          <label>
+          <label for="category">
             Category
             <select id="category">
               <option value="General">General (OPEN)</option>
@@ -141,14 +227,14 @@
               <option value="ST">Scheduled Tribe (ST)</option>
             </select>
           </label>
-          <label>
+          <label for="homeState">
             Home State / Quota
             <select id="homeState">
               <option value="Home State">UP Domicile (Home State Quota)</option>
               <option value="All India">All India / Other State</option>
             </select>
           </label>
-          <label>
+          <label for="branch">
             Preferred Branch
             <select id="branch">
               <option value="Computer Science & Engineering">Computer Science & Engineering (CSE / AI / ML / DS)</option>
@@ -159,14 +245,14 @@
               <option value="Civil Engineering">Civil Engineering (CE)</option>
             </select>
           </label>
-          <label>
+          <label for="gender">
             Gender
             <select id="gender">
               <option value="Male">Male / Neutral</option>
               <option value="Female">Female (Eligible for Girl Reservation Quota)</option>
             </select>
           </label>
-          <label>
+          <label for="round">
             Counselling Round
             <select id="round">
               <option value="Round 1">Round 1 (Opening Trends)</option>
@@ -175,7 +261,7 @@
             </select>
           </label>
         </div>
-        <div id="formError" class="error hidden"></div>
+        <div id="formError" class="error hidden" role="alert"></div>
         <button id="predictBtn" class="primary-btn full" type="submit">
           <i data-lucide="sparkles"></i> Predict Colleges
         </button>
@@ -199,7 +285,7 @@
         <div id="filters" class="filters"></div>
         <div class="secondary-filters">
           <input type="text" id="resultSearch" class="search-input" placeholder="Search college name or city...">
-          <select id="resultSort" class="filter-select">
+          <select id="resultSort" class="filter-select" aria-label="Sort prediction results">
             <option value="tier">Sort: ML Feasibility Tier</option>
             <option value="rankAsc">Sort: Closing Rank (Ascending)</option>
             <option value="rankDesc">Sort: Closing Rank (Descending)</option>
@@ -220,18 +306,18 @@
       </div>
 
       <div class="directory-bar">
-        <input type="text" id="dirSearch" class="search-input full" placeholder="Search by college name, code, or city (e.g. Lucknow, IET, Ghaziabad)...">
+        <input type="text" id="dirSearch" class="search-input full" placeholder="Search by college name, code, or city (e.g. Lucknow, IET, Ghaziabad)..." aria-label="Search colleges">
         <div class="dir-filters">
-          <select id="dirOwnership" class="filter-select">
+          <select id="dirOwnership" class="filter-select" aria-label="Filter by ownership">
             <option value="">All Ownership Types</option>
             <option value="Government">Government / University</option>
             <option value="Private">Private Affiliated</option>
           </select>
-          <select id="dirNirf" class="filter-select">
+          <select id="dirNirf" class="filter-select" aria-label="Filter by NIRF ranking">
             <option value="">All Institutions</option>
             <option value="true">NIRF Ranked Only</option>
           </select>
-          <select id="dirSort" class="filter-select">
+          <select id="dirSort" class="filter-select" aria-label="Sort college directory">
             <option value="name">Sort by Name</option>
             <option value="fee">Sort by Fees (Low to High)</option>
             <option value="placement">Sort by Average Package</option>
@@ -246,7 +332,11 @@
 
     <!-- College Detail Page -->
     <section id="details" class="page">
-      <button class="back-btn" id="backBtn">← Back</button>
+      <div class="details-top-bar">
+        <button class="back-btn" id="backBtn" aria-label="Go back to previous page">
+          <i data-lucide="arrow-left"></i> <span id="backBtnText">← Back</span>
+        </button>
+      </div>
       <div id="detailsCard"></div>
     </section>
 
@@ -259,6 +349,9 @@
       <div id="compareContent"></div>
     </section>
   </main>
+
+  <!-- In-app Toast Notification -->
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
   <footer>
     <div class="footer-inner">

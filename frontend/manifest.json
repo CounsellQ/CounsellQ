@@ -1,0 +1,19 @@
+{
+  "name": "CounsellQ — College Prediction & UPTAC Counselling Support",
+  "short_name": "CounsellQ",
+  "start_url": "/#home",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "description": "Evidence-backed UPTAC college prediction and counselling decision-support platform with ML feasibility scores, cutoffs, NIRF rankings, fees, and placements.",
+  "categories": ["education", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "64x64 128x128 256x256 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

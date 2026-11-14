@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>CounsellQ</ShortName>
+  <Description>Search UPTAC participating colleges, cutoffs, and ML feasibility on CounsellQ</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="64" height="64" type="image/svg+xml">https://counsell-q.vercel.app/favicon.svg</Image>
+  <Url type="text/html" template="https://counsell-q.vercel.app/#directory?q={searchTerms}"/>
+  <moz:SearchForm xmlns:moz="http://www.mozilla.org/2006/browser/search/">https://counsell-q.vercel.app/#directory</moz:SearchForm>
+</OpenSearchDescription>

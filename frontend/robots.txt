@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://counsell-q.vercel.app/sitemap.xml
