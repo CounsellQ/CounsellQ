@@ -722,7 +722,7 @@ function handleDetailsRoute(params) {
   const code = params.code || params.id;
   const backText = $("backBtnText");
   if (backText) {
-    backText.textContent = previousPage === "directory" ? "← Back to Directory" : "← Back to Predictions";
+    backText.textContent = previousPage === "directory" ? "Back to Directory" : "Back to Predictions";
   }
 
   if (selectedCollege && (selectedCollege.college?.code === code || selectedCollege.college?.id === code || !code)) {
