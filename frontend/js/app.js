@@ -512,7 +512,7 @@ function renderResults() {
     $("filters").innerHTML = "";
     $("resultsGrid").innerHTML = `
       <div class="college-card" style="grid-column:1/-1;text-align:center;color:#64748b;padding:48px 20px">
-        <i data-lucide="compass" style="width:40px;height:40px;margin:auto;display:block;margin-bottom:14px;color:#818cf8"></i>
+        <i data-lucide="compass" style="width:40px;height:40px;margin:auto;display:block;margin-bottom:14px;color:#0f172a"></i>
         <h3 style="font-size:18px;color:#0f172a;margin-bottom:6px">No Predictions Generated Yet</h3>
         <p style="font-size:14px;max-width:500px;margin:auto;color:#64748b">
           Enter your JEE Main rank and preferred engineering branch to evaluate your admission feasibility across 194 institutions.
@@ -645,7 +645,7 @@ function renderResultsList() {
 
             <!-- Explanation snippet -->
             <div class="explanation-snippet">
-              <i data-lucide="sparkles" style="width:13px;height:13px;display:inline-block;vertical-align:middle;color:#4f46e5"></i>
+              <i data-lucide="sparkles" style="width:13px;height:13px;display:inline-block;vertical-align:middle;color:#0f172a"></i>
               ${escapeHtml(c.explanation || "Evaluated by Random Forest ensemble against historical cutoffs.")}
             </div>
 
@@ -759,7 +759,7 @@ function handleDetailsRoute(params) {
   if (code) {
     $("detailsCard").innerHTML = `
       <div style="text-align:center;padding:60px 20px;color:#64748b">
-        <i data-lucide="loader-2" class="spin" style="width:36px;height:36px;margin:auto;display:block;margin-bottom:12px;color:#4f46e5"></i>
+        <i data-lucide="loader-2" class="spin" style="width:36px;height:36px;margin:auto;display:block;margin-bottom:12px;color:#0f172a"></i>
         Loading college profile...
       </div>
     `;
@@ -953,7 +953,7 @@ function renderCollegeDetailsHtml(c) {
             <span class="college-type">${escapeHtml(c.college?.city || "Uttar Pradesh")}</span>
           </div>
           <h1>${escapeHtml(c.college?.display_name || c.institute)}</h1>
-          <p class="program" style="font-size:16px;margin:6px 0;font-weight:600;color:#4f46e5">${escapeHtml(c.program)}</p>
+          <p class="program" style="font-size:16px;margin:6px 0;font-weight:600;color:#1e40af">${escapeHtml(c.program)}</p>
           <p style="color:#64748b;font-size:13px;margin:2px 0">
             ${escapeHtml(c.college?.city || "Uttar Pradesh")}, India • Established ${c.college?.established_year || "AKTU Affiliated"} • ${c.college?.campus_area ? escapeHtml(c.college.campus_area) : "Full Campus"}
           </p>
@@ -1115,7 +1115,7 @@ function renderCollegeDetailsHtml(c) {
 async function loadDirectory(initialQuery = "") {
   const stats = $("directoryStats");
   if (stats) {
-    stats.innerHTML = `<i data-lucide="loader-2" class="spin" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:6px;color:#4f46e5"></i> Loading colleges...`;
+    stats.innerHTML = `<i data-lucide="loader-2" class="spin" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:6px;color:#0f172a"></i> Loading colleges...`;
     if (window.lucide) lucide.createIcons();
   }
 
