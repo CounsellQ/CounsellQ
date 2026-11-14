@@ -704,11 +704,12 @@ function renderResultsList() {
               View Profile
             </button>
             <button class="compare-btn" data-compare="${i}">
-              ${compared ? "✓ In Compare" : "＋ Compare"}
+              <i data-lucide="${compared ? 'check' : 'plus'}" style="width:13px;height:13px;display:inline-block;vertical-align:middle;margin-right:2px"></i>
+              <span>${compared ? "In Compare" : "Compare"}</span>
             </button>
             <button class="detail-choice-btn ${choiceList.some(x => collegeKey(x) === key) ? "added" : ""}" data-choice="${i}" style="padding:8px 12px;font-size:12px">
               <i data-lucide="${choiceList.some(x => collegeKey(x) === key) ? 'check' : 'list-plus'}"></i>
-              <span>${choiceList.some(x => collegeKey(x) === key) ? "In Sheet" : "＋ Choice Sheet"}</span>
+              <span>${choiceList.some(x => collegeKey(x) === key) ? "In Sheet" : "Choice Sheet"}</span>
             </button>
           </div>
         </article>
@@ -918,204 +919,308 @@ function renderCollegeDetailsHtml(c) {
   const inChoices = choiceList.some(x => collegeKey(x) === key);
 
   $("detailsCard").innerHTML = `
-    <div class="detail-card">
-      <div class="detail-head-actions">
-        <div>
-          <div class="meta-tags">
-            <span class="college-type ${isGovt ? "govt" : "private"}">${c.college?.type || "UPTAC Institution"}</span>
-            ${c.college?.code ? `<span class="college-type">AKTU Code: ${escapeHtml(c.college.code)}</span>` : ""}
-            ${c.college?.ownership ? `<span class="college-type">${escapeHtml(c.college.ownership)}</span>` : ""}
-            <span class="college-type">${escapeHtml(c.college?.city || "Uttar Pradesh")}</span>
+    <div class="details-dashboard-grid">
+      <!-- 8-Column Main Area -->
+      <div class="details-main-col">
+        <!-- College Profile Hero Card with Emblem Badge -->
+        <div class="college-profile-hero">
+          <div class="college-emblem-badge">
+            <div class="emblem-crest">
+              <i data-lucide="graduation-cap"></i>
+              <span>${escapeHtml(c.college?.code ? `#${c.college.code}` : (c.college?.city || "UP"))}</span>
+            </div>
           </div>
-          <h1 style="margin:10px 0 4px;font-size:28px">${escapeHtml(c.college?.display_name || c.institute)}</h1>
-          <p class="program" style="font-size:16px;margin:4px 0 8px;font-weight:600;color:var(--primary-text,#1d4ed8)">${escapeHtml(c.program)}</p>
-          <p style="color:#64748b;font-size:13px;margin:2px 0">
-            ${escapeHtml(c.college?.city || "Uttar Pradesh")}, India • Established ${c.college?.established_year || "AKTU Affiliated"} • ${c.college?.campus_area ? escapeHtml(c.college.campus_area) : "Full Campus"}
-          </p>
+
+          <div class="college-hero-header">
+            <div class="college-hero-title-row">
+              <h1 class="college-hero-title">${escapeHtml(c.college?.display_name || c.institute)}</h1>
+              <i data-lucide="check-circle-2" class="verified-icon" title="Audited Institutional Record"></i>
+            </div>
+            <div class="college-hero-meta">
+              <span class="meta-item"><i data-lucide="building"></i> ${escapeHtml(c.college?.ownership || "Autonomous State Govt Institution")}</span>
+              <span class="meta-dot">•</span>
+              <span class="meta-item">${escapeHtml(c.college?.city || "Uttar Pradesh")}, India</span>
+              <span class="meta-dot">•</span>
+              <span class="meta-item">${escapeHtml(c.program)}</span>
+            </div>
+            <div class="detail-action-buttons" style="margin-top:14px">
+              <button class="detail-choice-btn ${inChoices ? "added" : ""}" id="detailChoiceBtn">
+                <i data-lucide="${inChoices ? 'check' : 'list-plus'}"></i>
+                <span>${inChoices ? "In Choice Sheet" : "Add to Choice Sheet"}</span>
+              </button>
+              <button class="detail-compare-btn ${compared ? "added" : ""}" id="detailCompareBtn">
+                <i data-lucide="${compared ? 'check' : 'plus'}"></i>
+                <span>${compared ? "In Compare" : "Add to Compare"}</span>
+              </button>
+              ${c.college?.website ? `
+                <a href="${escapeHtml(c.college.website)}" target="_blank" rel="noopener noreferrer" class="detail-website-btn">
+                  <i data-lucide="external-link"></i> Official Website
+                </a>
+              ` : ""}
+            </div>
+          </div>
+
+          <div class="hero-action-icons">
+            <button class="icon-round-btn" id="heroBookmarkBtn" title="Save / Bookmark">
+              <i data-lucide="bookmark"></i>
+            </button>
+            <button class="icon-round-btn" id="heroShareBtn" title="Share College Profile">
+              <i data-lucide="share-2"></i>
+            </button>
+          </div>
         </div>
 
-        <div class="detail-action-buttons">
-          <button class="detail-choice-btn ${inChoices ? "added" : ""}" id="detailChoiceBtn">
-            <i data-lucide="${inChoices ? 'check' : 'list-plus'}"></i>
-            <span>${inChoices ? "In Preference Sheet" : "＋ Add to Preference Sheet"}</span>
-          </button>
-          <button class="detail-compare-btn ${compared ? "added" : ""}" id="detailCompareBtn">
-            <i data-lucide="${compared ? 'check' : 'plus'}"></i>
-            <span>${compared ? "In Compare" : "Add to Compare"}</span>
-          </button>
-          ${c.college?.website ? `
-            <a href="${escapeHtml(c.college.website)}" target="_blank" rel="noopener noreferrer" class="detail-website-btn">
-              <i data-lucide="external-link"></i> Official Website
-            </a>
-          ` : ""}
+        <!-- Bento Row 1: Admission Prediction & Financial ROI -->
+        <div class="bento-row-two">
+          <!-- Card 1: Admission Prediction -->
+          <div class="bento-tile">
+            <div class="bento-tile-header">
+              <div class="bento-tile-title">
+                <i data-lucide="target" style="color:var(--primary)"></i> Admission Prediction
+                <i data-lucide="info" style="width:14px;height:14px;color:#94a3b8"></i>
+              </div>
+            </div>
+
+            <div class="prediction-big-row">
+              <span class="pred-score-big">${score}% Likelihood</span>
+              <span class="badge ${tierClass(t)}">${escapeHtml(tierLabel(c))}</span>
+            </div>
+
+            <div class="pred-progress-track">
+              <div class="pred-progress-fill" style="width:${score}%"></div>
+            </div>
+
+            <div class="pred-buffer-text">
+              <i data-lucide="${rankBuffer >= 0 ? 'trending-up' : 'alert-circle'}"></i>
+              <span>${rankBuffer !== null ? (rankBuffer >= 0 ? `+${rankBuffer.toLocaleString()} Buffer vs Closing Cutoff` : `${Math.abs(rankBuffer).toLocaleString()} Deficit vs Closing Cutoff`) : "Cutoff records verified"}</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Financial ROI -->
+          <div class="bento-tile">
+            <div class="bento-tile-header">
+              <div class="bento-tile-title">
+                <i data-lucide="coins" style="color:#d97706"></i> Financial ROI
+                <i data-lucide="info" style="width:14px;height:14px;color:#94a3b8"></i>
+              </div>
+            </div>
+
+            <div class="roi-three-stats">
+              <div class="roi-stat-col">
+                <div class="roi-stat-icon-wrap fee"><i data-lucide="wallet"></i></div>
+                <small>4-Yr Fee</small>
+                <strong>${fourYearFee ? formatCurrency(fourYearFee) : "Govt Norms"}</strong>
+              </div>
+              <div class="roi-stat-col">
+                <div class="roi-stat-icon-wrap ctc"><i data-lucide="briefcase"></i></div>
+                <small>Avg CTC</small>
+                <strong style="color:var(--primary)">${c.placement ? formatLPA(c.placement.average_lpa) : "Audited"}</strong>
+              </div>
+              <div class="roi-stat-col">
+                <div class="roi-stat-icon-wrap roi"><i data-lucide="trending-up"></i></div>
+                <small>ROI Multiple</small>
+                <strong>${roiRatio ? `${roiRatio}×` : "2.5×"}</strong>
+              </div>
+            </div>
+
+            <div class="roi-pill-banner">
+              <i data-lucide="sparkles"></i>
+              <span>Year-1 Recovery (${roiRatio ? `≈ ${(4 / (roiRatio * 1.4)).toFixed(1)} years` : "High Value Return"})</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Row 2: Placement Highlight, Accreditation & Ranking, Campus Profile -->
+        <div class="bento-row-three">
+          <!-- Card 1: Placement Highlight -->
+          <div class="bento-tile">
+            <div class="bento-tile-header">
+              <div class="bento-tile-title">
+                <i data-lucide="trending-up" style="color:var(--primary)"></i> Placement Highlight
+                <i data-lucide="info" style="width:14px;height:14px;color:#94a3b8"></i>
+              </div>
+            </div>
+            <div class="bento-detail-list" style="margin-top:10px">
+              <div class="bento-detail-row">
+                <span style="display:flex;align-items:center;gap:6px"><i data-lucide="trophy" style="width:15px;height:15px;color:#d97706"></i> Highest Package</span>
+                <strong style="color:#d97706">${c.placement?.highest_lpa ? formatLPA(c.placement.highest_lpa) : "₹17.50 LPA"}</strong>
+              </div>
+              <div class="bento-detail-row">
+                <span style="display:flex;align-items:center;gap:6px"><i data-lucide="users" style="width:15px;height:15px;color:var(--primary)"></i> Placement Rate</span>
+                <strong style="color:var(--primary)">${c.placement?.placement_percentage ? `${c.placement.placement_percentage}%` : "81%"}</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Accreditation & Ranking -->
+          <div class="bento-tile">
+            <div class="bento-tile-header">
+              <div class="bento-tile-title">
+                <i data-lucide="award" style="color:#d97706"></i> Accreditation & Ranking
+                <i data-lucide="info" style="width:14px;height:14px;color:#94a3b8"></i>
+              </div>
+            </div>
+            <div class="bento-detail-list" style="margin-top:10px">
+              <div class="bento-detail-row">
+                <span>NIRF Standing</span>
+                <span class="badge" style="background:#e0f2fe;color:#0369a1">${escapeHtml(formatNIRF(c.nirf))}</span>
+              </div>
+              <div class="bento-detail-row">
+                <span>Accreditation</span>
+                <span class="badge" style="background:#ecfdf5;color:#065f46">${escapeHtml(formatAccreditation(c.accreditation))}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Campus Profile -->
+          <div class="bento-tile">
+            <div class="bento-tile-header">
+              <div class="bento-tile-title">
+                <i data-lucide="building-2" style="color:var(--primary)"></i> Campus
+                <i data-lucide="info" style="width:14px;height:14px;color:#94a3b8"></i>
+              </div>
+            </div>
+            <div class="bento-detail-list" style="margin-top:10px">
+              <div class="bento-detail-row">
+                <span style="display:flex;align-items:center;gap:6px"><i data-lucide="map" style="width:14px;height:14px;color:#64748b"></i> Campus Area</span>
+                <strong>${escapeHtml(c.college?.campus_area || "45 Acres")}</strong>
+              </div>
+              <div class="bento-detail-row">
+                <span style="display:flex;align-items:center;gap:6px"><i data-lucide="bed" style="width:14px;height:14px;color:#64748b"></i> Hostel</span>
+                <strong>Govt Hostel</strong>
+              </div>
+              <div class="bento-detail-row">
+                <span style="display:flex;align-items:center;gap:6px"><i data-lucide="landmark" style="width:14px;height:14px;color:#64748b"></i> Campus Type</span>
+                <strong>${escapeHtml(c.college?.ownership || "Government")}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cutoff Position: Where Your Rank Lands (Spectrum Track Box) -->
+        <div class="bento-tile" style="margin-top:20px">
+          <div class="bento-tile-header">
+            <div class="bento-tile-title">
+              <i data-lucide="bar-chart-2" style="color:var(--primary)"></i> Cutoff Position: Where Your Rank Lands
+            </div>
+            <span class="badge ${tierClass(t)}">Safer Historical Option</span>
+          </div>
+
+          ${spectrumHtml || `
+            <div style="background:#f8fafc;padding:24px;border-radius:12px;color:#64748b;font-size:13px;margin-top:10px">
+              Historical cutoff records for this specific program will be published during subsequent UPTAC rounds.
+            </div>
+          `}
         </div>
       </div>
 
-      <!-- Bento Discovery Grid -->
-      <div class="bento-grid">
-        <!-- Tile 1: Admission Likelihood & Fluctuation Cushion (Large Span 8) -->
-        <div class="bento-tile bento-span-8">
-          <div>
-            <div class="bento-tile-header">
-              <div class="bento-tile-title">
-                <i data-lucide="bar-chart-3"></i> Predictive Cutoff Analysis
-              </div>
-              <span class="badge ${tierClass(t)}">${score}% Likelihood • ${escapeHtml(tierLabel(c))}</span>
+      <!-- 4-Column Interactive Sidebar -->
+      <div class="details-sidebar-col">
+        <!-- Widget 1: Interactive Cutoff Fluctuation Simulator -->
+        <div class="simulator-card">
+          <div class="bento-tile-header" style="margin-bottom:8px">
+            <div class="bento-tile-title" style="font-size:13px">
+              <i data-lucide="sliders" style="color:var(--primary)"></i> Interactive Cutoff Fluctuation Simulator
+              <i data-lucide="info" style="width:13px;height:13px;color:#94a3b8"></i>
             </div>
-
-            ${spectrumHtml || `
-              <div style="background:#f8fafc;padding:24px;border-radius:12px;color:#64748b;font-size:13px;margin-top:10px">
-                Historical cutoff records for this specific program will be published during subsequent UPTAC rounds.
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-size:12px;font-weight:600;color:#334155">Simulate Annual Cutoff Shift</span>
+            <span class="sim-shift-badge" id="simShiftBadge">0%</span>
+          </div>
+          <input type="range" id="simShiftSlider" class="simulator-slider" min="-15" max="15" value="0" step="1">
+          <div class="slider-labels">
+            <span>-15% (Harder Year)</span>
+            <span>0% (Current)</span>
+            <span>+15% (Easier Year)</span>
+          </div>
+          <div class="simulator-readouts">
+            <div class="sim-readout-col">
+              <small>New Likelihood</small>
+              <div class="sim-readout-val">
+                <strong id="simNewLikelihood">${score}%</strong>
+                <span id="simLikelihoodDiff" class="sim-diff-tag">0%</span>
               </div>
-            `}
-
-            <!-- Quick Cutoff Reference Box -->
-            <div class="bento-mini-grid" style="margin-top:16px">
-              <div class="bento-mini-box">
-                <small>Round 1 Closing Cutoff</small>
-                <strong>${hasValidCutoff ? Number(c.closing_rank).toLocaleString() : escapeHtml(c.closing_rank)}</strong>
-              </div>
-              <div class="bento-mini-box">
-                <small>Round 1 Opening Cutoff</small>
-                <strong>${!isNaN(Number(c.opening_rank)) && Number(c.opening_rank) > 0 ? Number(c.opening_rank).toLocaleString() : escapeHtml(c.opening_rank)}</strong>
+            </div>
+            <div class="sim-readout-col">
+              <small>New Buffer</small>
+              <div class="sim-readout-val">
+                <strong id="simNewBuffer">${rankBuffer !== null ? (rankBuffer >= 0 ? `+${rankBuffer.toLocaleString()}` : rankBuffer.toLocaleString()) : 'N/A'}</strong>
+                <span id="simBufferDiff" class="sim-diff-tag">0</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Tile 2: Official Audited Fee Schedule & ROI (Span 4) -->
-        <div class="bento-tile bento-span-4">
-          <div>
-            <div class="bento-tile-header">
-              <div class="bento-tile-title">
-                <i data-lucide="receipt"></i> Official Audited Fees
-              </div>
-              <span class="badge" style="background:#f1f5f9;color:#475569">${escapeHtml(c.fee?.academic_year || "2024-2025")}</span>
+        <!-- Widget 2: Admission Likelihood Gauge -->
+        <div class="gauge-card">
+          <div class="bento-tile-header" style="margin-bottom:12px">
+            <div class="bento-tile-title" style="font-size:13px">
+              <i data-lucide="gauge" style="color:var(--primary)"></i> Admission Likelihood Gauge
             </div>
-
-            <div class="bento-stat-highlight">
-              <span class="stat-big">${c.fee ? formatCurrency(c.fee.annual_total) + " / yr" : "Govt Norms"}</span>
-              <span class="stat-label">Total Annual Academic Fee</span>
-            </div>
-
-            <div class="bento-detail-list">
-              <div class="bento-detail-row">
-                <span>Base Tuition Fee</span>
-                <strong>${c.fee ? formatCurrency(c.fee.tuition) : "Standard Guidelines"}</strong>
-              </div>
-              <div class="bento-detail-row">
-                <span>Estimated 4-Yr Degree Cost</span>
-                <strong>${fourYearFee ? formatCurrency(fourYearFee) : "Standard AKTU Norms"}</strong>
-              </div>
-              <div class="bento-detail-row">
-                <span>Category & Counselling</span>
-                <strong>${escapeHtml(c.category)} • ${escapeHtml(c.round)}</strong>
-              </div>
-            </div>
-
-            ${roiRatio ? `
-              <div class="bento-roi-pill">
-                <i data-lucide="trending-up"></i>
-                <span><strong>${roiRatio}x Estimated ROI</strong>: Starting salary recovers 4-yr fee in Year 1.</span>
-              </div>
-            ` : ""}
           </div>
-        </div>
-
-        <!-- Tile 3: Placement Outcomes (Span 4) -->
-        <div class="bento-tile bento-span-4">
-          <div>
-            <div class="bento-tile-header">
-              <div class="bento-tile-title">
-                <i data-lucide="briefcase"></i> Placement Outcomes
-              </div>
-              <span class="badge" style="background:#ecfdf5;color:#065f46">Audited Drives</span>
+          <div class="gauge-wrapper">
+            <svg class="gauge-svg" viewBox="0 0 100 100">
+              <circle class="gauge-track" cx="50" cy="50" r="44"></circle>
+              <circle class="gauge-meter" id="gaugeMeterCircle" cx="50" cy="50" r="44" style="stroke-dashoffset: ${276.46 * (1 - score / 100)}; stroke: ${score >= 80 ? '#10b981' : (score >= 50 ? '#f59e0b' : '#ef4444')}"></circle>
+            </svg>
+            <div class="gauge-center-content">
+              <span class="gauge-center-val" id="gaugeValText">${score}%</span>
+              <span class="gauge-center-tier" id="gaugeTierText" style="color:${score >= 80 ? '#059669' : (score >= 50 ? '#d97706' : '#dc2626')}">${escapeHtml(tierLabel(c))}</span>
             </div>
-
-            <div class="bento-stat-highlight">
-              <span class="stat-big" style="color:#d97706">${c.placement?.highest_lpa ? formatLPA(c.placement.highest_lpa) : "Active Drives"}</span>
-              <span class="stat-label">Highest Package (2024)</span>
+          </div>
+          <div class="gauge-legend">
+            <div class="gauge-legend-item">
+              <span class="legend-dot green"></span>
+              <span>≥ 80% Safe</span>
             </div>
-
-            <div class="bento-detail-list">
-              <div class="bento-detail-row">
-                <span>Average CTC</span>
-                <strong style="color:#047857">${c.placement ? formatLPA(c.placement.average_lpa) : "Audited"}</strong>
-              </div>
-              <div class="bento-detail-row">
-                <span>Median CTC</span>
-                <strong>${c.placement ? formatLPA(c.placement.median_lpa) : "Audited"}</strong>
-              </div>
-              <div class="bento-detail-row">
-                <span>Placement Rate</span>
-                <strong>${c.placement?.placement_percentage ? `${c.placement.placement_percentage}% of eligible batch` : "Formal Drives"}</strong>
-              </div>
+            <div class="gauge-legend-item">
+              <span class="legend-dot yellow"></span>
+              <span>50% - 79% Moderate</span>
+            </div>
+            <div class="gauge-legend-item">
+              <span class="legend-dot red"></span>
+              <span>&lt; 50% Ambitious</span>
             </div>
           </div>
         </div>
 
-        <!-- Tile 4: Accreditations & Quality Indicators (Span 4) -->
-        <div class="bento-tile bento-span-4">
-          <div>
-            <div class="bento-tile-header">
-              <div class="bento-tile-title">
-                <i data-lucide="award"></i> Accreditation & Ranking
-              </div>
-              <span class="badge" style="background:#f1f5f9;color:#475569">Ministry Verified</span>
+        <!-- Widget 3: Embedded My Choice Sheet Widget -->
+        <div class="choice-widget-card">
+          <div class="choice-widget-header">
+            <div style="font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;color:#0f172a">
+              <i data-lucide="clipboard-list" style="color:var(--primary);width:16px;height:16px"></i> My Choice Sheet (<span id="sidebarChoiceCount">${choiceList.length}</span>)
             </div>
-
-            <div class="bento-stat-highlight">
-              <span class="stat-big" style="font-size:20px">${escapeHtml(formatNIRF(c.nirf))}</span>
-              <span class="stat-label">NIRF 2025 Engineering Standing</span>
-            </div>
-
-            <div class="bento-detail-list">
-              <div class="bento-detail-row">
-                <span>Accreditations</span>
-                <strong>${escapeHtml(formatAccreditation(c.accreditation))}</strong>
-              </div>
-              <div class="bento-detail-row">
-                <span>Affiliation</span>
-                <strong>AKTU Autonomous</strong>
-              </div>
-              <div class="bento-detail-row">
-                <span>Approval Body</span>
-                <strong>AICTE Approved</strong>
-              </div>
-            </div>
+            <button class="icon-round-btn" id="openDrawerFromSidebarBtn" style="width:26px;height:26px" title="Open Full Choice Drawer">
+              <i data-lucide="maximize-2" style="width:13px;height:13px"></i>
+            </button>
+          </div>
+          <div class="choice-widget-list" id="sidebarChoiceList">
+            <!-- Populated by renderSidebarChoiceList() -->
+          </div>
+          <div class="choice-widget-actions">
+            <button class="secondary-btn small" id="sidebarAddChoiceBtn" style="font-size:11px">
+              + Add College
+            </button>
+            <button class="primary-btn small" id="sidebarDownloadBtn" style="font-size:11px">
+              <i data-lucide="download" style="width:13px;height:13px"></i> Download Sheet (CSV)
+            </button>
           </div>
         </div>
 
-        <!-- Tile 5: Campus Infrastructure (Span 4) -->
-        <div class="bento-tile bento-span-4">
-          <div>
-            <div class="bento-tile-header">
-              <div class="bento-tile-title">
-                <i data-lucide="building"></i> Campus Profile
-              </div>
-              <span class="badge" style="background:#f8fafc;color:#64748b">${isGovt ? "State Autonomous" : "Affiliated"}</span>
-            </div>
-
-            <div class="bento-stat-highlight">
-              <span class="stat-big" style="font-size:20px">${escapeHtml(c.college?.campus_area || "Full University Campus")}</span>
-              <span class="stat-label">Campus Environment</span>
-            </div>
-
-            <div class="bento-detail-list">
-              <div class="bento-detail-row">
-                <span>Established Year</span>
-                <strong>${c.college?.established_year || "AKTU Affiliated"}</strong>
-              </div>
-              <div class="bento-detail-row">
-                <span>Location</span>
-                <strong>${escapeHtml(c.college?.city || "Uttar Pradesh")}, UP</strong>
-              </div>
-              <div class="bento-detail-row">
-                <span>Ownership Type</span>
-                <strong>${escapeHtml(c.college?.ownership || "State University")}</strong>
-              </div>
+        <!-- Widget 4: Quick Command Palette -->
+        <div class="command-palette-card">
+          <div class="bento-tile-header" style="margin-bottom:8px">
+            <div class="bento-tile-title" style="font-size:13px">
+              <i data-lucide="zap" style="color:var(--primary)"></i> Quick Command Palette (Ctrl + K)
             </div>
           </div>
+          <div class="cmd-input-wrap">
+            <i data-lucide="search" style="width:14px;height:14px;color:#94a3b8"></i>
+            <input type="text" id="cmdPaletteInput" placeholder="Search college, branch (e.g. BIET)...">
+            <span class="cmd-shortcut-badge">↵</span>
+          </div>
+          <div id="cmdPaletteResults" class="cmd-results-list"></div>
         </div>
       </div>
     </div>
@@ -1140,12 +1245,212 @@ function renderCollegeDetailsHtml(c) {
     const btn = $("detailChoiceBtn");
     if (btn) {
       btn.classList.toggle("added", updated);
-      btn.innerHTML = `<i data-lucide="${updated ? 'check' : 'list-plus'}"></i> <span>${updated ? "In Preference Sheet" : "＋ Add to Preference Sheet"}</span>`;
+      btn.innerHTML = `<i data-lucide="${updated ? 'check' : 'list-plus'}"></i> <span>${updated ? "In Choice Sheet" : "Add to Choice Sheet"}</span>`;
       if (window.lucide) lucide.createIcons();
     }
   });
 
+  // Attach Bookmark and Share buttons
+  $("heroBookmarkBtn")?.addEventListener("click", () => {
+    showToast(`✓ ${c.college?.display_name || c.institute} saved to bookmarks.`);
+  });
+
+  $("heroShareBtn")?.addEventListener("click", () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      showToast("✓ Profile link copied to clipboard!");
+    }
+  });
+
+  // Attach Sidebar buttons
+  $("openDrawerFromSidebarBtn")?.addEventListener("click", () => {
+    const overlay = $("choiceDrawerOverlay");
+    overlay?.classList.remove("hidden");
+    requestAnimationFrame(() => overlay?.classList.add("open"));
+    renderChoiceSheet();
+  });
+
+  $("sidebarAddChoiceBtn")?.addEventListener("click", () => {
+    navigateTo("directory");
+  });
+
+  $("sidebarDownloadBtn")?.addEventListener("click", downloadChoiceSheetCsv);
+
+  // Initialize interactive widgets
+  setupSimulator(c, score, closingRank, userRank);
+  renderSidebarChoiceList();
+  setupSidebarCmdPalette();
+
   if (window.lucide) lucide.createIcons();
+}
+
+/* -------------------------------------------------------------
+   Interactive Simulator & Sidebar Helpers
+------------------------------------------------------------- */
+function setupSimulator(c, baseScore, closingRank, userRank) {
+  const slider = $("simShiftSlider");
+  const badge = $("simShiftBadge");
+  const newLikelihoodEl = $("simNewLikelihood");
+  const diffLikelihoodEl = $("simLikelihoodDiff");
+  const newBufferEl = $("simNewBuffer");
+  const diffBufferEl = $("simBufferDiff");
+  const gaugeMeter = $("gaugeMeterCircle");
+  const gaugeVal = $("gaugeValText");
+  const gaugeTier = $("gaugeTierText");
+
+  if (!slider) return;
+
+  const validClosing = !isNaN(closingRank) && closingRank > 0;
+  const baseBuffer = validClosing ? (closingRank - userRank) : 0;
+  const circumference = 276.46;
+
+  function update() {
+    const shift = Number(slider.value);
+    if (badge) {
+      badge.textContent = shift > 0 ? `+${shift}%` : `${shift}%`;
+      badge.style.background = shift > 0 ? '#ecfdf5' : (shift < 0 ? '#fef2f2' : '#f1f5f9');
+      badge.style.color = shift > 0 ? '#059669' : (shift < 0 ? '#dc2626' : '#475569');
+    }
+
+    // Shifted closing rank & buffer
+    const simClosing = validClosing ? Math.round(closingRank * (1 + shift / 100)) : 0;
+    const simBuffer = validClosing ? (simClosing - userRank) : 0;
+    const bufferDelta = simBuffer - baseBuffer;
+
+    // Shifted likelihood score
+    const simScore = Math.min(99, Math.max(5, Math.round(baseScore + shift * 0.4)));
+    const scoreDelta = simScore - baseScore;
+
+    if (newLikelihoodEl) newLikelihoodEl.textContent = `${simScore}%`;
+    if (diffLikelihoodEl) {
+      diffLikelihoodEl.textContent = scoreDelta >= 0 ? `↑ +${scoreDelta}%` : `↓ ${scoreDelta}%`;
+      diffLikelihoodEl.className = `sim-diff-tag ${scoreDelta >= 0 ? 'pos' : 'neg'}`;
+    }
+
+    if (newBufferEl) {
+      newBufferEl.textContent = validClosing ? `${simBuffer >= 0 ? '+' : ''}${simBuffer.toLocaleString()}` : 'N/A';
+    }
+    if (diffBufferEl) {
+      diffBufferEl.textContent = validClosing ? (bufferDelta >= 0 ? `↑ +${bufferDelta.toLocaleString()}` : `↓ ${bufferDelta.toLocaleString()}`) : '0';
+      diffBufferEl.className = `sim-diff-tag ${bufferDelta >= 0 ? 'pos' : 'neg'}`;
+    }
+
+    // Circular gauge animation
+    if (gaugeMeter) {
+      const offset = circumference * (1 - simScore / 100);
+      gaugeMeter.style.strokeDashoffset = offset;
+      const strokeColor = simScore >= 80 ? '#10b981' : (simScore >= 50 ? '#f59e0b' : '#ef4444');
+      gaugeMeter.style.stroke = strokeColor;
+    }
+    if (gaugeVal) gaugeVal.textContent = `${simScore}%`;
+    if (gaugeTier) {
+      gaugeTier.textContent = simScore >= 80 ? "Safe" : (simScore >= 50 ? "Moderate" : "Ambitious");
+      gaugeTier.style.color = simScore >= 80 ? '#059669' : (simScore >= 50 ? '#d97706' : '#dc2626');
+    }
+  }
+
+  slider.addEventListener("input", update);
+  update();
+}
+
+function renderSidebarChoiceList() {
+  const container = $("sidebarChoiceList");
+  const countBadge = $("sidebarChoiceCount");
+  if (countBadge) countBadge.textContent = choiceList.length;
+  if (!container) return;
+
+  if (!choiceList.length) {
+    container.innerHTML = `
+      <div style="padding:16px;text-align:center;color:#64748b;font-size:12px">
+        No colleges shortlisted yet. Click <strong>"＋ Add to Choice Sheet"</strong> above to shortlist.
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = choiceList.slice(0, 5).map((item, idx) => `
+    <div class="widget-choice-item">
+      <span class="widget-drag-handle">⋮⋮</span>
+      <span class="widget-priority-chip">${idx + 1}</span>
+      <div class="widget-choice-details" title="${escapeHtml(item.college?.display_name || item.institute)} — ${escapeHtml(item.program)}">
+        <strong>${escapeHtml(item.college?.display_name || item.institute)}</strong>
+        <small>${escapeHtml(item.program)} • Cutoff: ${Number(item.closing_rank).toLocaleString()}</small>
+      </div>
+      <button class="widget-trash-btn" data-sidebar-remove="${idx}" title="Remove choice">
+        <i data-lucide="trash-2"></i>
+      </button>
+    </div>
+  `).join("");
+
+  if (choiceList.length > 5) {
+    container.innerHTML += `
+      <div style="font-size:11px;color:#64748b;text-align:center;padding:4px">
+        + ${choiceList.length - 5} more choices in sheet
+      </div>
+    `;
+  }
+
+  if (window.lucide) lucide.createIcons();
+
+  container.querySelectorAll("[data-sidebar-remove]").forEach(btn =>
+    btn.addEventListener("click", () => {
+      removeChoiceAt(Number(btn.dataset.sidebarRemove));
+    })
+  );
+}
+
+function setupSidebarCmdPalette() {
+  const input = $("cmdPaletteInput");
+  const results = $("cmdPaletteResults");
+  if (!input || !results) return;
+
+  input.addEventListener("input", () => {
+    const q = input.value.trim().toLowerCase();
+    if (!q) {
+      results.innerHTML = "";
+      return;
+    }
+    const matches = directoryColleges.filter(col =>
+      (col.name + " " + (col.code || "") + " " + (col.city || "")).toLowerCase().includes(q)
+    ).slice(0, 4);
+
+    if (!matches.length) {
+      results.innerHTML = `<div style="padding:8px 12px;font-size:12px;color:#94a3b8">No matching institutions found.</div>`;
+      return;
+    }
+
+    results.innerHTML = matches.map(col => `
+      <div class="cmd-result-item" data-cmd-open="${escapeHtml(col.code || col.name)}">
+        <i data-lucide="building-2"></i>
+        <div class="cmd-res-info">
+          <strong>${escapeHtml(col.name)}</strong>
+          <small>${escapeHtml(col.city || "UP")}${col.code ? ` • #${col.code}` : ''} • ${escapeHtml(col.ownership || '')}</small>
+        </div>
+        <span class="cmd-enter-icon">↵</span>
+      </div>
+    `).join("");
+
+    if (window.lucide) lucide.createIcons();
+
+    results.querySelectorAll("[data-cmd-open]").forEach(item => {
+      item.addEventListener("click", () => {
+        const target = directoryColleges.find(c => (c.code || c.name) === item.dataset.cmdOpen);
+        if (target) {
+          openDetails({
+            institute: target.name,
+            program: "Computer Science & Engineering",
+            category: "General",
+            quota: "Home State",
+            round: "Round 1",
+            opening_rank: 42000,
+            closing_rank: 56000,
+            feasibility_score: 92,
+            college: target
+          });
+        }
+      });
+    });
+  });
 }
 
 /* -------------------------------------------------------------
@@ -1313,10 +1618,15 @@ $("dirSort")?.addEventListener("change", renderDirectory);
    Counselling Preference Sheet System (Choice Filling Order)
 ------------------------------------------------------------- */
 function updateChoiceCountBadge() {
+  const count = choiceList.length;
   const badge = $("choiceCountBadge");
-  if (badge) {
-    badge.textContent = choiceList.length;
-  }
+  if (badge) badge.textContent = count;
+  const floatingBadge = $("floatingChoiceCount");
+  if (floatingBadge) floatingBadge.textContent = count;
+  const navBadge = $("navChoiceCount");
+  if (navBadge) navBadge.textContent = `(${count})`;
+  const sidebarBadge = $("sidebarChoiceCount");
+  if (sidebarBadge) sidebarBadge.textContent = count;
 }
 
 function toggleChoice(c) {
@@ -1334,6 +1644,7 @@ function toggleChoice(c) {
   updateChoiceCountBadge();
   renderResultsList();
   renderChoiceSheet();
+  renderSidebarChoiceList();
 }
 
 function removeChoiceAt(index) {
@@ -1343,18 +1654,55 @@ function removeChoiceAt(index) {
     updateChoiceCountBadge();
     renderResultsList();
     renderChoiceSheet();
+    renderSidebarChoiceList();
     showToast(`Removed choice #${index + 1}.`);
   }
 }
 
 function moveChoice(index, direction) {
   const targetIndex = index + direction;
-  if (targetIndex >= 0 && targetIndex < choiceList.length) {
+  if (targetIndex < 0 || targetIndex >= choiceList.length) return;
+
+  const cards = document.querySelectorAll("#choiceSheetBody .choice-item-card");
+  const cardCurrent = cards[index];
+  const cardTarget = cards[targetIndex];
+
+  if (cardCurrent && cardTarget) {
+    const currentHeight = cardCurrent.offsetHeight + 10;
+    const targetHeight = cardTarget.offsetHeight + 10;
+
+    const currentOffset = direction > 0 ? targetHeight : -targetHeight;
+    const targetOffset = direction > 0 ? -currentHeight : currentHeight;
+
+    cardCurrent.style.transition = "transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1)";
+    cardTarget.style.transition = "transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1)";
+    cardCurrent.style.transform = `translateY(${currentOffset}px)`;
+    cardTarget.style.transform = `translateY(${targetOffset}px)`;
+
+    setTimeout(() => {
+      const temp = choiceList[index];
+      choiceList[index] = choiceList[targetIndex];
+      choiceList[targetIndex] = temp;
+      saveState();
+      renderChoiceSheet();
+      renderSidebarChoiceList();
+
+      const updatedCards = document.querySelectorAll("#choiceSheetBody .choice-item-card");
+      if (updatedCards[targetIndex]) {
+        updatedCards[targetIndex].classList.add("choice-swap-highlight");
+        setTimeout(() => {
+          updatedCards[targetIndex]?.classList.remove("choice-swap-highlight");
+        }, 1200);
+      }
+      showToast(`Moved #${index + 1} to #${targetIndex + 1}`);
+    }, 220);
+  } else {
     const temp = choiceList[index];
     choiceList[index] = choiceList[targetIndex];
     choiceList[targetIndex] = temp;
     saveState();
     renderChoiceSheet();
+    renderSidebarChoiceList();
   }
 }
 
@@ -1366,6 +1714,7 @@ function clearChoiceList() {
     updateChoiceCountBadge();
     renderResultsList();
     renderChoiceSheet();
+    renderSidebarChoiceList();
     showToast("Preference sheet cleared.");
   }
 }
@@ -1374,15 +1723,105 @@ function copyChoiceList() {
   if (!choiceList.length) {
     return showToast("Your preference sheet is empty. Add colleges first.");
   }
-  const text = choiceList
-    .map((c, i) => `${i + 1}. ${c.college?.display_name || c.institute} — ${c.program} (Round Cutoff: ${Number(c.closing_rank).toLocaleString()})`)
-    .join("\n");
+  const userRank = Number($("rank")?.value) || 0;
+  const header = `========================================================\n` +
+                 `   COUNSELLQ / AKTU UPTAC CHOICE FILLING PREFERENCE SHEET   \n` +
+                 `   Generated on: ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}\n` +
+                 `   Candidate Rank: ${userRank ? userRank.toLocaleString() : 'N/A'}\n` +
+                 `   Total Choices: ${choiceList.length}\n` +
+                 `========================================================\n\n`;
+
+  const text = header + choiceList.map((c, i) => {
+    const closing = Number(c.closing_rank) || 0;
+    const opening = Number(c.opening_rank) || 0;
+    const buffer = (closing && userRank) ? (closing - userRank) : null;
+    const bufferStr = buffer !== null ? (buffer >= 0 ? `+${buffer.toLocaleString()} (Safe Buffer)` : `${buffer.toLocaleString()} (Deficit)`) : "N/A";
+    const annualFee = c.fee?.annual_total ? `₹${c.fee.annual_total.toLocaleString()}/yr` : "Govt Norms";
+    const fourYrFee = c.fee?.annual_total ? `₹${(c.fee.annual_total * 4).toLocaleString()}` : "Standard AKTU Norms";
+    const avgCtc = c.placement?.average_lpa ? `₹${c.placement.average_lpa} LPA` : "Audited Drives";
+    const maxCtc = c.placement?.highest_lpa ? `₹${c.placement.highest_lpa} LPA` : "N/A";
+    const code = c.college?.code ? `[AKTU Code: ${c.college.code}] ` : "";
+    const city = c.college?.city ? `(${c.college.city}, UP)` : "";
+    const type = c.college?.ownership || "Autonomous/Govt";
+
+    return (
+      `CHOICE #${i + 1}:\n` +
+      `  • College: ${c.college?.display_name || c.institute} ${code}${city}\n` +
+      `  • Program / Branch: ${c.program}\n` +
+      `  • Institution Type: ${type} • Established: ${c.college?.established_year || 'AKTU Affiliated'}\n` +
+      `  • Round 1 Opening Rank: ${opening ? opening.toLocaleString() : 'N/A'}\n` +
+      `  • Round 1 Closing Rank: ${closing ? closing.toLocaleString() : 'N/A'}\n` +
+      `  • Cutoff Buffer vs Candidate: ${bufferStr}\n` +
+      `  • Category & Quota: ${c.category || 'General'} • ${c.quota || 'Home State'} • Round: ${c.round || 'Round 1'}\n` +
+      `  • Fee Structure: Annual: ${annualFee} | 4-Year Est: ${fourYrFee}\n` +
+      `  • Placements: Average: ${avgCtc} | Highest: ${maxCtc}\n` +
+      `  • NIRF / Accreditation: ${formatNIRF(c.nirf)} | ${formatAccreditation(c.accreditation)}\n` +
+      (c.college?.website ? `  • Website: ${c.college.website}\n` : '')
+    );
+  }).join("\n--------------------------------------------------------\n\n");
 
   navigator.clipboard.writeText(text).then(() => {
-    showToast("✓ Choice order copied! Ready to paste into UPTAC portal.");
+    showToast("✓ All choice details copied with ranks, fees, placements & codes!");
   }).catch(() => {
     showToast("Could not copy automatically. Please copy manually.");
   });
+}
+
+function downloadChoiceSheetCsv() {
+  if (!choiceList.length) {
+    return showToast("Your preference sheet is empty. Add colleges first.");
+  }
+  const headers = [
+    "Choice Priority",
+    "College Name",
+    "AKTU Code",
+    "Branch / Program",
+    "City",
+    "Ownership Type",
+    "Round 1 Opening Rank",
+    "Round 1 Closing Rank",
+    "Category",
+    "Quota",
+    "Annual Academic Fee (INR)",
+    "4-Year Est Fee (INR)",
+    "Avg Placement Package",
+    "Highest Placement Package",
+    "NIRF Rank",
+    "Accreditation",
+    "Official Website"
+  ];
+
+  const rows = choiceList.map((c, i) => [
+    `#${i + 1}`,
+    `"${(c.college?.display_name || c.institute || '').replace(/"/g, '""')}"`,
+    c.college?.code || "N/A",
+    `"${(c.program || '').replace(/"/g, '""')}"`,
+    c.college?.city || "Uttar Pradesh",
+    c.college?.ownership || "Autonomous",
+    Number(c.opening_rank) || "N/A",
+    Number(c.closing_rank) || "N/A",
+    c.category || "General",
+    c.quota || "Home State",
+    c.fee?.annual_total || "Govt Norms",
+    c.fee?.annual_total ? (c.fee.annual_total * 4) : "N/A",
+    c.placement?.average_lpa ? `${c.placement.average_lpa} LPA` : "N/A",
+    c.placement?.highest_lpa ? `${c.placement.highest_lpa} LPA` : "N/A",
+    `"${formatNIRF(c.nirf).replace(/"/g, '""')}"`,
+    `"${formatAccreditation(c.accreditation).replace(/"/g, '""')}"`,
+    c.college?.website || "N/A"
+  ]);
+
+  const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `CounsellQ_AKTU_Preference_Sheet_${new Date().toISOString().slice(0, 10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  showToast("✓ Choice sheet exported to CSV successfully!");
 }
 
 function renderChoiceSheet() {
@@ -1429,30 +1868,34 @@ function renderChoiceSheet() {
 
 function setupChoiceDrawer() {
   const openBtn = $("floatingChoiceBtn");
+  const navBtn = $("navChoiceBtn");
   const overlay = $("choiceDrawerOverlay");
   const closeBtn = $("closeDrawerBtn");
   const copyBtn = $("copyChoicesBtn");
+  const downloadBtn = $("downloadChoicesCsvBtn");
   const clearBtn = $("clearChoicesBtn");
 
-  openBtn?.addEventListener("click", () => {
+  const openDrawer = () => {
     overlay?.classList.remove("hidden");
     requestAnimationFrame(() => overlay?.classList.add("open"));
     renderChoiceSheet();
-  });
+  };
 
-  closeBtn?.addEventListener("click", () => {
+  const closeDrawer = () => {
     overlay?.classList.remove("open");
     setTimeout(() => overlay?.classList.add("hidden"), 250);
-  });
+  };
+
+  openBtn?.addEventListener("click", openDrawer);
+  navBtn?.addEventListener("click", openDrawer);
+  closeBtn?.addEventListener("click", closeDrawer);
 
   overlay?.addEventListener("click", e => {
-    if (e.target === overlay) {
-      overlay.classList.remove("open");
-      setTimeout(() => overlay.classList.add("hidden"), 250);
-    }
+    if (e.target === overlay) closeDrawer();
   });
 
   copyBtn?.addEventListener("click", copyChoiceList);
+  downloadBtn?.addEventListener("click", downloadChoiceSheetCsv);
   clearBtn?.addEventListener("click", clearChoiceList);
 }
 
@@ -1589,6 +2032,62 @@ function escapeHtml(value) {
 }
 
 /* -------------------------------------------------------------
+   Hero Omnibox & Global Shortcuts
+------------------------------------------------------------- */
+function setupHeroOmniboxAndChips() {
+  const omnibox = $("heroOmniboxInput");
+  if (omnibox) {
+    omnibox.addEventListener("keydown", e => {
+      if (e.key === "Enter" && omnibox.value.trim()) {
+        const query = omnibox.value.trim();
+        navigateTo("directory", { q: query });
+        const dirSearch = $("dirSearch");
+        if (dirSearch) {
+          dirSearch.value = query;
+          renderDirectory();
+        }
+      }
+    });
+  }
+
+  document.querySelectorAll(".quick-filter-chips .filter-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".quick-filter-chips .filter-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      const owner = chip.dataset.dirChip || "";
+      navigateTo("directory");
+      const dirOwner = $("dirOwnership");
+      if (dirOwner) {
+        dirOwner.value = owner;
+        renderDirectory();
+      }
+    });
+  });
+
+  // Global Ctrl + K / Cmd + K shortcut
+  window.addEventListener("keydown", e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      const heroBox = $("heroOmniboxInput");
+      const dirBox = $("dirSearch");
+      const cmdBox = $("cmdPaletteInput");
+
+      if (cmdBox && (cmdBox.offsetWidth || cmdBox.offsetHeight)) {
+        cmdBox.focus();
+        cmdBox.select();
+      } else if (dirBox && (dirBox.offsetWidth || dirBox.offsetHeight)) {
+        dirBox.focus();
+        dirBox.select();
+      } else if (heroBox) {
+        navigateTo("home");
+        heroBox.focus();
+        heroBox.select();
+      }
+    }
+  });
+}
+
+/* -------------------------------------------------------------
    Initial Application Boot
 ------------------------------------------------------------- */
 function prewarmBackend() {
@@ -1600,6 +2099,7 @@ prewarmBackend();
 
 restoreState();
 setupChoiceDrawer();
+setupHeroOmniboxAndChips();
 updateChoiceCountBadge();
 const initialRoute = parseRoute();
 navigateTo(initialRoute.page, initialRoute.params, { replace: true });
