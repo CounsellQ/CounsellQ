@@ -1061,9 +1061,16 @@ i.spin,
   color: #0f172a;
 }
 
+.spectrum-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
 .spectrum-track-box {
   position: relative;
-  padding: 40px 10px 30px;
+  padding: 48px 12px 64px;
 }
 
 .spectrum-track {
@@ -1099,7 +1106,7 @@ i.spin,
   background: #4f46e5;
   border: 3px solid #ffffff;
   box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.3), 0 3px 8px rgba(0, 0, 0, 0.3);
-  z-index: 10;
+  z-index: 20;
   animation: pulse-pin 2s infinite ease-in-out;
 }
 
@@ -1108,36 +1115,72 @@ i.spin,
   50% { box-shadow: 0 0 0 8px rgba(79, 70, 229, 0.15), 0 3px 12px rgba(0, 0, 0, 0.3); }
 }
 
-.spectrum-pin-marker .pin-label-top {
+/* Candidate Pin Badge - Positioned strictly ABOVE the track */
+.candidate-pin-badge {
   position: absolute;
-  bottom: 24px;
+  bottom: 22px;
   white-space: nowrap;
-  font-size: 11px;
-  font-weight: 700;
-  color: #475569;
-  background: #f1f5f9;
-  padding: 4px 8px;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-}
-
-.spectrum-pin-marker.candidate-marker .pin-label-top {
   background: #4f46e5;
   color: #ffffff;
   font-size: 12px;
+  font-weight: 700;
   padding: 6px 12px;
   border-radius: 8px;
-  bottom: 28px;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+  z-index: 25;
 }
 
-.spectrum-pin-marker .pin-label-bottom {
+.candidate-pin-badge::after {
+  content: "";
   position: absolute;
-  top: 24px;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px 5px 0 5px;
+  border-style: solid;
+  border-color: #4f46e5 transparent transparent transparent;
+}
+
+/* Cutoff Markers - Positioned strictly BELOW the track so they never collide with the candidate */
+.cutoff-pill-bottom {
+  position: absolute;
+  top: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   white-space: nowrap;
-  font-size: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 4px 9px;
+  border-radius: 7px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.cutoff-pill-bottom .pill-label {
+  font-size: 10px;
   font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.cutoff-pill-bottom .pill-value {
+  font-size: 12px;
+  font-weight: 800;
   color: #0f172a;
+  line-height: 1.25;
+}
+
+.spectrum-legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-top: 50px;
+  padding: 0 4px;
 }
 
 .spectrum-cushion-banner {
@@ -1482,21 +1525,26 @@ footer {
     padding: 20px 16px;
   }
   .spectrum-track-box {
-    padding: 50px 6px 36px;
+    padding: 46px 6px 60px;
   }
-  .spectrum-pin-marker .pin-label-top {
+  .candidate-pin-badge {
+    font-size: 11px;
+    padding: 4px 9px;
+    bottom: 20px;
+  }
+  .cutoff-pill-bottom {
+    padding: 3px 6px;
+    top: 16px;
+  }
+  .cutoff-pill-bottom .pill-label {
+    font-size: 9px;
+  }
+  .cutoff-pill-bottom .pill-value {
+    font-size: 11px;
+  }
+  .spectrum-legend {
     font-size: 10px;
-    padding: 2px 6px;
-    bottom: 22px;
-  }
-  .spectrum-pin-marker.candidate-marker .pin-label-top {
-    font-size: 11px;
-    padding: 4px 8px;
-    bottom: 28px;
-  }
-  .spectrum-pin-marker .pin-label-bottom {
-    font-size: 11px;
-    top: 22px;
+    margin-top: 46px;
   }
   .hero h1 {
     font-size: 34px;

@@ -849,42 +849,56 @@ function renderCollegeDetailsHtml(c) {
     const cushionClass = rankBuffer > 1000 ? "safe" : (rankBuffer >= 0 ? "moderate" : "ambitious");
     let cushionMessage = "";
     if (rankBuffer > 0) {
-      cushionMessage = `<strong>Comfortable Safety Cushion:</strong> Your rank (<strong>${userRank.toLocaleString()}</strong>) is <strong>+${rankBuffer.toLocaleString()} positions ahead</strong> of the 2025 closing cutoff (${closingRank.toLocaleString()}). You have a strong buffer against annual cutoff swings.`;
+      cushionMessage = `<strong>Comfortable Safety Cushion:</strong> Your rank (<strong>${userRank.toLocaleString()}</strong>) is <strong>+${rankBuffer.toLocaleString()} positions ahead</strong> of the historical closing cutoff (${closingRank.toLocaleString()}). Even if this year's cutoffs close significantly higher due to shifts in applicant volume or competition, your rank provides a strong protective buffer.`;
     } else {
       const deficit = Math.abs(rankBuffer);
-      cushionMessage = `<strong>Competitive Boundary:</strong> Your rank (<strong>${userRank.toLocaleString()}</strong>) is <strong>${deficit.toLocaleString()} positions beyond</strong> the Round 1 closing cutoff (${closingRank.toLocaleString()}). You may secure admission in subsequent rounds, or should keep safer choices in your preference sheet.`;
+      cushionMessage = `<strong>Competitive Boundary Zone:</strong> Your rank (<strong>${userRank.toLocaleString()}</strong>) is <strong>${deficit.toLocaleString()} positions beyond</strong> the Round 1 closing cutoff (${closingRank.toLocaleString()}). Cutoffs fluctuate annually across counselling rounds, making this a strategic reach option for subsequent rounds.`;
     }
 
     spectrumHtml = `
       <div class="spectrum-card">
         <div class="spectrum-header">
-          <div class="spectrum-title">
-            <i data-lucide="bar-chart-3"></i> Cutoff Position: Where Your Rank Lands
+          <div>
+            <div class="spectrum-title">
+              <i data-lucide="bar-chart-3"></i> Predictive Cutoff Analysis: Annual Fluctuation Buffer
+            </div>
+            <div class="spectrum-subtitle">
+              Evaluates rank resilience against annual cutoff drifts and applicant volatility (±5–10%)
+            </div>
           </div>
           <span class="badge ${tierClass(t)}">${escapeHtml(tierLabel(c))}</span>
         </div>
 
         <div class="spectrum-track-box">
           <div class="spectrum-track">
-            <!-- Opening Cutoff Pin -->
+            <!-- Opening Cutoff Pin (Positioned Below Track) -->
             <div class="spectrum-pin-marker" style="left: ${openPct}%" title="Opening Cutoff: ${openingRank.toLocaleString()}">
-              <div class="pin-label-top">Opening Cutoff</div>
               <div class="pin-dot"></div>
-              <div class="pin-label-bottom">${openingRank.toLocaleString()}</div>
+              <div class="cutoff-pill-bottom">
+                <span class="pill-label">Opening Cutoff</span>
+                <span class="pill-value">${openingRank.toLocaleString()}</span>
+              </div>
             </div>
 
-            <!-- Closing Cutoff Pin -->
+            <!-- Closing Cutoff Pin (Positioned Below Track) -->
             <div class="spectrum-pin-marker" style="left: ${closePct}%" title="Closing Cutoff: ${closingRank.toLocaleString()}">
-              <div class="pin-label-top">Closing Cutoff</div>
               <div class="pin-dot"></div>
-              <div class="pin-label-bottom">${closingRank.toLocaleString()}</div>
+              <div class="cutoff-pill-bottom">
+                <span class="pill-label">Closing Cutoff</span>
+                <span class="pill-value">${closingRank.toLocaleString()}</span>
+              </div>
             </div>
 
-            <!-- Candidate Pin -->
+            <!-- Candidate Pin (Positioned Exclusively Above Track) -->
             <div class="spectrum-pin-marker candidate-marker" style="left: ${userPct}%" title="Your Rank: ${userRank.toLocaleString()}">
-              <div class="pin-label-top">🎯 Your Rank: ${userRank.toLocaleString()}</div>
+              <div class="candidate-pin-badge">🎯 Your Rank: ${userRank.toLocaleString()}</div>
               <div class="pin-dot"></div>
             </div>
+          </div>
+
+          <div class="spectrum-legend">
+            <span>← Higher Rank Merit (Safe Zone)</span>
+            <span>Cutoff Fluctuation Boundary →</span>
           </div>
         </div>
 
