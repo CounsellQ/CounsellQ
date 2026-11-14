@@ -37,6 +37,7 @@ const pageTitles = {
 
 let results = [];
 let compareList = [];
+let choiceList = [];
 let selectedCollege = null;
 let currentFilter = "ALL";
 let directoryColleges = [];
@@ -53,6 +54,7 @@ function saveState() {
   try {
     sessionStorage.setItem("counsellq_results", JSON.stringify(results));
     sessionStorage.setItem("counsellq_compare", JSON.stringify(compareList));
+    sessionStorage.setItem("counsellq_choices", JSON.stringify(choiceList));
     if (selectedCollege) {
       sessionStorage.setItem("counsellq_selected_college", JSON.stringify(selectedCollege));
     }
@@ -81,6 +83,12 @@ function restoreState() {
     if (savedCompare) {
       compareList = JSON.parse(savedCompare);
       updateCompareCountBadge();
+    }
+
+    const savedChoices = sessionStorage.getItem("counsellq_choices");
+    if (savedChoices) {
+      choiceList = JSON.parse(savedChoices);
+      updateChoiceCountBadge();
     }
 
     const savedCollege = sessionStorage.getItem("counsellq_selected_college");
@@ -691,12 +699,16 @@ function renderResultsList() {
             </div>
           </div>
 
-          <div class="card-actions">
-            <button class="view-btn" data-details="${i}">
-              View Full Profile
+          <div class="card-actions" style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="view-btn" data-details="${i}" style="flex:1;min-width:130px">
+              View Profile
             </button>
             <button class="compare-btn" data-compare="${i}">
-              ${compared ? "✓ Added to Compare" : "＋ Compare"}
+              ${compared ? "✓ In Compare" : "＋ Compare"}
+            </button>
+            <button class="detail-choice-btn ${choiceList.some(x => collegeKey(x) === key) ? "added" : ""}" data-choice="${i}" style="padding:8px 12px;font-size:12px">
+              <i data-lucide="${choiceList.some(x => collegeKey(x) === key) ? 'check' : 'list-plus'}"></i>
+              <span>${choiceList.some(x => collegeKey(x) === key) ? "In Sheet" : "＋ Choice Sheet"}</span>
             </button>
           </div>
         </article>
@@ -712,6 +724,10 @@ function renderResultsList() {
 
   document.querySelectorAll("[data-compare]").forEach(btn =>
     btn.addEventListener("click", () => toggleCompare(visible[Number(btn.dataset.compare)]))
+  );
+
+  document.querySelectorAll("[data-choice]").forEach(btn =>
+    btn.addEventListener("click", () => toggleChoice(visible[Number(btn.dataset.choice)]))
   );
 }
 
@@ -856,91 +872,50 @@ function renderCollegeDetailsHtml(c) {
     }
 
     spectrumHtml = `
-      <div class="spectrum-card">
-        <div class="spectrum-header">
-          <div>
-            <div class="spectrum-title">
-              <i data-lucide="bar-chart-3"></i> Predictive Cutoff Analysis: Annual Fluctuation Buffer
-            </div>
-            <div class="spectrum-subtitle">
-              Evaluates rank resilience against annual cutoff drifts and applicant volatility (±5–10%)
-            </div>
-          </div>
-          <span class="badge ${tierClass(t)}">${escapeHtml(tierLabel(c))}</span>
-        </div>
-
-        <div class="spectrum-track-box">
-          <div class="spectrum-track">
-            <!-- Opening Cutoff Pin (Positioned Below Track) -->
-            <div class="spectrum-pin-marker" style="left: ${openPct}%" title="Opening Cutoff: ${openingRank.toLocaleString()}">
-              <div class="pin-dot"></div>
-              <div class="cutoff-pill-bottom">
-                <span class="pill-label">Opening Cutoff</span>
-                <span class="pill-value">${openingRank.toLocaleString()}</span>
-              </div>
-            </div>
-
-            <!-- Closing Cutoff Pin (Positioned Below Track) -->
-            <div class="spectrum-pin-marker" style="left: ${closePct}%" title="Closing Cutoff: ${closingRank.toLocaleString()}">
-              <div class="pin-dot"></div>
-              <div class="cutoff-pill-bottom">
-                <span class="pill-label">Closing Cutoff</span>
-                <span class="pill-value">${closingRank.toLocaleString()}</span>
-              </div>
-            </div>
-
-            <!-- Candidate Pin (Positioned Exclusively Above Track) -->
-            <div class="spectrum-pin-marker candidate-marker" style="left: ${userPct}%" title="Your Rank: ${userRank.toLocaleString()}">
-              <div class="candidate-pin-badge">🎯 Your Rank: ${userRank.toLocaleString()}</div>
-              <div class="pin-dot"></div>
+      <div class="spectrum-track-box" style="padding-top:40px">
+        <div class="spectrum-track">
+          <!-- Opening Cutoff Pin (Positioned Below Track) -->
+          <div class="spectrum-pin-marker" style="left: ${openPct}%" title="Opening Cutoff: ${openingRank.toLocaleString()}">
+            <div class="pin-dot"></div>
+            <div class="cutoff-pill-bottom">
+              <span class="pill-label">Opening Cutoff</span>
+              <span class="pill-value">${openingRank.toLocaleString()}</span>
             </div>
           </div>
 
-          <div class="spectrum-legend">
-            <span>← Higher Rank Merit (Safe Zone)</span>
-            <span>Cutoff Fluctuation Boundary →</span>
+          <!-- Closing Cutoff Pin (Positioned Below Track) -->
+          <div class="spectrum-pin-marker" style="left: ${closePct}%" title="Closing Cutoff: ${closingRank.toLocaleString()}">
+            <div class="pin-dot"></div>
+            <div class="cutoff-pill-bottom">
+              <span class="pill-label">Closing Cutoff</span>
+              <span class="pill-value">${closingRank.toLocaleString()}</span>
+            </div>
+          </div>
+
+          <!-- Candidate Pin (Positioned Exclusively Above Track) -->
+          <div class="spectrum-pin-marker candidate-marker" style="left: ${userPct}%" title="Your Rank: ${userRank.toLocaleString()}">
+            <div class="candidate-pin-badge">🎯 Your Rank: ${userRank.toLocaleString()}</div>
+            <div class="pin-dot"></div>
           </div>
         </div>
 
-        <div class="spectrum-cushion-banner ${cushionClass}">
-          <i data-lucide="${rankBuffer > 0 ? 'shield-check' : 'alert-triangle'}"></i>
-          <div>${cushionMessage}</div>
+        <div class="spectrum-legend">
+          <span>← Higher Rank Merit (Safe Zone)</span>
+          <span>Cutoff Fluctuation Boundary →</span>
         </div>
+      </div>
+
+      <div class="spectrum-cushion-banner ${cushionClass}" style="margin-top:20px">
+        <i data-lucide="${rankBuffer > 0 ? 'shield-check' : 'alert-triangle'}"></i>
+        <div>${cushionMessage}</div>
       </div>
     `;
   }
 
-  // ROI Stat Card
-  let roiHtml = "";
-  if (c.fee?.annual_total && c.placement?.average_lpa) {
-    const fourYearFee = c.fee.annual_total * 4;
-    const avgSalary = c.placement.average_lpa * 100000;
-    const roiRatio = (avgSalary / fourYearFee).toFixed(1);
-    roiHtml = `
-      <div class="stat-card roi-stat">
-        <div class="stat-header">
-          <span class="stat-label">Estimated ROI</span>
-          <i data-lucide="trending-up" class="stat-icon"></i>
-        </div>
-        <div class="stat-value">${roiRatio}x Return</div>
-        <div class="stat-subtext">Avg starting salary recovers 4-yr fee in yr 1</div>
-      </div>
-    `;
-  } else {
-    roiHtml = `
-      <div class="stat-card roi-stat">
-        <div class="stat-header">
-          <span class="stat-label">Institution Standing</span>
-          <i data-lucide="award" class="stat-icon"></i>
-        </div>
-        <div class="stat-value">${c.nirf ? formatNIRF(c.nirf) : (isGovt ? "State Autonomous" : "Affiliated")}</div>
-        <div class="stat-subtext">AKTU Code: ${escapeHtml(c.college?.code || "Verified")}</div>
-      </div>
-    `;
-  }
-
-  // Stat Ribbon Class
-  const statClass = t === "SAFE" ? "safe-stat" : (t === "MODERATE" ? "mod-stat" : "amb-stat");
+  const fourYearFee = c.fee?.annual_total ? (c.fee.annual_total * 4) : null;
+  const avgSalary = c.placement?.average_lpa ? (c.placement.average_lpa * 100000) : null;
+  const roiRatio = (fourYearFee && avgSalary) ? (avgSalary / fourYearFee).toFixed(1) : null;
+  const inChoices = choiceList.some(x => collegeKey(x) === key);
 
   $("detailsCard").innerHTML = `
     <div class="detail-card">
@@ -952,14 +927,18 @@ function renderCollegeDetailsHtml(c) {
             ${c.college?.ownership ? `<span class="college-type">${escapeHtml(c.college.ownership)}</span>` : ""}
             <span class="college-type">${escapeHtml(c.college?.city || "Uttar Pradesh")}</span>
           </div>
-          <h1>${escapeHtml(c.college?.display_name || c.institute)}</h1>
-          <p class="program" style="font-size:16px;margin:6px 0;font-weight:600;color:#1e40af">${escapeHtml(c.program)}</p>
+          <h1 style="margin:10px 0 4px;font-size:28px">${escapeHtml(c.college?.display_name || c.institute)}</h1>
+          <p class="program" style="font-size:16px;margin:4px 0 8px;font-weight:600;color:#1e40af">${escapeHtml(c.program)}</p>
           <p style="color:#64748b;font-size:13px;margin:2px 0">
             ${escapeHtml(c.college?.city || "Uttar Pradesh")}, India • Established ${c.college?.established_year || "AKTU Affiliated"} • ${c.college?.campus_area ? escapeHtml(c.college.campus_area) : "Full Campus"}
           </p>
         </div>
 
         <div class="detail-action-buttons">
+          <button class="detail-choice-btn ${inChoices ? "added" : ""}" id="detailChoiceBtn">
+            <i data-lucide="${inChoices ? 'check' : 'list-plus'}"></i>
+            <span>${inChoices ? "In Preference Sheet" : "＋ Add to Preference Sheet"}</span>
+          </button>
           <button class="detail-compare-btn ${compared ? "added" : ""}" id="detailCompareBtn">
             <i data-lucide="${compared ? 'check' : 'plus'}"></i>
             <span>${compared ? "In Compare" : "Add to Compare"}</span>
@@ -972,121 +951,169 @@ function renderCollegeDetailsHtml(c) {
         </div>
       </div>
 
-      <!-- Quick Executive Summary (4 High-Impact Highlight Cards) -->
-      <div class="profile-hero-stats">
-        <div class="stat-card ${statClass}">
-          <div class="stat-header">
-            <span class="stat-label">Admission Likelihood</span>
-            <i data-lucide="shield-check" class="stat-icon"></i>
-          </div>
-          <div class="stat-value">${score}% Chance</div>
-          <div class="stat-subtext">${escapeHtml(tierLabel(c))}</div>
-        </div>
-
-        <div class="stat-card fee-stat">
-          <div class="stat-header">
-            <span class="stat-label">Annual Tuition & Fees</span>
-            <i data-lucide="banknote" class="stat-icon"></i>
-          </div>
-          <div class="stat-value">${c.fee ? formatCurrency(c.fee.annual_total) + " / yr" : "Govt Norms"}</div>
-          <div class="stat-subtext">${c.fee ? `Base Tuition: ${formatCurrency(c.fee.tuition)}` : "AKTU fee guidelines apply"}</div>
-        </div>
-
-        <div class="stat-card pkg-stat">
-          <div class="stat-header">
-            <span class="stat-label">Placement Track Record</span>
-            <i data-lucide="briefcase" class="stat-icon"></i>
-          </div>
-          <div class="stat-value">${c.placement ? formatLPA(c.placement.average_lpa) : "Active Cell"}</div>
-          <div class="stat-subtext">${c.placement?.highest_lpa ? `Highest: <strong style="color:#d97706">${formatLPA(c.placement.highest_lpa)}</strong> (${c.placement.placement_percentage || 80}% Placed)` : "Official T&P Drives"}</div>
-        </div>
-
-        ${roiHtml}
-      </div>
-
-      <!-- Cutoff Spectrum Gauge -->
-      ${spectrumHtml}
-
-      <div class="detail-sections">
-        <!-- Section 1: Historical UPTAC 2025 Cutoffs -->
-        <div>
-          <div class="detail-section-title"><i data-lucide="history"></i> Historical UPTAC 2025 Cutoffs</div>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <small>Closing Rank (Round Cutoff)</small>
-              <strong style="font-size:20px;color:#0f172a">${hasValidCutoff ? Number(c.closing_rank).toLocaleString() : escapeHtml(c.closing_rank)}</strong>
+      <!-- Bento Discovery Grid -->
+      <div class="bento-grid">
+        <!-- Tile 1: Admission Likelihood & Fluctuation Cushion (Large Span 8) -->
+        <div class="bento-tile bento-span-8">
+          <div>
+            <div class="bento-tile-header">
+              <div class="bento-tile-title">
+                <i data-lucide="bar-chart-3"></i> Predictive Cutoff Analysis
+              </div>
+              <span class="badge ${tierClass(t)}">${score}% Likelihood • ${escapeHtml(tierLabel(c))}</span>
             </div>
-            <div class="detail-item">
-              <small>Opening Rank</small>
-              <strong style="font-size:20px;color:#0f172a">${!isNaN(Number(c.opening_rank)) && Number(c.opening_rank) > 0 ? Number(c.opening_rank).toLocaleString() : escapeHtml(c.opening_rank)}</strong>
-            </div>
-            <div class="detail-item">
-              <small>Category & Round</small>
-              <strong style="font-size:18px">${escapeHtml(c.category)} • ${escapeHtml(c.round)}</strong>
+
+            ${spectrumHtml || `
+              <div style="background:#f8fafc;padding:24px;border-radius:12px;color:#64748b;font-size:13px;margin-top:10px">
+                Historical cutoff records for this specific program will be published during subsequent UPTAC rounds.
+              </div>
+            `}
+
+            <!-- Quick Cutoff Reference Box -->
+            <div class="bento-mini-grid" style="margin-top:16px">
+              <div class="bento-mini-box">
+                <small>Round 1 Closing Cutoff</small>
+                <strong>${hasValidCutoff ? Number(c.closing_rank).toLocaleString() : escapeHtml(c.closing_rank)}</strong>
+              </div>
+              <div class="bento-mini-box">
+                <small>Round 1 Opening Cutoff</small>
+                <strong>${!isNaN(Number(c.opening_rank)) && Number(c.opening_rank) > 0 ? Number(c.opening_rank).toLocaleString() : escapeHtml(c.opening_rank)}</strong>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Section 2: Official Audited Fee Schedule -->
-        <div>
-          <div class="detail-section-title"><i data-lucide="receipt"></i> Official Audited Fee Schedule</div>
-          ${c.fee ? `
-          <div class="detail-grid">
-            <div class="detail-item">
-              <small>Total Annual Academic Fee</small>
-              <strong style="color:#0f172a;font-size:20px">${formatCurrency(c.fee.annual_total)} / yr</strong>
+        <!-- Tile 2: Official Audited Fee Schedule & ROI (Span 4) -->
+        <div class="bento-tile bento-span-4">
+          <div>
+            <div class="bento-tile-header">
+              <div class="bento-tile-title">
+                <i data-lucide="receipt"></i> Official Audited Fees
+              </div>
+              <span class="badge" style="background:#f1f5f9;color:#475569">${escapeHtml(c.fee?.academic_year || "2024-2025")}</span>
             </div>
-            <div class="detail-item">
-              <small>Base Tuition Component</small>
-              <strong style="font-size:18px">${formatCurrency(c.fee.tuition)}</strong>
+
+            <div class="bento-stat-highlight">
+              <span class="stat-big">${c.fee ? formatCurrency(c.fee.annual_total) + " / yr" : "Govt Norms"}</span>
+              <span class="stat-label">Total Annual Academic Fee</span>
             </div>
-            <div class="detail-item">
-              <small>Academic Year</small>
-              <strong style="color:#0f172a;font-size:18px">${escapeHtml(c.fee.academic_year || "2024-2025")}</strong>
+
+            <div class="bento-detail-list">
+              <div class="bento-detail-row">
+                <span>Base Tuition Fee</span>
+                <strong>${c.fee ? formatCurrency(c.fee.tuition) : "Standard Guidelines"}</strong>
+              </div>
+              <div class="bento-detail-row">
+                <span>Estimated 4-Yr Degree Cost</span>
+                <strong>${fourYearFee ? formatCurrency(fourYearFee) : "Standard AKTU Norms"}</strong>
+              </div>
+              <div class="bento-detail-row">
+                <span>Category & Counselling</span>
+                <strong>${escapeHtml(c.category)} • ${escapeHtml(c.round)}</strong>
+              </div>
             </div>
-          </div>` : `
-          <div style="background:#f8fafc;padding:16px;border-radius:10px;color:#64748b;font-size:13px">
-            Audited fee schedule for this specific institution is pending official disclosure. Standard AKTU fee guidelines apply.
-          </div>`}
+
+            ${roiRatio ? `
+              <div class="bento-roi-pill">
+                <i data-lucide="trending-up"></i>
+                <span><strong>${roiRatio}x Estimated ROI</strong>: Starting salary recovers 4-yr fee in Year 1.</span>
+              </div>
+            ` : ""}
+          </div>
         </div>
 
-        <!-- Section 3: Verified Placement Outcomes -->
-        <div>
-          <div class="detail-section-title"><i data-lucide="trending-up"></i> Official Placement Outcomes</div>
-          ${c.placement ? `
-          <div class="detail-grid">
-            <div class="detail-item">
-              <small>Average Package</small>
-              <strong style="color:#047857;font-size:20px">${formatLPA(c.placement.average_lpa)}</strong>
+        <!-- Tile 3: Placement Outcomes (Span 4) -->
+        <div class="bento-tile bento-span-4">
+          <div>
+            <div class="bento-tile-header">
+              <div class="bento-tile-title">
+                <i data-lucide="briefcase"></i> Placement Outcomes
+              </div>
+              <span class="badge" style="background:#ecfdf5;color:#065f46">Audited Drives</span>
             </div>
-            <div class="detail-item">
-              <small>Median Package</small>
-              <strong style="font-size:18px">${formatLPA(c.placement.median_lpa)}</strong>
+
+            <div class="bento-stat-highlight">
+              <span class="stat-big" style="color:#d97706">${c.placement?.highest_lpa ? formatLPA(c.placement.highest_lpa) : "Active Drives"}</span>
+              <span class="stat-label">Highest Package (2024)</span>
             </div>
-            <div class="detail-item">
-              <small>Highest Package</small>
-              <strong style="color:#d97706;font-size:20px;font-weight:800">${formatLPA(c.placement.highest_lpa)}</strong>
+
+            <div class="bento-detail-list">
+              <div class="bento-detail-row">
+                <span>Average CTC</span>
+                <strong style="color:#047857">${c.placement ? formatLPA(c.placement.average_lpa) : "Audited"}</strong>
+              </div>
+              <div class="bento-detail-row">
+                <span>Median CTC</span>
+                <strong>${c.placement ? formatLPA(c.placement.median_lpa) : "Audited"}</strong>
+              </div>
+              <div class="bento-detail-row">
+                <span>Placement Rate</span>
+                <strong>${c.placement?.placement_percentage ? `${c.placement.placement_percentage}% of eligible batch` : "Formal Drives"}</strong>
+              </div>
             </div>
           </div>
-          <div style="margin-top:12px;font-size:12px;color:#64748b">
-            ${c.placement.placement_percentage ? `Placement Rate: <strong>${c.placement.placement_percentage}% of eligible students</strong>` : ""}
-          </div>` : `
-          <div style="background:#f8fafc;padding:16px;border-radius:10px;color:#64748b;font-size:13px">
-            Official placement report for this institution is pending audited publication. Standard university recruitment drives apply.
-          </div>`}
         </div>
 
-        <!-- Section 4: Accreditations & Quality Indicators -->
-        <div>
-          <div class="detail-section-title"><i data-lucide="award"></i> NIRF Rankings & NBA/NAAC Accreditations</div>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <small>NIRF 2025 Engineering</small>
-              <strong>${escapeHtml(formatNIRF(c.nirf))}</strong>
+        <!-- Tile 4: Accreditations & Quality Indicators (Span 4) -->
+        <div class="bento-tile bento-span-4">
+          <div>
+            <div class="bento-tile-header">
+              <div class="bento-tile-title">
+                <i data-lucide="award"></i> Accreditation & Ranking
+              </div>
+              <span class="badge" style="background:#f1f5f9;color:#475569">Ministry Verified</span>
             </div>
-            <div class="detail-item" style="grid-column: span 2">
-              <small>Accreditations</small>
-              <strong>${escapeHtml(formatAccreditation(c.accreditation))}</strong>
+
+            <div class="bento-stat-highlight">
+              <span class="stat-big" style="font-size:20px">${escapeHtml(formatNIRF(c.nirf))}</span>
+              <span class="stat-label">NIRF 2025 Engineering Standing</span>
+            </div>
+
+            <div class="bento-detail-list">
+              <div class="bento-detail-row">
+                <span>Accreditations</span>
+                <strong>${escapeHtml(formatAccreditation(c.accreditation))}</strong>
+              </div>
+              <div class="bento-detail-row">
+                <span>Affiliation</span>
+                <strong>AKTU Autonomous</strong>
+              </div>
+              <div class="bento-detail-row">
+                <span>Approval Body</span>
+                <strong>AICTE Approved</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tile 5: Campus Infrastructure (Span 4) -->
+        <div class="bento-tile bento-span-4">
+          <div>
+            <div class="bento-tile-header">
+              <div class="bento-tile-title">
+                <i data-lucide="building"></i> Campus Profile
+              </div>
+              <span class="badge" style="background:#f8fafc;color:#64748b">${isGovt ? "State Autonomous" : "Affiliated"}</span>
+            </div>
+
+            <div class="bento-stat-highlight">
+              <span class="stat-big" style="font-size:20px">${escapeHtml(c.college?.campus_area || "Full University Campus")}</span>
+              <span class="stat-label">Campus Environment</span>
+            </div>
+
+            <div class="bento-detail-list">
+              <div class="bento-detail-row">
+                <span>Established Year</span>
+                <strong>${c.college?.established_year || "AKTU Affiliated"}</strong>
+              </div>
+              <div class="bento-detail-row">
+                <span>Location</span>
+                <strong>${escapeHtml(c.college?.city || "Uttar Pradesh")}, UP</strong>
+              </div>
+              <div class="bento-detail-row">
+                <span>Ownership Type</span>
+                <strong>${escapeHtml(c.college?.ownership || "State University")}</strong>
+              </div>
             </div>
           </div>
         </div>
@@ -1102,6 +1129,18 @@ function renderCollegeDetailsHtml(c) {
     if (btn) {
       btn.classList.toggle("added", updated);
       btn.innerHTML = `<i data-lucide="${updated ? 'check' : 'plus'}"></i> <span>${updated ? "In Compare" : "Add to Compare"}</span>`;
+      if (window.lucide) lucide.createIcons();
+    }
+  });
+
+  // Attach live preference sheet toggle handler on detail page
+  $("detailChoiceBtn")?.addEventListener("click", () => {
+    toggleChoice(c);
+    const updated = choiceList.some(x => collegeKey(x) === key);
+    const btn = $("detailChoiceBtn");
+    if (btn) {
+      btn.classList.toggle("added", updated);
+      btn.innerHTML = `<i data-lucide="${updated ? 'check' : 'list-plus'}"></i> <span>${updated ? "In Preference Sheet" : "＋ Add to Preference Sheet"}</span>`;
       if (window.lucide) lucide.createIcons();
     }
   });
@@ -1271,6 +1310,153 @@ $("dirNirf")?.addEventListener("change", renderDirectory);
 $("dirSort")?.addEventListener("change", renderDirectory);
 
 /* -------------------------------------------------------------
+   Counselling Preference Sheet System (Choice Filling Order)
+------------------------------------------------------------- */
+function updateChoiceCountBadge() {
+  const badge = $("choiceCountBadge");
+  if (badge) {
+    badge.textContent = choiceList.length;
+  }
+}
+
+function toggleChoice(c) {
+  const key = collegeKey(c);
+  const exists = choiceList.some(x => collegeKey(x) === key);
+  if (exists) {
+    choiceList = choiceList.filter(x => collegeKey(x) !== key);
+    showToast("Removed from preference sheet.");
+  } else {
+    choiceList.push(c);
+    showToast(`Added to preference sheet (Choice #${choiceList.length}).`);
+  }
+
+  saveState();
+  updateChoiceCountBadge();
+  renderResultsList();
+  renderChoiceSheet();
+}
+
+function removeChoiceAt(index) {
+  if (index >= 0 && index < choiceList.length) {
+    const removed = choiceList.splice(index, 1)[0];
+    saveState();
+    updateChoiceCountBadge();
+    renderResultsList();
+    renderChoiceSheet();
+    showToast(`Removed choice #${index + 1}.`);
+  }
+}
+
+function moveChoice(index, direction) {
+  const targetIndex = index + direction;
+  if (targetIndex >= 0 && targetIndex < choiceList.length) {
+    const temp = choiceList[index];
+    choiceList[index] = choiceList[targetIndex];
+    choiceList[targetIndex] = temp;
+    saveState();
+    renderChoiceSheet();
+  }
+}
+
+function clearChoiceList() {
+  if (!choiceList.length) return;
+  if (confirm("Clear all choices from your preference sheet?")) {
+    choiceList = [];
+    saveState();
+    updateChoiceCountBadge();
+    renderResultsList();
+    renderChoiceSheet();
+    showToast("Preference sheet cleared.");
+  }
+}
+
+function copyChoiceList() {
+  if (!choiceList.length) {
+    return showToast("Your preference sheet is empty. Add colleges first.");
+  }
+  const text = choiceList
+    .map((c, i) => `${i + 1}. ${c.college?.display_name || c.institute} — ${c.program} (Round Cutoff: ${Number(c.closing_rank).toLocaleString()})`)
+    .join("\n");
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("✓ Choice order copied! Ready to paste into UPTAC portal.");
+  }).catch(() => {
+    showToast("Could not copy automatically. Please copy manually.");
+  });
+}
+
+function renderChoiceSheet() {
+  const body = $("choiceSheetBody");
+  if (!body) return;
+  if (!choiceList.length) {
+    body.innerHTML = `
+      <div style="text-align:center;padding:48px 16px;color:#64748b">
+        <i data-lucide="clipboard-list" style="width:36px;height:36px;margin:auto;display:block;margin-bottom:12px;color:#94a3b8"></i>
+        <strong style="color:#0f172a;display:block;font-size:15px">No choices added yet</strong>
+        <p style="font-size:12px;margin:6px 0 0;line-height:1.5">
+          Browse predicted colleges or search the directory, then click <strong>"＋ Choice Sheet"</strong> to prepare your counselling priority order.
+        </p>
+      </div>
+    `;
+    if (window.lucide) lucide.createIcons();
+    return;
+  }
+
+  body.innerHTML = choiceList.map((c, idx) => `
+    <div class="choice-item-card">
+      <div class="choice-priority-num">#${idx + 1}</div>
+      <div class="choice-item-info">
+        <strong>${escapeHtml(c.college?.display_name || c.institute)}</strong>
+        <small>${escapeHtml(c.program)} • Cutoff: ${Number(c.closing_rank).toLocaleString()}</small>
+      </div>
+      <div class="choice-item-actions">
+        ${idx > 0 ? `<button class="choice-action-btn" data-move-choice="${idx}" data-dir="-1" title="Move Up">▲</button>` : ""}
+        ${idx < choiceList.length - 1 ? `<button class="choice-action-btn" data-move-choice="${idx}" data-dir="1" title="Move Down">▼</button>` : ""}
+        <button class="choice-action-btn delete" data-remove-choice="${idx}" title="Remove Choice">✕</button>
+      </div>
+    </div>
+  `).join("");
+
+  if (window.lucide) lucide.createIcons();
+
+  body.querySelectorAll("[data-move-choice]").forEach(btn =>
+    btn.addEventListener("click", () => moveChoice(Number(btn.dataset.moveChoice), Number(btn.dataset.dir)))
+  );
+  body.querySelectorAll("[data-remove-choice]").forEach(btn =>
+    btn.addEventListener("click", () => removeChoiceAt(Number(btn.dataset.removeChoice)))
+  );
+}
+
+function setupChoiceDrawer() {
+  const openBtn = $("floatingChoiceBtn");
+  const overlay = $("choiceDrawerOverlay");
+  const closeBtn = $("closeDrawerBtn");
+  const copyBtn = $("copyChoicesBtn");
+  const clearBtn = $("clearChoicesBtn");
+
+  openBtn?.addEventListener("click", () => {
+    overlay?.classList.remove("hidden");
+    requestAnimationFrame(() => overlay?.classList.add("open"));
+    renderChoiceSheet();
+  });
+
+  closeBtn?.addEventListener("click", () => {
+    overlay?.classList.remove("open");
+    setTimeout(() => overlay?.classList.add("hidden"), 250);
+  });
+
+  overlay?.addEventListener("click", e => {
+    if (e.target === overlay) {
+      overlay.classList.remove("open");
+      setTimeout(() => overlay.classList.add("hidden"), 250);
+    }
+  });
+
+  copyBtn?.addEventListener("click", copyChoiceList);
+  clearBtn?.addEventListener("click", clearChoiceList);
+}
+
+/* -------------------------------------------------------------
    College Comparison System
 ------------------------------------------------------------- */
 function collegeKey(c) {
@@ -1413,5 +1599,7 @@ function prewarmBackend() {
 prewarmBackend();
 
 restoreState();
+setupChoiceDrawer();
+updateChoiceCountBadge();
 const initialRoute = parseRoute();
 navigateTo(initialRoute.page, initialRoute.params, { replace: true });

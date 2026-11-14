@@ -353,6 +353,45 @@
   <!-- In-app Toast Notification -->
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
+  <!-- Floating Preference Sheet Pill Button -->
+  <button id="floatingChoiceBtn" class="floating-choice-btn" aria-label="Open Counselling Preference Sheet">
+    <i data-lucide="list-ordered"></i>
+    <span>Preference Sheet</span>
+    <span class="choice-badge" id="choiceCountBadge">0</span>
+  </button>
+
+  <!-- Slide-Over Drawer for Choice Filling Sheet -->
+  <div id="choiceDrawerOverlay" class="drawer-overlay hidden">
+    <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+      <div class="drawer-header">
+        <div>
+          <h2 id="drawerTitle" style="display:flex;align-items:center;gap:8px;font-size:18px;margin:0;color:#0f172a">
+            <i data-lucide="list-ordered"></i> Choice Filling Sheet
+          </h2>
+          <p class="drawer-subtitle" style="margin:4px 0 0;font-size:12px;color:#64748b">
+            Your prioritized order of colleges for the official UPTAC portal.
+          </p>
+        </div>
+        <button id="closeDrawerBtn" class="drawer-close-btn" aria-label="Close preference sheet">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="drawer-body" id="choiceSheetBody">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+
+      <div class="drawer-footer">
+        <button id="copyChoicesBtn" class="primary-btn full">
+          <i data-lucide="copy"></i> Copy Choice Order (for Portal)
+        </button>
+        <button id="clearChoicesBtn" class="secondary-btn full" style="margin-top:8px">
+          Clear All Choices
+        </button>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <div class="footer-inner">
       <p>© 2026 <strong>CounsellQ</strong> • Machine learning admission counselling decision-support platform.</p>
