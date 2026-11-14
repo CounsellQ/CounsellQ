@@ -948,7 +948,7 @@ function renderCollegeDetailsHtml(c) {
         <div class="detail-action-buttons">
           <button class="detail-compare-btn ${compared ? "added" : ""}" id="detailCompareBtn">
             <i data-lucide="${compared ? 'check' : 'plus'}"></i>
-            <span>${compared ? "✓ In Compare" : "＋ Add to Compare"}</span>
+            <span>${compared ? "In Compare" : "Add to Compare"}</span>
           </button>
           ${c.college?.website ? `
             <a href="${escapeHtml(c.college.website)}" target="_blank" rel="noopener noreferrer" class="detail-website-btn">
@@ -1087,7 +1087,7 @@ function renderCollegeDetailsHtml(c) {
     const btn = $("detailCompareBtn");
     if (btn) {
       btn.classList.toggle("added", updated);
-      btn.innerHTML = `<i data-lucide="${updated ? 'check' : 'plus'}"></i> <span>${updated ? "✓ In Compare" : "＋ Add to Compare"}</span>`;
+      btn.innerHTML = `<i data-lucide="${updated ? 'check' : 'plus'}"></i> <span>${updated ? "In Compare" : "Add to Compare"}</span>`;
       if (window.lucide) lucide.createIcons();
     }
   });
@@ -1305,7 +1305,7 @@ function renderCompare() {
       <div class="compare-card" style="padding:48px;text-align:center;color:#64748b">
         <i data-lucide="copy" style="width:36px;height:36px;margin:auto;display:block;margin-bottom:12px;color:#94a3b8"></i>
         <strong>No colleges added for comparison yet.</strong>
-        <p style="font-size:13px;margin-top:6px">Run a prediction or search colleges, then click '＋ Compare' on up to 3 cards.</p>
+        <p style="font-size:13px;margin-top:6px">Run a prediction or search colleges, then click 'Compare' on up to 3 cards.</p>
         <button class="primary-btn" style="margin-top:16px" data-page="directory">
           Explore Colleges to Compare
         </button>
