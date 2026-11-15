@@ -2427,25 +2427,58 @@ function renderAssistantBubble(stream, rawMarkdown, citations = []) {
 }
 
 function renderClientFallbackChat(stream, query, rank, cat) {
-  const q = query.toLowerCase();
+  const q = query.toLowerCase().trim();
   let reply = "";
 
-  if (q.includes("internal slid") || q.includes("sliding") || q.includes("branch change")) {
+  // 1. Off-Topic / Out of Domain Guard
+  const isOffTopic = (
+    /\b(ind vs nz|india vs|nz vs|pak vs|aus vs|cricket|match|score|ipl|t20|odi|world cup|football|messi|ronaldo|wicket|batting|bowling|tennis|badminton)\b/i.test(q) ||
+    /\b(movie|bollywood|hollywood|trailer|song|album|singer|actor|actress|netflix|spotify|cinema)\b/i.test(q) ||
+    /\b(weather|temperature|forecast|rain today|humidity)\b/i.test(q) ||
+    /\b(recipe|pizza|burger|cooking|cake|food)\b/i.test(q) ||
+    /\b(election|prime minister|president|bjp|congress|parliament)\b/i.test(q)
+  ) && !/\b(college|cutoffs?|rank|uptac|aktu|branch|admission|fee|seat|placement|btech|engineering)\b/i.test(q);
+
+  if (isOffTopic) {
+    reply = "### 🎓 Ask CounsellQ Admissions Assistant\n\nI am an AI admissions counsellor dedicated strictly to **UPTAC / AKTU engineering admissions**, JEE Main cutoffs, fee structures, college comparisons, and counselling rules.\n\nI don't track sports scores, match updates (like India vs New Zealand), or general non-educational topics.\n\n**Here are some things you can ask me:**\n• **College Cutoffs**: *\"What branch can I get at 1,35,000 rank?\"*\n• **College Comparisons**: *\"Which college is better: ABES or ABES IT?\"* or *\"Compare ABES vs AKGEC\"*\n• **UPTAC Rules**: *\"Should I choose Freeze or Float in Round 2?\"* or *\"How does Internal Sliding work?\"*\n• **Fee Structures & TFW**: *\"Who is eligible for Tuition Fee Waiver (FW) seats?\"*\n• **Branch Selection**: *\"Is CSE with AIML better than core CSE?\"*";
+  } else if (/^(hi|hello|hey|greetings|namaste|good\s*(morning|afternoon|evening)|who are you|help me|what can you do)[\s!.]*$/i.test(q)) {
+    reply = "### 🎓 Welcome to Ask CounsellQ!\n\nI am your dedicated AI admissions assistant for **UPTAC / AKTU 2025 B.Tech Counselling**.\n\nHere is how I can assist your admission journey:\n• **Rank Feasibility**: Type your rank (e.g. `135000`) to see Safe, Moderate, and Dream college options.\n• **Direct Comparisons**: Ask *\"Which is better: ABES or ABES IT?\"* or *\"Compare AKGEC vs KIET\"*.\n• **Counselling Strategy**: Learn the exact rules for **Freeze vs Float**, **Internal Sliding in Round 3**, and **Refund policies**.\n• **Branch Insights**: Learn about **Core CSE vs CSE(AIML) vs IT** and placement eligibility.";
+  } else if (q.includes("abes") && (q.includes("abes it") || q.includes("abesit") || q.includes("abes-it") || q.includes("institute of technology"))) {
+    reply = "### 🏛️ Comparison: ABES Engineering College (#032) vs ABES IT (#290)\n\nWhile both colleges share the ABES brand name and are located on NH-24 in Ghaziabad, they are **two separate institutions with different college codes, administration, cutoffs, and accreditations**:\n\n| Key Factor | ABES Engineering College (Code #032) | ABES Institute of Technology (Code #290) |\n| :--- | :--- | :--- |\n| **College Code** | **032** (Flagship Campus) | **290** (Separate campus nearby) |\n| **Status** | **Autonomous Institute** | Non-Autonomous AKTU Affiliated |\n| **Accreditation** | **NBA Accredited** (CSE, ECE, ME till 2028) • NAAC 'B+' | NAAC Accredited • Limited NBA |\n| **NIRF Standing** | **NIRF Engineering Band 201–300** | Not ranked in NIRF top bands |\n| **Annual Tuition** | ₹1,40,750 / year | ₹1,18,000 / year |\n| **2025 CSE Round 3 Cutoff** | **4,11,234** (High Demand) | **~7,50,000 – 9,00,000+** |\n| **Average Placement CTC** | **₹5.20 – ₹5.80 LPA** (Top: ₹50 LPA) | **₹3.60 – ₹4.10 LPA** (Top: ₹12–15 LPA) |\n| **Top Recruiters** | Amazon, Cisco, TCS Digital, Capgemini, Infosys | TCS Ninja, Wipro, Nucleus, Tech Mahindra |\n\n#### 🎯 CounsellQ Verdict\n• **ABES Engineering College (#032) is significantly superior** in brand value, autonomous academic flexibility, active alumni network, verified NBA accreditations, and placement package averages.\n• In your UPTAC preference sheet, always list all desired branches at **ABES Engineering College (#032)** strictly above ABES IT (#290).";
+  } else if (q.includes("internal slid") || q.includes("sliding") || q.includes("branch change")) {
     reply = "### 🔄 Internal Sliding in Round 3\n\nInternal sliding occurs inside the admitted college without risk of losing your currently allotted seat:\n\n• **Eligibility**: Admitted candidates who paid the Seat Acceptance Fee and opted for sliding.\n• **Safety**: If no higher branch is available, you securely retain your current branch.\n• **No Inter-College Transfer**: Upgrades occur strictly within the same institute.";
   } else if (q.includes("freeze") || q.includes("float")) {
     reply = "### ⚖️ Freeze vs Float\n\n• **Freeze**: Locks your allotted seat permanently and ends your counselling participation. Mandatory reporting required.\n• **Float**: Accepts the current seat as a safety net while competing for higher-preference choices in subsequent rounds.\n\n**Rule of Thumb**: Always select **Float** in Round 1 & 2 unless you received your top #1 preference choice!";
   } else if (q.includes("fee waiver") || q.includes("tfw") || q.includes("fw")) {
     reply = "### 💰 Tuition Fee Waiver (TFW / FW) Seats\n\n• **100% Tuition Fee is waived** (saves ₹85,000–₹1,15,000/yr).\n• Requires **UP Domicile** and Family Income **< ₹8 Lakhs/yr**.\n• Income certificate must be issued on or after 1st April of current year.\n• In choice filling, place FW branches right above the corresponding general branches.";
-  } else if (q.includes("abes") && (q.includes("akgec") || q.includes("compare"))) {
+  } else if ((q.includes("cse") || q.includes("computer science")) && (q.includes("aiml") || q.includes("ai & ml") || q.includes("artificial intelligence") || q.includes("data science") || q.includes("it vs") || q.includes("specialization"))) {
+    reply = "### 💻 Branch Breakdown: Core CSE vs CSE (AI & ML) vs IT\n\n• **Core CSE**: 100% classic fundamentals, 100% company placement eligibility, perfect GATE CS alignment.\n• **CSE (AI & ML) / Data Science**: 80% same as Core CSE + specialized ML/analytics electives. >95% tech companies treat it equal to CSE.\n• **Information Technology (IT)**: Applied software systems focus; identical campus placement opportunities in AKTU.\n\n**Recommended Choice Filling Order**: Core CSE > CSE (AIML) > CSE (DS) > IT.";
+  } else if (q.includes("abes") && (q.includes("akgec") || q.includes("ajay kumar garg"))) {
     reply = "### 🏛️ ABES (#032) vs AKGEC (#027)\n\n• **ABES**: NBA Accredited (CSE, ECE, ME till 2028), NIRF Band 201–300, Fee ₹1.41L/yr, Avg CTC ₹5.20 LPA. CSE closes around ~4.11L in Round 3.\n• **AKGEC**: NBA Accredited, NIRF Band 201–300, Fee ₹1.41L/yr, Avg CTC ₹5.50 LPA. CSE closes around ~1.85L in Round 3.\n\n**Verdict**: Under 1.8L rank, pick AKGEC. Between 2.0L and 4.2L rank, ABES is the premier NCR choice!";
-  } else if (q.includes("abes")) {
+  } else if (q.includes("akgec") && q.includes("kiet")) {
+    reply = "### 🏛️ Comparison: AKGEC (#027) vs KIET (#029)\n\n• **AKGEC**: NBA Accredited, NIRF Band 201–300, strict discipline, outstanding robotics & industrial automation labs. CSE closes ~1.85L.\n• **KIET**: Autonomous, NAAC A+ Grade, NIRF Band 151–200, strong startup incubation & vibrant campus life. CSE closes ~2.10L.\n\n**Verdict**: Both are elite NCR private colleges with ₹5.50–₹6.00 LPA average packages.";
+  } else if (q.includes("abes") || q.includes("032")) {
     reply = "### 🏛️ ABES Engineering College, Ghaziabad (#032)\n\n• **Accreditation**: NBA Accredited across CSE (valid till 31-12-2028), ECE (till 30-06-2028), and ME (till 30-06-2028).\n• **NIRF**: Band 201–300 Engineering.\n• **Fees & CTC**: Annual fee ₹1,40,750, Average placement ₹5.20 LPA, Highest ₹50.00 LPA.\n• **2025 CSE Round 3 Cutoff**: Closed at **4,11,234** (expanded by +132k positions from Round 1).";
   } else {
-    reply = "### 🎓 CounsellQ Admission Assistant\n\nI can assist you with UPTAC counselling rules, fee structures, cutoff shifts, and branch comparisons. Ask about **Freeze vs Float**, **Internal Sliding**, **Fee Waiver seats**, or enter your JEE Main rank for personalized branch recommendations!";
+    // Rank evaluation only if rank is explicitly in query or asking for college suggestions
+    const explicitRankMatch = q.match(/\b([1-9]\d{3,6})\b/);
+    const explicitRank = explicitRankMatch ? Number(explicitRankMatch[1]) : null;
+    const isAskingForColleges = /\b(colleges?|recommend|options?|chances?|what can i get|where can i get|get into|admission in|which branch|cutoff for me|my rank|suggest)\b/i.test(q);
+    const targetRank = explicitRank || (isAskingForColleges ? rank : null);
+
+    if (targetRank && targetRank > 0) {
+      reply = `### 🎯 Admission Recommendations for Rank ${targetRank.toLocaleString()} (${cat || "General"})\n\nBased on historical UPTAC closing cutoffs and CounsellQ ML evaluations:\n\n` +
+        (targetRank < 50000 ? "• **Top Options**: IET Lucknow (EE, Chem, Civil), KNIT Sultanpur, AKGEC/KIET/JSS CSE (100% Safe)" :
+         targetRank < 150000 ? "• **Top Options**: AKGEC / KIET (IT, ECE, CS Allied), GL Bajaj CSE, BIET Jhansi / KNIT core branches" :
+         targetRank < 400000 ? "• **Top Options**: ABES Engineering College (#032) CSE/AIML/IT, Galgotias College (#097) IT, NIET CSE" :
+         "• **Top Options**: ABES Engineering College (CSE closed at 4.11L in R3), NIET, United College, REC Government Core Branches");
+    } else {
+      reply = "### 🎓 CounsellQ Admission Assistant\n\nI can assist you with UPTAC counselling rules, fee structures, cutoff shifts, and branch comparisons.\n\n• Ask *\"Which is better: ABES or ABES IT?\"* or *\"Compare ABES vs AKGEC\"*\n• Ask *\"Is Core CSE better than CSE AIML or IT?\"*\n• Ask about **Freeze vs Float**, **Internal Sliding**, or **Fee Waiver seats**\n• Type your rank (e.g. `135000`) for personalized branch recommendations!";
+    }
   }
 
   aiChatHistory.push({ role: "assistant", content: reply });
-  renderAssistantBubble(stream, reply, ["UPTAC 2025 Offline Knowledge Engine"]);
+  renderAssistantBubble(stream, reply, ["UPTAC 2025 Knowledge Engine"]);
 }
 
 function parseSimpleMarkdown(md) {

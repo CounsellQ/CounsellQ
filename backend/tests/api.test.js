@@ -263,5 +263,52 @@ describe("CounsellQ API & Data Test Suite", () => {
             const data = await res.json();
             assert.strictEqual(data.success, false);
         });
+
+        test("POST /api/chat should politely decline off-topic sports queries like 'ind vs nz' without giving rank recommendations", async () => {
+            const res = await fetch(`${baseUrl}/api/chat`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message: "ind vs nz",
+                    context: { rank: 45000, category: "General" }
+                })
+            });
+            assert.strictEqual(res.status, 200);
+            const data = await res.json();
+            assert.strictEqual(data.success, true);
+            assert.ok(!data.reply.includes("Admission Recommendations for Rank 45,000"), "Must not trigger rank recommendation for off-topic query");
+            assert.ok(data.reply.includes("sports") || data.reply.includes("cricket") || data.reply.includes("New Zealand"), "Should state domain boundary");
+        });
+
+        test("POST /api/chat should distinguish ABES Engineering College (#032) vs ABES IT (#290)", async () => {
+            const res = await fetch(`${baseUrl}/api/chat`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message: "Which college is better abes or abes it"
+                })
+            });
+            assert.strictEqual(res.status, 200);
+            const data = await res.json();
+            assert.strictEqual(data.success, true);
+            assert.ok(data.reply.includes("032"), "Should identify ABES EC code 032");
+            assert.ok(data.reply.includes("290"), "Should identify ABES IT code 290");
+            assert.ok(data.reply.includes("Autonomous"), "Should identify autonomous status");
+        });
+
+        test("POST /api/chat should provide recommendations when user explicitly asks with rank 135000", async () => {
+            const res = await fetch(`${baseUrl}/api/chat`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message: "135000"
+                })
+            });
+            assert.strictEqual(res.status, 200);
+            const data = await res.json();
+            assert.strictEqual(data.success, true);
+            assert.ok(data.reply.includes((135000).toLocaleString()));
+            assert.ok(data.reply.includes("Admission Recommendations"));
+        });
     });
 });
