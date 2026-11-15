@@ -2463,7 +2463,7 @@ function generateSvgLineChart(points, mode) {
   const valRange = Math.max(1, maxVal - minVal);
 
   const getY = val => (padTop + chartH - ((val - minVal) / valRange) * chartH).toFixed(1);
-  const getX = idx => (padLeft + (idx / (points.length - 1)) * chartW).toFixed(1);
+  const getX = idx => points.length === 1 ? (padLeft + chartW / 2).toFixed(1) : (padLeft + (idx / (points.length - 1)) * chartW).toFixed(1);
 
   const coords = points.map((p, idx) => ({
     x: getX(idx),
@@ -2543,15 +2543,31 @@ function setupAskCounsellAi() {
   if (!launcherBtn || !drawer) return;
   isAskAiInitialized = true;
 
+  const openDrawer = () => {
+    drawer.classList.add("open");
+    document.body.classList.add("ai-drawer-open");
+    input?.focus();
+  };
+
+  const closeDrawer = () => {
+    drawer.classList.remove("open");
+    document.body.classList.remove("ai-drawer-open");
+  };
+
   launcherBtn.addEventListener("click", () => {
-    drawer.classList.toggle("open");
     if (drawer.classList.contains("open")) {
-      input?.focus();
+      closeDrawer();
+    } else {
+      openDrawer();
     }
   });
 
-  closeBtn?.addEventListener("click", () => {
-    drawer.classList.remove("open");
+  closeBtn?.addEventListener("click", closeDrawer);
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawer.classList.contains("open")) {
+      closeDrawer();
+    }
   });
 
   clearBtn?.addEventListener("click", () => {
@@ -2723,6 +2739,42 @@ function parseSimpleMarkdown(md) {
 
   // Bullets
   html = html.replace(/^[•\-] (.*?)$/gm, '<li style="margin-left:14px;margin-bottom:3px">$1</li>');
+
+  // Markdown Tables
+  if (html.includes("|")) {
+    const lines = html.split("\n");
+    let inTable = false;
+    let tableHtml = "";
+    const newLines = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith("|") && line.endsWith("|")) {
+        if (!inTable) {
+          inTable = true;
+          tableHtml = '<table style="width:100%;border-collapse:collapse;margin:8px 0;font-size:11px">';
+        }
+        if (line.includes("---")) continue;
+        const cells = line.split("|").slice(1, -1).map(c => c.trim());
+        const tag = tableHtml.includes("</tr>") ? "td" : "th";
+        const bg = tag === "th" ? "background:#f1f5f9;font-weight:700" : "";
+        tableHtml += `<tr>${cells.map(c => `<${tag} style="border:1px solid #cbd5e1;padding:4px 6px;${bg}">${c}</${tag}>`).join("")}</tr>`;
+      } else {
+        if (inTable) {
+          tableHtml += "</table>";
+          newLines.push(tableHtml);
+          inTable = false;
+          tableHtml = "";
+        }
+        newLines.push(line);
+      }
+    }
+    if (inTable) {
+      tableHtml += "</table>";
+      newLines.push(tableHtml);
+    }
+    html = newLines.join("\n");
+  }
 
   // Newlines to breaks
   html = html.replace(/\n\n/g, '<div style="height:6px"></div>');
