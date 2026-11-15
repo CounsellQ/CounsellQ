@@ -2580,41 +2580,6 @@ footer {
 /* -------------------------------------------------------------
    Choice Filling Preference Sheet Drawer
 ------------------------------------------------------------- */
-.floating-choice-btn {
-  position: fixed;
-  bottom: 78px;
-  right: 24px;
-  background: var(--primary);
-  color: #ffffff;
-  border: 0;
-  border-radius: 999px;
-  padding: 10px 18px;
-  font-size: 13px;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 18px var(--primary-shadow);
-  z-index: 998;
-  transition: transform 0.2s, background 0.2s, opacity 0.25s ease;
-}
-
-body.ai-drawer-open .floating-choice-btn {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transform: translateY(8px) scale(0.92) !important;
-}
-
-.floating-choice-btn:hover {
-  background: var(--primary-hover);
-  transform: translateY(-2px);
-}
-
-.floating-choice-btn svg {
-  width: 18px;
-  height: 18px;
-}
 
 .choice-badge {
   background: #ffffff;
@@ -2928,187 +2893,6 @@ body.ai-drawer-open .floating-choice-btn {
 
 
 /* =============================================================
-   Historical Cutoff Trend Visualizer (Multi-Year & Multi-Round)
-============================================================= */
-.trend-visualizer-card {
-  margin-top: 20px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
-}
-
-.trend-controls-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-  margin: 16px 0 18px 0;
-  padding-bottom: 14px;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.trend-select-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-  min-width: 260px;
-}
-
-.trend-select-wrap label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #475569;
-  white-space: nowrap;
-}
-
-.trend-select {
-  width: 100%;
-  padding: 8px 12px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #0f172a;
-  background: #f8fafc;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  outline: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.trend-select:focus {
-  border-color: #2563eb;
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.trend-view-tabs {
-  display: flex;
-  background: #f1f5f9;
-  padding: 3px;
-  border-radius: 8px;
-  gap: 4px;
-}
-
-.trend-view-tab {
-  padding: 6px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #64748b;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.18s ease;
-}
-
-.trend-view-tab.active {
-  background: #ffffff;
-  color: #2563eb;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-.trend-chart-wrapper {
-  position: relative;
-  width: 100%;
-  min-height: 220px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 18px 12px 12px 12px;
-  overflow: hidden;
-}
-
-.trend-svg {
-  width: 100%;
-  height: 200px;
-  display: block;
-  overflow: visible;
-}
-
-.trend-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.trend-stat-box {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.trend-stat-box small {
-  font-size: 11px;
-  color: #64748b;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.trend-stat-box strong {
-  font-size: 16px;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.trend-stat-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 6px;
-  width: fit-content;
-}
-
-.trend-stat-tag.competitive {
-  background: #fef2f2;
-  color: #dc2626;
-}
-
-.trend-stat-tag.relaxing {
-  background: #ecfdf5;
-  color: #059669;
-}
-
-.trend-stat-tag.stable {
-  background: #eff6ff;
-  color: #2563eb;
-}
-
-.trend-advice-banner {
-  margin-top: 14px;
-  padding: 12px 14px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: 10px;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 12px;
-  color: #166534;
-  line-height: 1.45;
-}
-
-.trend-advice-banner svg {
-  width: 18px;
-  height: 18px;
-  color: #16a34a;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-/* =============================================================
    Ask CounsellQ AI Assistant Widget & Drawer
 ============================================================= */
 .ask-ai-launcher {
@@ -3193,6 +2977,7 @@ body.ai-drawer-open .floating-choice-btn {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  visibility: hidden;
   opacity: 0;
   pointer-events: none;
   transform: translateY(20px) scale(0.95);
@@ -3200,9 +2985,10 @@ body.ai-drawer-open .floating-choice-btn {
 }
 
 .counsell-ai-drawer.open {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateY(0) scale(1) !important;
 }
 
 .counsell-ai-header {
@@ -3492,12 +3278,6 @@ body.ai-drawer-open .floating-choice-btn {
 @media (max-width: 640px) {
   .ask-ai-launcher {
     bottom: 16px;
-    right: 16px;
-    padding: 8px 14px;
-    font-size: 12px;
-  }
-  .floating-choice-btn {
-    bottom: 66px;
     right: 16px;
     padding: 8px 14px;
     font-size: 12px;

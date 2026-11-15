@@ -44,6 +44,11 @@ let directoryColleges = [];
 let previousPage = "home";
 let isHandlingHistory = false;
 
+// Ask CounsellQ AI Assistant state
+let isAskAiInitialized = false;
+let aiChatHistory = [];
+let isAiGenerating = false;
+
 const $ = id => document.getElementById(id);
 const pages = ["home", "predict", "results", "directory", "details", "compare"];
 
@@ -1307,41 +1312,6 @@ function renderCollegeDetailsHtml(c) {
             </div>
           `}
         </div>
-
-        <!-- Historical Cutoff Trend Visualizer (Multi-Year & Multi-Round) -->
-        <div class="trend-visualizer-card" id="trendVisualizerCard">
-          <div class="bento-tile-header">
-            <div class="bento-tile-title">
-              <i data-lucide="line-chart" style="color:var(--primary)"></i> Historical Cutoff Trend Visualizer & Trajectory
-            </div>
-            <span class="badge" style="background:#eff6ff;color:#1d4ed8">Multi-Year Analytics</span>
-          </div>
-
-          <div class="trend-controls-bar">
-            <div class="trend-select-wrap">
-              <label for="trendBranchSelect">Select Branch:</label>
-              <select id="trendBranchSelect" class="trend-select">
-                <option value="Computer Science and Engineering">Computer Science and Engineering</option>
-              </select>
-            </div>
-            <div class="trend-view-tabs">
-              <button class="trend-view-tab active" id="tabMultiYearView">3-Year Trend (2023-25)</button>
-              <button class="trend-view-tab" id="tabRoundProgView">Round Progression (R1-R3)</button>
-            </div>
-          </div>
-
-          <!-- Dynamic SVG Line Chart -->
-          <div class="trend-chart-wrapper" id="trendChartWrapper">
-            <div style="display:flex;align-items:center;justify-content:center;height:180px;color:#64748b;font-size:12px">
-              <i data-lucide="loader-2" class="spin" style="width:16px;height:16px;margin-right:8px;color:#2563eb"></i> Loading historical trends...
-            </div>
-          </div>
-
-          <!-- Dynamic Trajectory Statistics & Strategy -->
-          <div id="trendAnalyticsWrap">
-            <!-- Populated dynamically by updateTrendChart() -->
-          </div>
-        </div>
       </div>
 
       <!-- 4-Column Interactive Sidebar -->
@@ -1501,7 +1471,6 @@ function renderCollegeDetailsHtml(c) {
   renderSidebarChoiceList();
   setupSidebarCmdPalette();
   setupAskCounsellAi();
-  setupCutoffTrendsVisualizer(c);
 
   if (window.lucide) lucide.createIcons();
 }
@@ -1799,10 +1768,6 @@ $("dirSort")?.addEventListener("change", renderDirectory);
 ------------------------------------------------------------- */
 function updateChoiceCountBadge() {
   const count = choiceList.length;
-  const badge = $("choiceCountBadge");
-  if (badge) badge.textContent = count;
-  const floatingBadge = $("floatingChoiceCount");
-  if (floatingBadge) floatingBadge.textContent = count;
   const navBadge = $("navChoiceCount");
   if (navBadge) navBadge.textContent = `(${count})`;
   const sidebarBadge = $("sidebarChoiceCount");
@@ -2047,7 +2012,6 @@ function renderChoiceSheet() {
 }
 
 function setupChoiceDrawer() {
-  const openBtn = $("floatingChoiceBtn");
   const navBtn = $("navChoiceBtn");
   const overlay = $("choiceDrawerOverlay");
   const closeBtn = $("closeDrawerBtn");
@@ -2066,7 +2030,6 @@ function setupChoiceDrawer() {
     setTimeout(() => overlay?.classList.add("hidden"), 250);
   };
 
-  openBtn?.addEventListener("click", openDrawer);
   navBtn?.addEventListener("click", openDrawer);
   closeBtn?.addEventListener("click", closeDrawer);
 
@@ -2284,252 +2247,13 @@ updateChoiceCountBadge();
 setupAskCounsellAi();
 const initialRoute = parseRoute();
 navigateTo(initialRoute.page, initialRoute.params, { replace: true });
-
-
-/* -------------------------------------------------------------
-   Historical Cutoff Trend Visualizer (Multi-Year & Multi-Round)
-------------------------------------------------------------- */
-let currentCollegeTrendsData = null;
-let currentTrendViewMode = "yearly"; // "yearly" | "rounds"
-
-async function setupCutoffTrendsVisualizer(collegeItem) {
-  const container = $("trendChartWrapper");
-  const branchSelect = $("trendBranchSelect");
-  const tabYearly = $("tabMultiYearView");
-  const tabRounds = $("tabRoundProgView");
-
-  if (!container || !branchSelect) return;
-
-  const collegeIdOrCode = collegeItem.college?.id || collegeItem.college?.code || collegeItem.institute || "";
-  const cat = $("category")?.value ? (categoryMap[$("category").value] || "OPEN") : "OPEN";
-
-  tabYearly?.addEventListener("click", () => {
-    currentTrendViewMode = "yearly";
-    tabYearly.classList.add("active");
-    tabRounds?.classList.remove("active");
-    renderActiveTrendChart();
-  });
-
-  tabRounds?.addEventListener("click", () => {
-    currentTrendViewMode = "rounds";
-    tabRounds.classList.add("active");
-    tabYearly?.classList.remove("active");
-    renderActiveTrendChart();
-  });
-
-  branchSelect.addEventListener("change", () => {
-    renderActiveTrendChart();
-  });
-
-  try {
-    const res = await fetch(`${API_BASE}/colleges/${encodeURIComponent(collegeIdOrCode)}/trends?category=${encodeURIComponent(cat)}`);
-    const data = await res.json();
-
-    if (data.success && data.trends && Object.keys(data.trends).length > 0) {
-      currentCollegeTrendsData = data;
-      const programs = data.available_programs || Object.keys(data.trends);
-
-      branchSelect.innerHTML = programs.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join("");
-      
-      // Auto-select CSE or matching program if available
-      const preferred = programs.find(p => p.toLowerCase().includes("computer science") && !p.includes("(")) || programs[0];
-      if (preferred) branchSelect.value = preferred;
-
-      renderActiveTrendChart();
-      return;
-    }
-  } catch (err) {
-    console.warn("Notice: Online trends fetch notice:", err.message);
-  }
-
-  // Fallback client-side calibrated generator if offline or single-year data
-  generateClientFallbackTrends(collegeItem);
-}
-
-function generateClientFallbackTrends(c) {
-  const branchSelect = $("trendBranchSelect");
-  const baseClosing = Number(c.closing_rank) || 278476;
-  const progName = c.program && c.program !== "General B.Tech Programs" ? c.program : "Computer Science and Engineering";
-
-  const hist2024 = Math.round(baseClosing * 1.058);
-  const hist2023 = Math.round(baseClosing * 1.124);
-  const r1Closing = Math.round(baseClosing * 0.72);
-  const r2Closing = Math.round(baseClosing * 0.86);
-  const r3Closing = baseClosing;
-  const roundExpansion = r3Closing - r1Closing;
-  const yoyShift = Number(((baseClosing - hist2024) / hist2024 * 100).toFixed(1));
-
-  currentCollegeTrendsData = {
-    trends: {
-      [progName]: {
-        yearly: [
-          { year: 2023, closing_rank: hist2023, opening_rank: Math.round(hist2023 * 0.44) },
-          { year: 2024, closing_rank: hist2024, opening_rank: Math.round(hist2024 * 0.42) },
-          { year: 2025, closing_rank: baseClosing, opening_rank: Math.round(baseClosing * 0.38) }
-        ],
-        rounds_2025: [
-          { round: "Round 1", opening_rank: Math.round(r1Closing * 0.4), closing_rank: r1Closing },
-          { round: "Round 2", opening_rank: Math.round(r2Closing * 0.42), closing_rank: r2Closing },
-          { round: "Round 3", opening_rank: Math.round(r3Closing * 0.45), closing_rank: r3Closing }
-        ],
-        yoy_shift_pct: yoyShift,
-        trajectory: yoyShift < -3 ? "COMPETITIVE_SURGE" : "STABLE",
-        trajectory_label: yoyShift < -3 ? "Increasing Competition (Closing Tighter)" : "Consistent Cutoff Band",
-        round_expansion_buffer: roundExpansion,
-        recommendation: `High applicant demand. Cutoffs closed tighter in 2025. If rank is near Round 1 closing (${r1Closing.toLocaleString()}), use Float as Round 3 relaxed by +${roundExpansion.toLocaleString()} ranks.`
-      }
-    }
-  };
-
-  if (branchSelect) {
-    branchSelect.innerHTML = `<option value="${escapeHtml(progName)}">${escapeHtml(progName)}</option>`;
-  }
-  renderActiveTrendChart();
-}
-
-function renderActiveTrendChart() {
-  const container = $("trendChartWrapper");
-  const analyticsWrap = $("trendAnalyticsWrap");
-  const branchSelect = $("trendBranchSelect");
-  if (!container || !currentCollegeTrendsData) return;
-
-  const selectedBranch = branchSelect?.value || Object.keys(currentCollegeTrendsData.trends)[0];
-  const trendInfo = currentCollegeTrendsData.trends[selectedBranch];
-  if (!trendInfo) return;
-
-  const points = currentTrendViewMode === "yearly"
-    ? trendInfo.yearly.map(d => ({ label: String(d.year), closing: d.closing_rank, opening: d.opening_rank }))
-    : trendInfo.rounds_2025.map(d => ({ label: d.round, closing: d.closing_rank, opening: d.opening_rank }));
-
-  // Render SVG Chart
-  container.innerHTML = generateSvgLineChart(points, currentTrendViewMode);
-
-  // Render Stats & Strategy Card
-  if (analyticsWrap) {
-    const isYearly = currentTrendViewMode === "yearly";
-    const tagClass = trendInfo.trajectory === "COMPETITIVE_SURGE" ? "competitive" : (trendInfo.trajectory === "RELAXING" ? "relaxing" : "stable");
-    const tagIcon = trendInfo.trajectory === "COMPETITIVE_SURGE" ? "trending-down" : (trendInfo.trajectory === "RELAXING" ? "trending-up" : "minus");
-
-    analyticsWrap.innerHTML = `
-      <div class="trend-stats-grid">
-        <div class="trend-stat-box">
-          <small>3-Year Cutoff Shift</small>
-          <strong>${trendInfo.yoy_shift_pct > 0 ? '+' : ''}${trendInfo.yoy_shift_pct}% YoY</strong>
-          <span class="trend-stat-tag ${tagClass}">
-            <i data-lucide="${tagIcon}" style="width:12px;height:12px"></i> ${escapeHtml(trendInfo.trajectory_label)}
-          </span>
-        </div>
-
-        <div class="trend-stat-box">
-          <small>R1 → R3 Expansion Buffer</small>
-          <strong style="color:#059669">+${trendInfo.round_expansion_buffer.toLocaleString()} Positions</strong>
-          <span style="font-size:11px;color:#64748b">Cushion added between Round 1 and Round 3</span>
-        </div>
-
-        <div class="trend-stat-box">
-          <small>2025 Final Closing Cutoff</small>
-          <strong style="color:var(--primary)">#${(trendInfo.yearly[2]?.closing_rank || 0).toLocaleString()}</strong>
-          <span style="font-size:11px;color:#64748b">Final Home State Allocation Rank</span>
-        </div>
-      </div>
-
-      <div class="trend-advice-banner">
-        <i data-lucide="shield-alert"></i>
-        <div>
-          <strong>CounsellQ Choice Strategy:</strong> ${escapeHtml(trendInfo.recommendation)}
-        </div>
-      </div>
-    `;
-    if (window.lucide) lucide.createIcons();
-  }
-}
-
-function generateSvgLineChart(points, mode) {
-  if (!points || points.length === 0) return '<div style="padding:40px;text-align:center;color:#64748b">No cutoff data available</div>';
-
-  const width = 580;
-  const height = 180;
-  const padLeft = 70;
-  const padRight = 30;
-  const padTop = 30;
-  const padBottom = 35;
-
-  const chartW = width - padLeft - padRight;
-  const chartH = height - padTop - padBottom;
-
-  const closings = points.map(p => p.closing);
-  const minVal = Math.floor(Math.min(...closings) * 0.88);
-  const maxVal = Math.ceil(Math.max(...closings) * 1.08);
-  const valRange = Math.max(1, maxVal - minVal);
-
-  const getY = val => (padTop + chartH - ((val - minVal) / valRange) * chartH).toFixed(1);
-  const getX = idx => points.length === 1 ? (padLeft + chartW / 2).toFixed(1) : (padLeft + (idx / (points.length - 1)) * chartW).toFixed(1);
-
-  const coords = points.map((p, idx) => ({
-    x: getX(idx),
-    y: getY(p.closing),
-    label: p.label,
-    val: p.closing
-  }));
-
-  const pathD = coords.map((c, i) => (i === 0 ? `M ${c.x} ${c.y}` : `L ${c.x} ${c.y}`)).join(" ");
-  const areaD = `${pathD} L ${coords[coords.length - 1].x} ${padTop + chartH} L ${coords[0].x} ${padTop + chartH} Z`;
-
-  // Horizontal Grid Lines
-  const gridSteps = 3;
-  let gridLines = "";
-  for (let s = 0; s <= gridSteps; s++) {
-    const gVal = Math.round(minVal + (s / gridSteps) * valRange);
-    const gY = (padTop + chartH - (s / gridSteps) * chartH).toFixed(1);
-    gridLines += `
-      <line x1="${padLeft}" y1="${gY}" x2="${width - padRight}" y2="${gY}" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3" />
-      <text x="${padLeft - 10}" y="${Number(gY) + 3}" font-size="10" fill="#94a3b8" text-anchor="end" font-weight="600">${(gVal / 1000).toFixed(0)}k</text>
-    `;
-  }
-
-  return `
-    <svg class="trend-svg" viewBox="0 0 ${width} ${height}">
-      <defs>
-        <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#2563eb" stop-opacity="0.28" />
-          <stop offset="100%" stop-color="#2563eb" stop-opacity="0.0" />
-        </linearGradient>
-      </defs>
-
-      <!-- Grid -->
-      ${gridLines}
-
-      <!-- Area Fill -->
-      <path d="${areaD}" fill="url(#trendGradient)" />
-
-      <!-- Curve Line -->
-      <path d="${pathD}" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-
-      <!-- Data Points & Labels -->
-      ${coords.map(c => `
-        <g>
-          <circle cx="${c.x}" cy="${c.y}" r="6" fill="#ffffff" stroke="#2563eb" stroke-width="3" />
-          <rect x="${Number(c.x) - 34}" y="${Number(c.y) - 26}" width="68" height="20" rx="6" fill="#0f172a" />
-          <text x="${c.x}" y="${Number(c.y) - 13}" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">
-            ${c.val.toLocaleString()}
-          </text>
-          <text x="${c.x}" y="${height - 10}" font-size="11" fill="#475569" font-weight="700" text-anchor="middle">
-            ${escapeHtml(c.label)}
-          </text>
-        </g>
-      `).join("")}
-    </svg>
-  `;
+if (window.lucide) {
+  lucide.createIcons();
 }
 
 /* -------------------------------------------------------------
    Ask CounsellQ AI Assistant Floating Widget & Drawer
 ------------------------------------------------------------- */
-let aiChatHistory = [];
-let isAiGenerating = false;
-
-let isAskAiInitialized = false;
-
 function setupAskCounsellAi() {
   if (isAskAiInitialized) return;
   const launcherBtn = $("askAiLauncherBtn");
