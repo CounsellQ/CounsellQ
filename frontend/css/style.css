@@ -2140,9 +2140,9 @@ footer {
 
 .gauge-wrapper {
   position: relative;
-  width: 130px;
-  height: 130px;
-  margin: 10px auto;
+  width: 140px;
+  height: 140px;
+  margin: 12px auto;
 }
 
 .gauge-svg {
@@ -2154,15 +2154,15 @@ footer {
 .gauge-track {
   fill: none;
   stroke: #e2e8f0;
-  stroke-width: 9;
+  stroke-width: 8;
 }
 
 .gauge-meter {
   fill: none;
   stroke: #10b981;
-  stroke-width: 9;
+  stroke-width: 8;
   stroke-linecap: round;
-  stroke-dasharray: 264;
+  stroke-dasharray: 276.46;
   stroke-dashoffset: 20;
   transition: stroke-dashoffset 0.5s ease, stroke 0.3s ease;
 }
@@ -2174,20 +2174,24 @@ footer {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  pointer-events: none;
 }
 
 .gauge-center-val {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 800;
   color: var(--text-main);
   line-height: 1;
 }
 
 .gauge-center-tier {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #059669;
   margin-top: 4px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .gauge-legend {

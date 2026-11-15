@@ -1331,7 +1331,7 @@ function renderCollegeDetailsHtml(c) {
               </svg>
               <div class="gauge-center-content">
                 <span class="gauge-center-val" id="gaugeValText">${score}%</span>
-                <span class="gauge-center-tier" id="gaugeTierText" style="color:${(score || 0) >= 80 ? '#059669' : ((score || 0) >= 50 ? '#d97706' : '#dc2626')}">${escapeHtml(tierLabel(c))}</span>
+                <span class="gauge-center-tier" id="gaugeTierText" style="color:${(score || 0) >= 80 ? '#059669' : ((score || 0) >= 50 ? '#d97706' : '#dc2626')}">${(score || 0) >= 80 ? 'Safe' : ((score || 0) >= 50 ? 'Moderate' : 'Ambitious')}</span>
               </div>
             </div>
             <div class="gauge-legend">
