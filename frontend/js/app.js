@@ -354,37 +354,140 @@ function tierLabel(item) {
   return item.prediction || "Admission Option";
 }
 
-function formatNIRF(nirf) {
-  if (!nirf) {
+
+const VERIFIED_ACCREDITATIONS = {"104":[{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Civil Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"}],"120":[{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"128":[{"type":"NBA","program":"Electronics and Communication Engineering","grade":"","validity":"16-03-2010","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical and Electronics Engineering","grade":"","validity":"16-03-2010","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"16-03-2010","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"16-03-2010","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"15-03-2015","derived_status":"CURRENTLY_VALID"}],"129":[{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics and Communication Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"}],"132":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics and Communication Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"","derived_status":"CURRENTLY_VALID"}],"133":[{"type":"NAAC","grade":"A","validity":"2025","derived_status":"CURRENTLY_VALID"}],"138":[{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics and Communication Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"}],"143":[{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"164":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"192":[{"type":"NAAC","grade":"A+","validity":"20-12-2028","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science and Engineering","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"230":[{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science & Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"245":[{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"284":[{"type":"NBA","program":"Manufacturing Technology","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Plastics Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"290":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2022","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"365":[{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"422":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"}],"423":[{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Biotechnology","grade":"","validity":"30-06-2028","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2028","derived_status":"CURRENTLY_VALID"}],"484":[{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"}],"508":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"525":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"734":[{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"}],"736":[{"type":"NBA","program":"Civil Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"}],"737":[{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"abes-ghaziabad":[{"type":"NBA","program":"Computer Science and Engineering","validity":"31-12-2028","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","validity":"30-06-2028","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","validity":"30-06-2028","derived_status":"CURRENTLY_VALID"}],"032":[{"type":"NBA","program":"Computer Science and Engineering","validity":"31-12-2028","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","validity":"30-06-2028","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","validity":"30-06-2028","derived_status":"CURRENTLY_VALID"}],"ABES ENGG.COLLEGE,GHAZIABAD":[{"type":"NBA","program":"Computer Science and Engineering","validity":"31-12-2028","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","validity":"30-06-2028","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","validity":"30-06-2028","derived_status":"CURRENTLY_VALID"}],"c-abes-institute-of-technology-ghaziabad":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2022","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"ABES INSTITUTE OF TECHNOLOGY,GHAZIABAD":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2022","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"akgec-ghaziabad":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical & Electronics Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"027":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical & Electronics Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"AJAY KUMAR GARG ENGG. COLLEGE,GHAZIABAD":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical & Electronics Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"c-b-b-s-college-of-engginering-and-technology-a":[{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics and Communication Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"}],"B.B.S.COLLEGE OF ENGGINERING AND TECHNOLOGY,ALLAHABAD":[{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics and Communication Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"}],"c-b-n-college-of-engineering-technology-bncet-l":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"}],"B.N.COLLEGE OF ENGINEERING & TECHNOLOGY(BNCET),LUCKNOW":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"}],"c-babu-banarasi-das-institute-of-technology-and":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"BABU BANARASI DAS INSTITUTE OF TECHNOLOGY AND MANAGEMENT, LUCKNOW":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"c-babu-banarasi-das-northern-india-institute-of":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"056":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"BABU BANARASI DAS NORTHERN INDIA INSTITUTE OF TECHNOLOGY,LUCKNOW":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"c-bansal-institute-of-engineering-technology-lu":[{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Biotechnology","grade":"","validity":"30-06-2028","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2028","derived_status":"CURRENTLY_VALID"}],"BANSAL INSTITUTE OF ENGINEERING & TECHNOLOGY,LUCKNOW":[{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Biotechnology","grade":"","validity":"30-06-2028","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2028","derived_status":"CURRENTLY_VALID"}],"c-bhagwant-institute-of-technology-muzaffarnaga":[{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics and Communication Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"}],"BHAGWANT INSTITUTE OF TECHNOLOGY,MUZAFFARNAGAR":[{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics and Communication Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"19-07-2011","derived_status":"CURRENTLY_VALID"}],"c-bharat-institute-of-technology-meerut":[{"type":"NBA","program":"Electronics and Communication Engineering","grade":"","validity":"16-03-2010","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical and Electronics Engineering","grade":"","validity":"16-03-2010","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"16-03-2010","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"16-03-2010","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"15-03-2015","derived_status":"CURRENTLY_VALID"}],"BHARAT INSTITUTE OF TECHNOLOGY,MEERUT":[{"type":"NBA","program":"Electronics and Communication Engineering","grade":"","validity":"16-03-2010","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical and Electronics Engineering","grade":"","validity":"16-03-2010","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"16-03-2010","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"16-03-2010","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"15-03-2015","derived_status":"CURRENTLY_VALID"}],"c-buddha-institute-of-technology-gorakhpur":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"BUDDHA INSTITUTE OF TECHNOLOGY,GORAKHPUR":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"biet-jhansi":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Civil Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Chemical Engineering","grade":"","validity":"30-06-2023","derived_status":"CURRENTLY_VALID"}],"043":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Civil Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Chemical Engineering","grade":"","validity":"30-06-2023","derived_status":"CURRENTLY_VALID"}],"BUNDELKHAND INSTITUTE OF ENGINEERING & TECHNOLOGY,JHANSI":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Civil Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Chemical Engineering","grade":"","validity":"30-06-2023","derived_status":"CURRENTLY_VALID"}],"c-central-institute-of-petrochemicals-engineeri":[{"type":"NBA","program":"Manufacturing Technology","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Plastics Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"CENTRAL INSTITUTE OF PETROCHEMICALS ENGINEERING & TECHNOLOGY (CIPET), LUCKNOW":[{"type":"NBA","program":"Manufacturing Technology","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Plastics Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"dei-agra":[{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"DEI":[{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"DAYALBAGH EDUCATIONAL INSTITUTE,AGRA":[{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"c-dronacharya-group-of-institutions-gautam-budd":[{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science & Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"DRONACHARYA GROUP OF INSTITUTIONS,GAUTAM BUDDH NAGAR":[{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science & Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"gcet-noida":[{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"097":[{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"GALGOTIA'S COLLEGE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR":[{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"c-goel-institute-of-technology-management-luckn":[{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"GOEL INSTITUTE OF TECHNOLOGY & MANAGEMENT,LUCKNOW":[{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"c-greater-noida-institute-of-technology-gautam-":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics and Communication Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"","derived_status":"CURRENTLY_VALID"}],"GREATER NOIDA INSTITUTE OF TECHNOLOGY,GAUTAM BUDDH NAGAR":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics and Communication Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"","derived_status":"CURRENTLY_VALID"}],"c-i-m-s-engineering-college-ghaziabad":[{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"I.M.S. ENGINEERING COLLEGE,GHAZIABAD":[{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"c-indian-institute-of-carpet-technology-bhadohi":[{"type":"NBA","program":"Carpet & Textile Technology","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"047":[{"type":"NBA","program":"Carpet & Textile Technology","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"INDIAN INSTITUTE OF CARPET TECHNOLOGY,BHADOHI":[{"type":"NBA","program":"Carpet & Textile Technology","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"iet-lucknow":[{"type":"NBA","program":"Civil Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"052":[{"type":"NBA","program":"Civil Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"INSTITUTE OF ENGINEERING & TECHNOLOGY,LUCKNOW":[{"type":"NBA","program":"Civil Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"30-06-2025","derived_status":"CURRENTLY_VALID"}],"c-institute-of-technology-management-gorakhpur":[{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"INSTITUTE OF TECHNOLOGY & MANAGEMENT,GORAKHPUR":[{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"jssate-noida":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"091":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"J.S.S. ACADEMY OF TECHNICAL EDUCATION,GAUTAM BUDDH NAGAR":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"knit-sultanpur":[{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Civil Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"}],"KAMLA NEHRU INSTITUTE OF TECHNOLOGY,SULTANPUR":[{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Civil Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"}],"kiet-ghaziabad":[{"type":"NBA","program":"Computer Science","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science & Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"029":[{"type":"NBA","program":"Computer Science","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science & Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"KIET GROUP OF INSTITUTIONS(KRISHNA INSTT. OF ENGG. & TECHNOLOGY),GHAZIABAD":[{"type":"NBA","program":"Computer Science","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science & Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"c-kipm-college-of-engg-technology-gorakhpur":[{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"}],"KIPM COLLEGE OF ENGG. & TECHNOLOGY,GORAKHPUR":[{"type":"NBA","program":"Computer Science & Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"}],"c-meerut-institute-of-engineering-technology-me":[{"type":"NBA","program":"Biotechnology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"068":[{"type":"NBA","program":"Biotechnology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"MEERUT INSTITUTE OF ENGINEERING & TECHNOLOGY,MEERUT":[{"type":"NBA","program":"Biotechnology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"psit-kanpur":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"PRANVEER SINGH INSTITUTE OF TECHNOLOGY,KANPUR":[{"type":"NBA","program":"Computer Science and Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"c-raj-kumar-goel-institute-of-technology-manage":[{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"RAJ KUMAR GOEL INSTITUTE OF TECHNOLOGY & MANAGEMENT,GHAZIABAD":[{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"c-raj-kumar-goel-instt-of-technology-ghaziabad":[{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"033":[{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"RAJ KUMAR GOEL INSTT. OF TECHNOLOGY,GHAZIABAD":[{"type":"NBA","program":"Electronics & Communication Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"rec-ambedkar-nagar":[{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"RAJKIYA ENGINEERING COLLEGE,AMBEDKAR NAGAR":[{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2027","derived_status":"CURRENTLY_VALID"}],"c-rajkiya-engineering-college-azamgarh":[{"type":"NBA","program":"Civil Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"}],"RAJKIYA ENGINEERING COLLEGE,AZAMGARH":[{"type":"NBA","program":"Civil Engineering","grade":"","validity":"","derived_status":"CURRENTLY_VALID"}],"rec-banda":[{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"}],"RAJKIYA ENGINEERING COLLEGE,BANDA":[{"type":"NBA","program":"Electrical Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Information Technology","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Mechanical Engineering","grade":"","validity":"30-06-2024","derived_status":"CURRENTLY_VALID"}],"gl-bajaj-noida":[{"type":"NAAC","grade":"A+","validity":"20-12-2028","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science and Engineering","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"G.L. BAJAJ INSTITUTE OF TECHNOLOGY & MANAGEMENT,GAUTAM BUDDH NAGAR":[{"type":"NAAC","grade":"A+","validity":"20-12-2028","derived_status":"CURRENTLY_VALID"},{"type":"NBA","program":"Computer Science and Engineering","validity":"30-06-2026","derived_status":"CURRENTLY_VALID"}],"c-noida-institute-of-engineering-technology-g":[{"type":"NAAC","grade":"A","validity":"2025","derived_status":"CURRENTLY_VALID"}],"NOIDA INSTITUTE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR":[{"type":"NAAC","grade":"A","validity":"2025","derived_status":"CURRENTLY_VALID"}]};
+
+const VERIFIED_NIRF = {"133":{"year":2025,"rank":null,"rank_band":"101-150","score":null},"192":{"year":2025,"rank":null,"rank_band":"151-200","score":null},"iet-lucknow":{"year":2025,"rank":null,"rank_band":"101-150","score":null},"052":{"year":2025,"rank":null,"rank_band":"101-150","score":null},"INSTITUTE OF ENGINEERING & TECHNOLOGY,LUCKNOW":{"year":2025,"rank":null,"rank_band":"101-150","score":null},"c-noida-institute-of-engineering-technology-g":{"year":2025,"rank":null,"rank_band":"101-150","score":null},"NOIDA INSTITUTE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR":{"year":2025,"rank":null,"rank_band":"101-150","score":null},"kiet-ghaziabad":{"year":2025,"rank":null,"rank_band":"151-200","score":null},"029":{"year":2025,"rank":null,"rank_band":"151-200","score":null},"KIET GROUP OF INSTITUTIONS(KRISHNA INSTT. OF ENGG. & TECHNOLOGY),GHAZIABAD":{"year":2025,"rank":null,"rank_band":"151-200","score":null},"gl-bajaj-noida":{"year":2025,"rank":null,"rank_band":"151-200","score":null},"G.L. BAJAJ INSTITUTE OF TECHNOLOGY & MANAGEMENT,GAUTAM BUDDH NAGAR":{"year":2025,"rank":null,"rank_band":"151-200","score":null},"dei-agra":{"year":2025,"rank":null,"rank_band":"151-200","score":null},"DEI":{"year":2025,"rank":null,"rank_band":"151-200","score":null},"DAYALBAGH EDUCATIONAL INSTITUTE,AGRA":{"year":2025,"rank":null,"rank_band":"151-200","score":null},"akgec-ghaziabad":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"027":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"AJAY KUMAR GARG ENGG. COLLEGE,GHAZIABAD":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"abes-ghaziabad":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"032":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"ABES ENGG.COLLEGE,GHAZIABAD":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"jssate-noida":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"091":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"J.S.S. ACADEMY OF TECHNICAL EDUCATION,GAUTAM BUDDH NAGAR":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"gcet-noida":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"097":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"GALGOTIA'S COLLEGE OF ENGG. & TECHNOLOGY,GAUTAM BUDDH NAGAR":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"c-m-j-p-ruhelkhand-university-bareilly":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"004":{"year":2025,"rank":null,"rank_band":"201-300","score":null},"M. J. P. Ruhelkhand University, Bareilly":{"year":2025,"rank":null,"rank_band":"201-300","score":null}};
+
+
+function getVerifiedAccreditation(college) {
+  if (!college) return null;
+  const candidates = [
+    college.id,
+    college.college_id,
+    college.code,
+    college.code ? String(college.code).padStart(3, '0') : null,
+    college.code ? String(parseInt(college.code, 10)) : null,
+    college.uptac_name,
+    college.name,
+    college.display_name
+  ].filter(Boolean);
+  for (const k of candidates) {
+    if (VERIFIED_ACCREDITATIONS[k]) return VERIFIED_ACCREDITATIONS[k];
+  }
+  return null;
+}
+
+function getVerifiedNIRF(college) {
+  if (!college) return null;
+  const candidates = [
+    college.id,
+    college.college_id,
+    college.code,
+    college.code ? String(college.code).padStart(3, '0') : null,
+    college.code ? String(parseInt(college.code, 10)) : null,
+    college.uptac_name,
+    college.name,
+    college.display_name
+  ].filter(Boolean);
+  for (const k of candidates) {
+    if (VERIFIED_NIRF[k]) return VERIFIED_NIRF[k];
+  }
+  return null;
+}
+
+function getNirfSortOrder(col) {
+  const n = col.nirf || getVerifiedNIRF(col);
+  if (!n) return 99999;
+  if (typeof n.rank === 'number' && !isNaN(n.rank)) return n.rank;
+  if (n.rank_band) {
+    const m = String(n.rank_band).match(/^(\d+)/);
+    if (m) return parseInt(m[1], 10);
+  }
+  return 99000;
+}
+
+function formatNIRF(nirf, college) {
+  let n = nirf;
+  if (!n && college) {
+    n = college.nirf || getVerifiedNIRF(college);
+  }
+  if (!n) {
     return "Not ranked in NIRF";
   }
-  if (nirf.rank !== null && nirf.rank !== undefined) {
-    return `NIRF #${nirf.rank}`;
+  if (n.rank !== null && n.rank !== undefined) {
+    return `NIRF #${n.rank}`;
   }
-  if (nirf.rank_band) {
-    return `NIRF Band ${nirf.rank_band}`;
+  if (n.rank_band) {
+    return `NIRF Band ${n.rank_band}`;
   }
   return "NIRF Listed";
 }
 
-function formatAccreditation(accreditation) {
-  if (!accreditation || accreditation.length === 0) {
+function formatAccreditation(accreditation, college) {
+  let list = (Array.isArray(accreditation) && accreditation.length > 0)
+    ? accreditation
+    : (Array.isArray(college?.accreditation) && college.accreditation.length > 0
+        ? college.accreditation
+        : (Array.isArray(college?.accreditations) && college.accreditations.length > 0
+            ? college.accreditations
+            : null));
+
+  if (!list || list.length === 0) {
+    const fallback = getVerifiedAccreditation(college);
+    if (fallback && fallback.length > 0) {
+      list = fallback;
+    }
+  }
+
+  if (!list || list.length === 0) {
     return "Pending official disclosure";
   }
 
-  return accreditation
-    .map(item => {
-      let label = item.type || "Accreditation";
-      if (item.grade) label += ` Grade ${item.grade}`;
-      if (item.program) label += ` (${item.program})`;
-      if (item.derived_status === "CURRENTLY_VALID") {
-        label += " • Valid";
-      } else if (item.derived_status === "EXPIRED") {
-        label += " • Expired";
+  const naac = list.filter(item => item.type === "NAAC");
+  const nba = list.filter(item => item.type === "NBA");
+  const parts = [];
+
+  if (naac.length > 0) {
+    const n = naac[0];
+    let label = `NAAC Grade ${n.grade || 'Accredited'}`;
+    if (n.derived_status === "CURRENTLY_VALID") label += " • Valid";
+    parts.push(label);
+  }
+
+  if (nba.length > 0) {
+    if (nba.length === 1 && nba[0].program) {
+      let p = nba[0].program
+        .replace(/Engineering/i, "Engg")
+        .replace(/Computer Science and Engg/i, "CSE")
+        .replace(/Electronics & Communication Engg/i, "ECE")
+        .replace(/Mechanical Engg/i, "ME")
+        .replace(/Information Technology/i, "IT");
+      let label = `NBA Accredited (${p})`;
+      if (nba[0].derived_status === "CURRENTLY_VALID") label += " • Valid";
+      parts.push(label);
+    } else {
+      const validNba = nba.filter(n => n.derived_status === "CURRENTLY_VALID" || !n.derived_status || n.derived_status === "DATE_NOT_AVAILABLE");
+      const listToUse = validNba.length > 0 ? validNba : nba;
+      const programs = listToUse
+        .map(n => n.program ? n.program
+          .replace(/Engineering/i, "Engg")
+          .replace(/Computer Science and Engg/i, "CSE")
+          .replace(/Electronics & Communication Engg/i, "ECE")
+          .replace(/Mechanical Engg/i, "ME")
+          .replace(/Information Technology/i, "IT") : "")
+        .filter(Boolean);
+
+      const uniquePrograms = Array.from(new Set(programs));
+      if (uniquePrograms.length > 0) {
+        parts.push(`NBA Accredited (${uniquePrograms.join(", ")}) • Valid`);
+      } else {
+        parts.push(`NBA Accredited (${nba.length} Programs) • Valid`);
       }
-      return label;
-    })
-    .join(" | ");
+    }
+  }
+
+  return parts.length > 0 ? parts.join(" | ") : "Pending official disclosure";
 }
 
 function formatCurrency(val) {
@@ -694,7 +797,7 @@ function renderResultsList() {
 
               <div class="data-row">
                 <span>Accreditation</span>
-                <strong>${escapeHtml(formatAccreditation(c.accreditation))}</strong>
+                <strong>${escapeHtml(formatAccreditation(c.accreditation, c.college))}</strong>
               </div>
             </div>
           </div>
@@ -764,10 +867,11 @@ function handleDetailsRoute(params) {
         fee: found.fee,
         placement: found.placement,
         nirf: found.nirf,
-        accreditation: []
+        accreditation: found.accreditation || []
       };
       saveState();
       renderCollegeDetailsHtml(selectedCollege);
+      fetchLiveCollegeDetails(found.id || code);
       return;
     }
   }
@@ -798,10 +902,11 @@ function handleDetailsRoute(params) {
           fee: found.fee,
           placement: found.placement,
           nirf: found.nirf,
-          accreditation: []
+          accreditation: found.accreditation || []
         };
         saveState();
         renderCollegeDetailsHtml(selectedCollege);
+        fetchLiveCollegeDetails(found.id || code);
       } else {
         $("detailsCard").innerHTML = `
           <div style="text-align:center;padding:60px 20px;color:#64748b">
@@ -823,6 +928,52 @@ function handleDetailsRoute(params) {
   }
 }
 
+function fetchLiveCollegeDetails(idOrCode) {
+  if (!idOrCode) return;
+  fetch(`${API_BASE}/colleges/${encodeURIComponent(idOrCode)}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.college && selectedCollege) {
+        const c = data.college;
+        const matches = (selectedCollege.college?.id && selectedCollege.college.id === c.id) ||
+                        (selectedCollege.college?.code && selectedCollege.college.code === c.code) ||
+                        (selectedCollege.institute === c.uptac_name);
+        if (matches) {
+          selectedCollege.college = { ...selectedCollege.college, ...c };
+          if (c.accreditations && c.accreditations.length > 0) {
+            selectedCollege.accreditation = c.accreditations;
+            selectedCollege.college.accreditation = c.accreditations;
+          }
+          if (c.nirf && c.nirf.length > 0) {
+            selectedCollege.nirf = c.nirf[0];
+          }
+          if (c.fees && c.fees.length > 0 && !selectedCollege.fee) {
+            selectedCollege.fee = {
+              annual_total: c.fees[0].total_annual_fee,
+              tuition: c.fees[0].tuition_fee_annual,
+              hostel: c.fees[0].hostel_fee_annual,
+              academic_year: c.fees[0].academic_year,
+              source_url: c.fees[0].source_url
+            };
+          }
+          if (c.placements && c.placements.length > 0 && !selectedCollege.placement) {
+            selectedCollege.placement = {
+              average_lpa: c.placements[0].average_lpa,
+              highest_lpa: c.placements[0].highest_lpa,
+              placement_percentage: c.placements[0].placement_percentage,
+              top_recruiters: c.placements[0].top_recruiters,
+              year: c.placements[0].year,
+              source_url: c.placements[0].source_url
+            };
+          }
+          saveState();
+          renderCollegeDetailsHtml(selectedCollege);
+        }
+      }
+    })
+    .catch(err => console.warn("Live college details fetch notice:", err));
+}
+
 function openDetails(c) {
   selectedCollege = c;
   saveState();
@@ -830,6 +981,7 @@ function openDetails(c) {
   const collegeName = c.college?.display_name || c.institute || "College Profile";
 
   navigateTo("details", { code: collegeCode, title: `${collegeName} — CounsellQ` });
+  fetchLiveCollegeDetails(c.college?.id || collegeCode || c.institute);
 }
 
 function renderCollegeDetailsHtml(c) {
@@ -837,7 +989,12 @@ function renderCollegeDetailsHtml(c) {
   const t = tier(c);
   const ml = c.ml_prediction || {};
   const probs = ml.probabilities || {};
-  const score = c.feasibility_score || (t === "SAFE" ? 93 : t === "MODERATE" ? 64 : 25);
+  const isPredictionEvaluated = typeof c.feasibility_score === "number" ||
+    (c.ml_prediction && typeof c.ml_prediction.feasibilityScore === "number") ||
+    (Boolean(c.closing_rank) && Number(c.closing_rank) > 0 && typeof c.tier === "string");
+  const score = isPredictionEvaluated
+    ? (c.feasibility_score || (t === "SAFE" ? 93 : t === "MODERATE" ? 64 : 25))
+    : null;
   const key = collegeKey(c);
   const compared = compareList.some(x => collegeKey(x) === key);
 
@@ -918,6 +1075,28 @@ function renderCollegeDetailsHtml(c) {
   const roiRatio = (fourYearFee && avgSalary) ? (avgSalary / fourYearFee).toFixed(1) : null;
   const inChoices = choiceList.some(x => collegeKey(x) === key);
 
+  const allAccredList = (Array.isArray(c.accreditation) && c.accreditation.length > 0)
+    ? c.accreditation
+    : (Array.isArray(c.college?.accreditation) && c.college.accreditation.length > 0
+        ? c.college.accreditation
+        : (Array.isArray(c.college?.accreditations) && c.college.accreditations.length > 0
+            ? c.college.accreditations
+            : (getVerifiedAccreditation(c.college || c) || [])));
+  const nbaPrograms = allAccredList.filter(a => a.type === "NBA");
+  const nbaProgramsListHtml = nbaPrograms.length > 0 ? `
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #cbd5e1;font-size:11px">
+      <div style="font-weight:600;margin-bottom:4px;color:#0f172a;display:flex;align-items:center;gap:4px">
+        <i data-lucide="award" style="width:12px;height:12px;color:#059669"></i> Verified NBA Programs:
+      </div>
+      ${nbaPrograms.map(p => `
+        <div style="display:flex;justify-content:space-between;padding:2px 0;color:#334155">
+          <span>• ${escapeHtml(p.program || 'Engineering')}</span>
+          <span style="color:#059669;font-weight:600">${p.validity ? `Till ${escapeHtml(p.validity)}` : 'Accredited'}</span>
+        </div>
+      `).join("")}
+    </div>
+  ` : "";
+
   $("detailsCard").innerHTML = `
     <div class="details-dashboard-grid">
       <!-- 8-Column Main Area -->
@@ -981,19 +1160,34 @@ function renderCollegeDetailsHtml(c) {
               </div>
             </div>
 
-            <div class="prediction-big-row">
-              <span class="pred-score-big">${score}% Likelihood</span>
-              <span class="badge ${tierClass(t)}">${escapeHtml(tierLabel(c))}</span>
-            </div>
+            ${isPredictionEvaluated ? `
+              <div class="prediction-big-row">
+                <span class="pred-score-big">${score}% Likelihood</span>
+                <span class="badge ${tierClass(t)}">${escapeHtml(tierLabel(c))}</span>
+              </div>
 
-            <div class="pred-progress-track">
-              <div class="pred-progress-fill" style="width:${score}%"></div>
-            </div>
+              <div class="pred-progress-track">
+                <div class="pred-progress-fill" style="width:${score}%"></div>
+              </div>
 
-            <div class="pred-buffer-text">
-              <i data-lucide="${rankBuffer >= 0 ? 'trending-up' : 'alert-circle'}"></i>
-              <span>${rankBuffer !== null ? (rankBuffer >= 0 ? `+${rankBuffer.toLocaleString()} Buffer vs Closing Cutoff` : `${Math.abs(rankBuffer).toLocaleString()} Deficit vs Closing Cutoff`) : "Cutoff records verified"}</span>
-            </div>
+              <div class="pred-buffer-text">
+                <i data-lucide="${rankBuffer >= 0 ? 'trending-up' : 'alert-circle'}"></i>
+                <span>${rankBuffer !== null ? (rankBuffer >= 0 ? `+${rankBuffer.toLocaleString()} Buffer vs Closing Cutoff` : `${Math.abs(rankBuffer).toLocaleString()} Deficit vs Closing Cutoff`) : "Cutoff records verified"}</span>
+              </div>
+            ` : `
+              <div class="prediction-big-row">
+                <span class="pred-score-big" style="font-size:20px;color:#0f172a">Admission Feasibility</span>
+                <span class="badge" style="background:#f1f5f9;color:#475569">Directory Profile</span>
+              </div>
+
+              <p style="font-size:12px;color:#64748b;margin:8px 0 12px 0;line-height:1.45">
+                Personalized admission likelihood and cutoff cushions are calculated based on your JEE Main rank against official UPTAC cutoff data.
+              </p>
+
+              <button class="primary-btn" id="cardPredictBtn" style="width:100%;font-size:12px;padding:8px 12px;display:flex;align-items:center;justify-content:center;gap:6px">
+                <i data-lucide="sparkles" style="width:14px;height:14px"></i> Calculate Chances for Your Rank
+              </button>
+            `}
           </div>
 
           <!-- Card 2: Financial ROI -->
@@ -1063,12 +1257,13 @@ function renderCollegeDetailsHtml(c) {
             <div class="bento-detail-list" style="margin-top:10px">
               <div class="bento-detail-row">
                 <span>NIRF Standing</span>
-                <span class="badge" style="background:#e0f2fe;color:#0369a1">${escapeHtml(formatNIRF(c.nirf))}</span>
+                <span class="badge" style="background:#e0f2fe;color:#0369a1">${escapeHtml(formatNIRF(c.nirf || c.college?.nirf))}</span>
               </div>
               <div class="bento-detail-row">
                 <span>Accreditation</span>
-                <span class="badge" style="background:#ecfdf5;color:#065f46">${escapeHtml(formatAccreditation(c.accreditation))}</span>
+                <span class="badge" style="background:#ecfdf5;color:#065f46">${escapeHtml(formatAccreditation(c.accreditation, c.college))}</span>
               </div>
+              ${nbaProgramsListHtml}
             </div>
           </div>
 
@@ -1116,74 +1311,61 @@ function renderCollegeDetailsHtml(c) {
 
       <!-- 4-Column Interactive Sidebar -->
       <div class="details-sidebar-col">
-        <!-- Widget 1: Interactive Cutoff Fluctuation Simulator -->
-        <div class="simulator-card">
-          <div class="bento-tile-header" style="margin-bottom:8px">
-            <div class="bento-tile-title" style="font-size:13px">
-              <i data-lucide="sliders" style="color:var(--primary)"></i> Interactive Cutoff Fluctuation Simulator
-              <i data-lucide="info" style="width:13px;height:13px;color:#94a3b8"></i>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <span style="font-size:12px;font-weight:600;color:#334155">Simulate Annual Cutoff Shift</span>
-            <span class="sim-shift-badge" id="simShiftBadge">0%</span>
-          </div>
-          <input type="range" id="simShiftSlider" class="simulator-slider" min="-15" max="15" value="0" step="1">
-          <div class="slider-labels">
-            <span>-15% (Harder Year)</span>
-            <span>0% (Current)</span>
-            <span>+15% (Easier Year)</span>
-          </div>
-          <div class="simulator-readouts">
-            <div class="sim-readout-col">
-              <small>New Likelihood</small>
-              <div class="sim-readout-val">
-                <strong id="simNewLikelihood">${score}%</strong>
-                <span id="simLikelihoodDiff" class="sim-diff-tag">0%</span>
+        ${isPredictionEvaluated ? `
+          <!-- Widget: Admission Likelihood Gauge -->
+          <div class="gauge-card">
+            <div class="bento-tile-header" style="margin-bottom:12px">
+              <div class="bento-tile-title" style="font-size:13px">
+                <i data-lucide="gauge" style="color:var(--primary)"></i> Admission Likelihood Gauge
               </div>
             </div>
-            <div class="sim-readout-col">
-              <small>New Buffer</small>
-              <div class="sim-readout-val">
-                <strong id="simNewBuffer">${rankBuffer !== null ? (rankBuffer >= 0 ? `+${rankBuffer.toLocaleString()}` : rankBuffer.toLocaleString()) : 'N/A'}</strong>
-                <span id="simBufferDiff" class="sim-diff-tag">0</span>
+            <div class="gauge-wrapper">
+              <svg class="gauge-svg" viewBox="0 0 100 100">
+                <circle class="gauge-track" cx="50" cy="50" r="44"></circle>
+                <circle class="gauge-meter" id="gaugeMeterCircle" cx="50" cy="50" r="44" style="stroke-dashoffset: ${276.46 * (1 - (score || 0) / 100)}; stroke: ${(score || 0) >= 80 ? '#10b981' : ((score || 0) >= 50 ? '#f59e0b' : '#ef4444')}"></circle>
+              </svg>
+              <div class="gauge-center-content">
+                <span class="gauge-center-val" id="gaugeValText">${score}%</span>
+                <span class="gauge-center-tier" id="gaugeTierText" style="color:${(score || 0) >= 80 ? '#059669' : ((score || 0) >= 50 ? '#d97706' : '#dc2626')}">${escapeHtml(tierLabel(c))}</span>
+              </div>
+            </div>
+            <div class="gauge-legend">
+              <div class="gauge-legend-item">
+                <span class="legend-dot green"></span>
+                <span>≥ 80% Safe</span>
+              </div>
+              <div class="gauge-legend-item">
+                <span class="legend-dot yellow"></span>
+                <span>50% - 79% Moderate</span>
+              </div>
+              <div class="gauge-legend-item">
+                <span class="legend-dot red"></span>
+                <span>&lt; 50% Ambitious</span>
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- Widget 2: Admission Likelihood Gauge -->
-        <div class="gauge-card">
-          <div class="bento-tile-header" style="margin-bottom:12px">
-            <div class="bento-tile-title" style="font-size:13px">
-              <i data-lucide="gauge" style="color:var(--primary)"></i> Admission Likelihood Gauge
+        ` : `
+          <!-- Widget: Admission Likelihood Prompt -->
+          <div class="gauge-card" style="text-align:center;padding:20px">
+            <div class="bento-tile-header" style="margin-bottom:12px">
+              <div class="bento-tile-title" style="font-size:13px">
+                <i data-lucide="gauge" style="color:var(--primary)"></i> Admission Likelihood
+              </div>
             </div>
+            <div style="margin:16px 0;display:flex;justify-content:center">
+              <div style="width:58px;height:58px;border-radius:50%;background:#eff6ff;display:flex;align-items:center;justify-content:center">
+                <i data-lucide="help-circle" style="width:28px;height:28px;color:#2563eb"></i>
+              </div>
+            </div>
+            <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:6px">Chances Not Calculated</div>
+            <div style="font-size:12px;color:#64748b;margin-bottom:14px;line-height:1.4">
+              Enter your JEE Main rank in the predictor to view your personalized admission likelihood (Safe / Moderate / Ambitious).
+            </div>
+            <button class="primary-btn" id="sidebarPredictBtn" style="width:100%;font-size:12px;padding:8px">
+              <i data-lucide="sparkles" style="width:13px;height:13px;margin-right:4px"></i> Predict for My Rank
+            </button>
           </div>
-          <div class="gauge-wrapper">
-            <svg class="gauge-svg" viewBox="0 0 100 100">
-              <circle class="gauge-track" cx="50" cy="50" r="44"></circle>
-              <circle class="gauge-meter" id="gaugeMeterCircle" cx="50" cy="50" r="44" style="stroke-dashoffset: ${276.46 * (1 - score / 100)}; stroke: ${score >= 80 ? '#10b981' : (score >= 50 ? '#f59e0b' : '#ef4444')}"></circle>
-            </svg>
-            <div class="gauge-center-content">
-              <span class="gauge-center-val" id="gaugeValText">${score}%</span>
-              <span class="gauge-center-tier" id="gaugeTierText" style="color:${score >= 80 ? '#059669' : (score >= 50 ? '#d97706' : '#dc2626')}">${escapeHtml(tierLabel(c))}</span>
-            </div>
-          </div>
-          <div class="gauge-legend">
-            <div class="gauge-legend-item">
-              <span class="legend-dot green"></span>
-              <span>≥ 80% Safe</span>
-            </div>
-            <div class="gauge-legend-item">
-              <span class="legend-dot yellow"></span>
-              <span>50% - 79% Moderate</span>
-            </div>
-            <div class="gauge-legend-item">
-              <span class="legend-dot red"></span>
-              <span>&lt; 50% Ambitious</span>
-            </div>
-          </div>
-        </div>
+        `}
 
         <!-- Widget 3: Embedded My Choice Sheet Widget -->
         <div class="choice-widget-card">
@@ -1276,8 +1458,11 @@ function renderCollegeDetailsHtml(c) {
 
   $("sidebarDownloadBtn")?.addEventListener("click", downloadChoiceSheetCsv);
 
+  // Predictor navigation triggers
+  $("cardPredictBtn")?.addEventListener("click", () => navigateTo("predict"));
+  $("sidebarPredictBtn")?.addEventListener("click", () => navigateTo("predict"));
+
   // Initialize interactive widgets
-  setupSimulator(c, score, closingRank, userRank);
   renderSidebarChoiceList();
   setupSidebarCmdPalette();
 
@@ -1285,73 +1470,8 @@ function renderCollegeDetailsHtml(c) {
 }
 
 /* -------------------------------------------------------------
-   Interactive Simulator & Sidebar Helpers
+   Sidebar Helpers
 ------------------------------------------------------------- */
-function setupSimulator(c, baseScore, closingRank, userRank) {
-  const slider = $("simShiftSlider");
-  const badge = $("simShiftBadge");
-  const newLikelihoodEl = $("simNewLikelihood");
-  const diffLikelihoodEl = $("simLikelihoodDiff");
-  const newBufferEl = $("simNewBuffer");
-  const diffBufferEl = $("simBufferDiff");
-  const gaugeMeter = $("gaugeMeterCircle");
-  const gaugeVal = $("gaugeValText");
-  const gaugeTier = $("gaugeTierText");
-
-  if (!slider) return;
-
-  const validClosing = !isNaN(closingRank) && closingRank > 0;
-  const baseBuffer = validClosing ? (closingRank - userRank) : 0;
-  const circumference = 276.46;
-
-  function update() {
-    const shift = Number(slider.value);
-    if (badge) {
-      badge.textContent = shift > 0 ? `+${shift}%` : `${shift}%`;
-      badge.style.background = shift > 0 ? '#ecfdf5' : (shift < 0 ? '#fef2f2' : '#f1f5f9');
-      badge.style.color = shift > 0 ? '#059669' : (shift < 0 ? '#dc2626' : '#475569');
-    }
-
-    // Shifted closing rank & buffer
-    const simClosing = validClosing ? Math.round(closingRank * (1 + shift / 100)) : 0;
-    const simBuffer = validClosing ? (simClosing - userRank) : 0;
-    const bufferDelta = simBuffer - baseBuffer;
-
-    // Shifted likelihood score
-    const simScore = Math.min(99, Math.max(5, Math.round(baseScore + shift * 0.4)));
-    const scoreDelta = simScore - baseScore;
-
-    if (newLikelihoodEl) newLikelihoodEl.textContent = `${simScore}%`;
-    if (diffLikelihoodEl) {
-      diffLikelihoodEl.textContent = scoreDelta >= 0 ? `↑ +${scoreDelta}%` : `↓ ${scoreDelta}%`;
-      diffLikelihoodEl.className = `sim-diff-tag ${scoreDelta >= 0 ? 'pos' : 'neg'}`;
-    }
-
-    if (newBufferEl) {
-      newBufferEl.textContent = validClosing ? `${simBuffer >= 0 ? '+' : ''}${simBuffer.toLocaleString()}` : 'N/A';
-    }
-    if (diffBufferEl) {
-      diffBufferEl.textContent = validClosing ? (bufferDelta >= 0 ? `↑ +${bufferDelta.toLocaleString()}` : `↓ ${bufferDelta.toLocaleString()}`) : '0';
-      diffBufferEl.className = `sim-diff-tag ${bufferDelta >= 0 ? 'pos' : 'neg'}`;
-    }
-
-    // Circular gauge animation
-    if (gaugeMeter) {
-      const offset = circumference * (1 - simScore / 100);
-      gaugeMeter.style.strokeDashoffset = offset;
-      const strokeColor = simScore >= 80 ? '#10b981' : (simScore >= 50 ? '#f59e0b' : '#ef4444');
-      gaugeMeter.style.stroke = strokeColor;
-    }
-    if (gaugeVal) gaugeVal.textContent = `${simScore}%`;
-    if (gaugeTier) {
-      gaugeTier.textContent = simScore >= 80 ? "Safe" : (simScore >= 50 ? "Moderate" : "Ambitious");
-      gaugeTier.style.color = simScore >= 80 ? '#059669' : (simScore >= 50 ? '#d97706' : '#dc2626');
-    }
-  }
-
-  slider.addEventListener("input", update);
-  update();
-}
 
 function renderSidebarChoiceList() {
   const container = $("sidebarChoiceList");
@@ -1464,11 +1584,21 @@ async function loadDirectory(initialQuery = "") {
   }
 
   try {
-    const res = await fetch(`${API_BASE}/colleges?limit=200`);
+    const res = await fetch(`${API_BASE}/colleges?limit=250`);
     const data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error);
 
-    directoryColleges = data.colleges || [];
+    directoryColleges = (data.colleges || []).map(col => {
+      const verifiedAcc = getVerifiedAccreditation(col);
+      const verifiedN = getVerifiedNIRF(col);
+      return {
+        ...col,
+        accreditation: (Array.isArray(col.accreditation) && col.accreditation.length > 0)
+          ? col.accreditation
+          : (verifiedAcc || col.accreditations || []),
+        nirf: col.nirf || verifiedN || null
+      };
+    });
     renderDirectory();
   } catch (err) {
     if (stats) stats.textContent = "Failed to load directory. Ensure backend is running.";
@@ -1484,7 +1614,7 @@ function renderDirectory() {
 
   let filtered = directoryColleges.filter(col => {
     if (ownerFilter && col.ownership !== ownerFilter) return false;
-    if (nirfFilter === "true" && !col.nirf) return false;
+    if (nirfFilter === "true" && getNirfSortOrder(col) >= 99000) return false;
     if (searchTerm) {
       const match = (col.name + " " + col.city + " " + (col.code || "")).toLowerCase();
       if (!match.includes(searchTerm)) return false;
@@ -1499,7 +1629,15 @@ function renderDirectory() {
   } else if (sortMode === "placement") {
     filtered.sort((a, b) => (b.placement?.average_lpa || 0) - (a.placement?.average_lpa || 0));
   } else if (sortMode === "nirf") {
-    filtered.sort((a, b) => (a.nirf?.rank || 999) - (b.nirf?.rank || 999));
+    filtered.sort((a, b) => {
+      const orderA = getNirfSortOrder(a);
+      const orderB = getNirfSortOrder(b);
+      if (orderA !== orderB) return orderA - orderB;
+      const avgSalaryA = a.placement?.average_lpa || 0;
+      const avgSalaryB = b.placement?.average_lpa || 0;
+      if (avgSalaryA !== avgSalaryB) return avgSalaryB - avgSalaryA;
+      return a.name.localeCompare(b.name);
+    });
   }
 
   if ($("directoryStats")) {
@@ -1549,8 +1687,13 @@ function renderDirectory() {
               </div>` : ""}
 
               <div class="data-row">
+                <span>Accreditation</span>
+                <strong>${escapeHtml(formatAccreditation(col.accreditation, col))}</strong>
+              </div>
+
+              <div class="data-row">
                 <span>NIRF Engineering</span>
-                <strong>${formatNIRF(col.nirf)}</strong>
+                <strong>${formatNIRF(col.nirf, col)}</strong>
               </div>
 
               <div class="data-row">
@@ -1592,7 +1735,7 @@ function renderDirectory() {
         fee: col.fee,
         placement: col.placement,
         nirf: col.nirf,
-        accreditation: []
+        accreditation: col.accreditation || []
       });
     })
   );
@@ -1755,7 +1898,7 @@ function copyChoiceList() {
       `  • Category & Quota: ${c.category || 'General'} • ${c.quota || 'Home State'} • Round: ${c.round || 'Round 1'}\n` +
       `  • Fee Structure: Annual: ${annualFee} | 4-Year Est: ${fourYrFee}\n` +
       `  • Placements: Average: ${avgCtc} | Highest: ${maxCtc}\n` +
-      `  • NIRF / Accreditation: ${formatNIRF(c.nirf)} | ${formatAccreditation(c.accreditation)}\n` +
+      `  • NIRF / Accreditation: ${formatNIRF(c.nirf, c.college || c)} | ${formatAccreditation(c.accreditation, c.college || c)}\n` +
       (c.college?.website ? `  • Website: ${c.college.website}\n` : '')
     );
   }).join("\n--------------------------------------------------------\n\n");
@@ -1806,8 +1949,8 @@ function downloadChoiceSheetCsv() {
     c.fee?.annual_total ? (c.fee.annual_total * 4) : "N/A",
     c.placement?.average_lpa ? `${c.placement.average_lpa} LPA` : "N/A",
     c.placement?.highest_lpa ? `${c.placement.highest_lpa} LPA` : "N/A",
-    `"${formatNIRF(c.nirf).replace(/"/g, '""')}"`,
-    `"${formatAccreditation(c.accreditation).replace(/"/g, '""')}"`,
+    `"${formatNIRF(c.nirf, c.college || c).replace(/"/g, '""')}"`,
+    `"${formatAccreditation(c.accreditation, c.college || c).replace(/"/g, '""')}"`,
     c.college?.website || "N/A"
   ]);
 
@@ -1972,8 +2115,8 @@ function renderCompare() {
     ["Annual Academic Fees", c => c.fee ? formatCurrency(c.fee.annual_total) + " / yr" : "Pending official disclosure"],
     ["Placements (Average)", c => c.placement ? formatLPA(c.placement.average_lpa) : "Pending official disclosure"],
     ["Placements (Highest)", c => c.placement ? formatLPA(c.placement.highest_lpa) : "Pending official disclosure"],
-    ["NIRF 2025 Ranking", c => formatNIRF(c.nirf)],
-    ["Accreditation", c => formatAccreditation(c.accreditation)]
+    ["NIRF 2025 Ranking", c => formatNIRF(c.nirf, c.college || c)],
+    ["Accreditation", c => formatAccreditation(c.accreditation, c.college || c)]
   ];
 
   $("compareContent").innerHTML = `

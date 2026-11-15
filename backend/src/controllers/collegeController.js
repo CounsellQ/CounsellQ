@@ -26,8 +26,8 @@ const getColleges = async (req, res) => {
             sortOrder = "ASC"
         } = req.query;
 
-        const offset = (Math.max(1, Number(page)) - 1) * Math.min(100, Math.max(1, Number(limit)));
-        const pageLimit = Math.min(100, Math.max(1, Number(limit)));
+        const offset = (Math.max(1, Number(page)) - 1) * Math.min(250, Math.max(1, Number(limit)));
+        const pageLimit = Math.min(250, Math.max(1, Number(limit)));
 
         const conditions = [];
         const values = [];
@@ -96,7 +96,7 @@ const getColleges = async (req, res) => {
         } else if (sortBy === "placement") {
             orderByClause = `ORDER BY cp.average_package_lpa ${sortOrder === "ASC" ? "ASC NULLS LAST" : "DESC NULLS LAST"}`;
         } else if (sortBy === "nirf") {
-            orderByClause = `ORDER BY n.rank ASC NULLS LAST, n.rank_band ASC NULLS LAST`;
+            orderByClause = `ORDER BY COALESCE(n.rank, CAST(NULLIF(SUBSTRING(n.rank_band FROM '^[0-9]+'), '') AS INTEGER), 99999) ASC, cp.average_package_lpa DESC NULLS LAST, col.display_name ASC`;
         }
 
         const dataQuery = `
@@ -137,6 +137,9 @@ const getColleges = async (req, res) => {
                 n.rank_band AS nirf_rank_band,
                 n.score AS nirf_score,
 
+                -- Accreditations
+                COALESCE(acc.accreditations, '[]'::json) AS accreditations,
+
                 -- Cutoff record count
                 COALESCE(cut.cutoff_count, 0) AS cutoff_count
 
@@ -157,6 +160,34 @@ const getColleges = async (req, res) => {
             LEFT JOIN nirf_rankings n
                 ON n.institute_name = m.nirf_institute
                 AND n.ranking_category = 'Engineering'
+
+            LEFT JOIN LATERAL (
+                SELECT
+                    json_agg(
+                        json_build_object(
+                            'type', a.accreditation_type,
+                            'status', a.accreditation_status,
+                            'grade', a.grade,
+                            'program', a.program,
+                            'validity', a.validity,
+                            'valid_from', a.valid_from,
+                            'valid_until', a.valid_until,
+                            'source', a.source,
+                            'source_url', a.source_url,
+                            'derived_status', CASE
+                                WHEN a.valid_until IS NULL THEN 'DATE_NOT_AVAILABLE'
+                                WHEN a.valid_until >= CURRENT_DATE THEN 'CURRENTLY_VALID'
+                                ELSE 'EXPIRED'
+                            END
+                        )
+                        ORDER BY a.accreditation_type, a.program
+                    ) AS accreditations
+                FROM college_accreditation_map cam
+                JOIN accreditations a
+                    ON cam.accreditation_institute = a.institute_name
+                WHERE cam.uptac_institute = col.uptac_name
+                    AND cam.verified = TRUE
+            ) acc ON TRUE
 
             LEFT JOIN (
                 SELECT institute, COUNT(*) AS cutoff_count
@@ -211,7 +242,9 @@ const getColleges = async (req, res) => {
                 rank: row.nirf_rank,
                 rank_band: row.nirf_rank_band,
                 score: row.nirf_score
-            } : null
+            } : null,
+
+            accreditation: row.accreditations || []
         }));
 
         res.json({

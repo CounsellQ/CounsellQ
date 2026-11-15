@@ -165,6 +165,20 @@ describe("CounsellQ API & Data Test Suite", () => {
             assert.ok(col.accreditations.length >= 1);
         });
 
+        test("GET /api/colleges/abes-ghaziabad should return verified NBA accreditations", async () => {
+            const res = await fetch(`${baseUrl}/api/colleges/abes-ghaziabad`);
+            assert.strictEqual(res.status, 200);
+            const data = await res.json();
+            assert.strictEqual(data.success, true);
+            const col = data.college;
+            assert.strictEqual(col.id, "abes-ghaziabad");
+            assert.strictEqual(col.code, "032");
+            assert.ok(col.accreditations.length >= 3);
+            const nbaPrograms = col.accreditations.filter(a => a.type === "NBA");
+            assert.ok(nbaPrograms.length >= 3);
+            assert.ok(nbaPrograms.some(p => p.program.includes("Computer Science")));
+        });
+
         test("GET /api/colleges/non-existent-college should return 400 not found", async () => {
             const res = await fetch(`${baseUrl}/api/colleges/non-existent-xyz`);
             assert.strictEqual(res.status, 400);

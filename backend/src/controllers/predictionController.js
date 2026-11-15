@@ -114,7 +114,8 @@ const predictColleges = async (req, res) => {
                 n.score AS nirf_score,
 
                 -- Accreditations (Aggregated)
-                COALESCE(acc.accreditation, '[]'::json) AS accreditation
+                COALESCE(acc.accreditation, '[]'::json) AS accreditation,
+                COALESCE(all_acc.all_accreditations, '[]'::json) AS all_accreditations
 
             FROM cutoffs c
 
@@ -167,10 +168,47 @@ const predictColleges = async (req, res) => {
                         a.accreditation_type = 'NAAC'
                         OR (
                             a.accreditation_type = 'NBA'
-                            AND LOWER(TRIM(c.program)) = LOWER(TRIM(a.program))
+                            AND (
+                                LOWER(TRIM(c.program)) = LOWER(TRIM(a.program))
+                                OR LOWER(REPLACE(REPLACE(c.program, ' and ', ' & '), ' (FW)', '')) = LOWER(REPLACE(a.program, ' and ', ' & '))
+                                OR (a.program ILIKE '%Computer Science%' AND c.program ILIKE '%Computer Science%')
+                                OR (a.program ILIKE '%Electronics%' AND c.program ILIKE '%Electronics%')
+                                OR (a.program ILIKE '%Mechanical%' AND c.program ILIKE '%Mechanical%')
+                                OR (a.program ILIKE '%Information Technology%' AND c.program ILIKE '%Information Technology%')
+                                OR (a.program ILIKE '%Electrical%' AND c.program ILIKE '%Electrical%')
+                                OR (a.program ILIKE '%Civil%' AND c.program ILIKE '%Civil%')
+                            )
                         )
                     )
             ) acc ON TRUE
+
+            LEFT JOIN LATERAL (
+                SELECT
+                    json_agg(
+                        json_build_object(
+                            'type', a.accreditation_type,
+                            'status', a.accreditation_status,
+                            'grade', a.grade,
+                            'program', a.program,
+                            'validity', a.validity,
+                            'valid_from', a.valid_from,
+                            'valid_until', a.valid_until,
+                            'source', a.source,
+                            'source_url', a.source_url,
+                            'derived_status', CASE
+                                WHEN a.valid_until IS NULL THEN 'DATE_NOT_AVAILABLE'
+                                WHEN a.valid_until >= CURRENT_DATE THEN 'CURRENTLY_VALID'
+                                ELSE 'EXPIRED'
+                            END
+                        )
+                        ORDER BY a.accreditation_type, a.program
+                    ) AS all_accreditations
+                FROM college_accreditation_map cam
+                JOIN accreditations a
+                    ON cam.accreditation_institute = a.institute_name
+                WHERE cam.uptac_institute = c.institute
+                    AND cam.verified = TRUE
+            ) all_acc ON TRUE
 
             WHERE c.category = ANY($1)
               AND c.closing_rank >= $2
@@ -259,7 +297,10 @@ const predictColleges = async (req, res) => {
                     ownership: row.ownership,
                     city: row.city,
                     website: row.website,
-                    approval: row.approval
+                    approval: row.approval,
+                    accreditation: (row.all_accreditations && row.all_accreditations.length > 0)
+                        ? row.all_accreditations
+                        : (row.accreditation || [])
                 } : {
                     id: null,
                     display_name: row.institute,
@@ -268,7 +309,8 @@ const predictColleges = async (req, res) => {
                     ownership: "Affiliated",
                     city: "Uttar Pradesh",
                     website: null,
-                    approval: null
+                    approval: null,
+                    accreditation: row.accreditation || []
                 },
 
                 // Fee data
@@ -297,8 +339,10 @@ const predictColleges = async (req, res) => {
                     score: row.nirf_score ? Number(row.nirf_score) : null
                 } : null,
 
-                // Accreditations
-                accreditation: row.accreditation || []
+                // Accreditations (Program-specific with institutional fallback)
+                accreditation: (row.accreditation && row.accreditation.length > 0)
+                    ? row.accreditation
+                    : ((row.all_accreditations && row.all_accreditations.length > 0) ? row.all_accreditations : [])
             };
         });
 

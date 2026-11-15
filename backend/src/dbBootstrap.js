@@ -155,12 +155,15 @@ async function initDatabase(pool) {
         const feesRes = await pool.query("SELECT COUNT(*) AS count FROM college_fees");
         const feesCount = parseInt(feesRes.rows[0].count, 10);
 
-        if (collegeCount === 0 || missingCount > 0 || feesCount < 100) {
-            console.log(`Running database population & enrichment (colleges: ${collegeCount}, missing details: ${missingCount}, fees: ${feesCount})...`);
+        const accredCountRes = await pool.query("SELECT COUNT(*) AS count FROM accreditations").catch(() => ({ rows: [{ count: 0 }] }));
+        const accredCount = parseInt(accredCountRes.rows[0].count, 10);
+
+        if (collegeCount === 0 || missingCount > 0 || feesCount < 100 || accredCount < 90) {
+            console.log(`Running database population & enrichment (colleges: ${collegeCount}, missing details: ${missingCount}, fees: ${feesCount}, accreditations: ${accredCount})...`);
             await runPopulation(pool);
             console.log("Data population and enrichment completed successfully.");
         } else {
-            console.log(`Database verified complete. All ${collegeCount} colleges enriched with verified details, fees (${feesCount}), and placements.`);
+            console.log(`Database verified complete. All ${collegeCount} colleges enriched with verified details, fees (${feesCount}), placements, and accreditations (${accredCount}).`);
         }
     } catch (err) {
         console.error("Database bootstrap encountered an error:", err.message);
