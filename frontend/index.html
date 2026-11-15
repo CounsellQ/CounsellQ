@@ -396,6 +396,66 @@
     </div>
   </div>
 
+  <!-- Floating Ask CounsellQ AI Assistant Launcher -->
+  <button id="askAiLauncherBtn" class="ask-ai-launcher" aria-label="Open Ask CounsellQ AI Assistant">
+    <div class="ask-ai-launcher-pulse"></div>
+    <div class="ask-ai-launcher-icon">
+      <i data-lucide="sparkles"></i>
+    </div>
+    <span class="ask-ai-launcher-text">Ask CounsellQ AI</span>
+  </button>
+
+  <!-- Slide-Out AI Assistant Drawer -->
+  <aside id="counsellAiDrawer" class="counsell-ai-drawer" aria-hidden="true">
+    <div class="counsell-ai-header">
+      <div class="counsell-ai-header-info">
+        <div class="counsell-ai-avatar">
+          <i data-lucide="bot"></i>
+          <span class="counsell-ai-online-dot"></span>
+        </div>
+        <div class="counsell-ai-titles">
+          <h4>Ask CounsellQ AI</h4>
+          <span>UPTAC 2025 Expert • Online</span>
+        </div>
+      </div>
+      <div class="counsell-ai-header-tools">
+        <button id="clearChatBtn" class="ai-icon-btn" title="Clear Conversation"><i data-lucide="rotate-ccw"></i></button>
+        <button id="closeAiDrawerBtn" class="ai-icon-btn" title="Close"><i data-lucide="x"></i></button>
+      </div>
+    </div>
+
+    <!-- Quick Question Chips -->
+    <div class="counsell-ai-chips-wrap" id="aiQuickChips">
+      <button class="ai-chip-pill" data-query="How does internal sliding work in Round 3?">🔄 Internal Sliding</button>
+      <button class="ai-chip-pill" data-query="Should I choose Freeze or Float in Round 1/2?">⚖️ Freeze vs Float</button>
+      <button class="ai-chip-pill" data-query="Who is eligible for Tuition Fee Waiver (FW) seats?">💰 Fee Waiver (FW)</button>
+      <button class="ai-chip-pill" data-query="Compare ABES vs AKGEC placements and fees">🏛️ ABES vs AKGEC</button>
+      <button class="ai-chip-pill" data-query="What is the refund policy if I withdraw after Round 2?">💳 Refund Policy</button>
+      <button class="ai-chip-pill" data-query="What documents are required for physical reporting?">📋 Documents Checklist</button>
+    </div>
+
+    <!-- Chat Message Stream -->
+    <div class="counsell-ai-messages" id="aiMessagesStream">
+      <div class="ai-msg assistant">
+        <div style="font-weight:700;margin-bottom:4px;color:#2563eb;display:flex;align-items:center;gap:4px">
+          <i data-lucide="sparkles" style="width:14px;height:14px"></i> Welcome to Ask CounsellQ!
+        </div>
+        I am your AI admissions counsellor trained on official UPTAC 2025 rules, cutoff archives, verified fee structures, and college placements.
+        <div style="margin-top:8px;font-size:11px;color:#64748b">
+          Ask me about <strong>Freeze vs Float</strong>, <strong>Internal Sliding</strong>, <strong>Fee Waiver seats</strong>, <strong>College Comparisons</strong>, or enter your rank for personalized branch recommendations.
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Input Bar -->
+    <div class="counsell-ai-input-bar">
+      <textarea id="aiChatInput" class="counsell-ai-textarea" placeholder="Ask about UPTAC rules, cutoffs, colleges..." rows="1"></textarea>
+      <button id="aiSendBtn" class="counsell-ai-send-btn" aria-label="Send message">
+        <i data-lucide="send" style="width:16px;height:16px"></i>
+      </button>
+    </div>
+  </aside>
+
   <footer>
     <div class="footer-inner">
       <p>© 2026 <strong>CounsellQ</strong> • Machine learning admission counselling decision-support platform.</p>
@@ -403,6 +463,6 @@
     </div>
   </footer>
 
-  <script src="js/app.js?v=2.1"></script>
+  <script src="js/app.js?v=2.2"></script>
 </body>
 </html>

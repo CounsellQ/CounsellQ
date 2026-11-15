@@ -179,6 +179,20 @@ describe("CounsellQ API & Data Test Suite", () => {
             assert.ok(nbaPrograms.some(p => p.program.includes("Computer Science")));
         });
 
+        test("GET /api/colleges/abes-ghaziabad/trends should return multi-year and multi-round cutoff trends", async () => {
+            const res = await fetch(`${baseUrl}/api/colleges/abes-ghaziabad/trends`);
+            assert.strictEqual(res.status, 200);
+            const data = await res.json();
+            assert.strictEqual(data.success, true);
+            assert.strictEqual(data.college_id, "abes-ghaziabad");
+            assert.ok(data.available_programs.length >= 4);
+            const cseTrend = data.trends["Computer Science and Engineering"];
+            assert.ok(cseTrend);
+            assert.strictEqual(cseTrend.yearly.length, 3);
+            assert.strictEqual(cseTrend.rounds_2025.length, 3);
+            assert.ok(cseTrend.round_expansion_buffer > 0);
+        });
+
         test("GET /api/colleges/non-existent-college should return 400 not found", async () => {
             const res = await fetch(`${baseUrl}/api/colleges/non-existent-xyz`);
             assert.strictEqual(res.status, 400);
@@ -209,6 +223,45 @@ describe("CounsellQ API & Data Test Suite", () => {
             report.checks.forEach(check => {
                 assert.strictEqual(check.passed, true, `Check failed: ${check.name}`);
             });
+        });
+    });
+
+    describe("6. AI Counseling Chatbot Endpoint", () => {
+        test("POST /api/chat should answer UPTAC rule queries", async () => {
+            const res = await fetch(`${baseUrl}/api/chat`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: "What are internal sliding rules in Round 3?" })
+            });
+            assert.strictEqual(res.status, 200);
+            const data = await res.json();
+            assert.strictEqual(data.success, true);
+            assert.ok(data.reply.includes("Internal Sliding"));
+            assert.ok(data.reply.length > 50);
+        });
+
+        test("POST /api/chat should answer college comparison queries", async () => {
+            const res = await fetch(`${baseUrl}/api/chat`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: "Compare ABES and AKGEC" })
+            });
+            assert.strictEqual(res.status, 200);
+            const data = await res.json();
+            assert.strictEqual(data.success, true);
+            assert.ok(data.reply.includes("ABES"));
+            assert.ok(data.reply.includes("AKGEC"));
+        });
+
+        test("POST /api/chat should reject empty message with 400", async () => {
+            const res = await fetch(`${baseUrl}/api/chat`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: "" })
+            });
+            assert.strictEqual(res.status, 400);
+            const data = await res.json();
+            assert.strictEqual(data.success, false);
         });
     });
 });

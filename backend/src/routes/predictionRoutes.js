@@ -10,17 +10,28 @@ const {
 const {
     getColleges,
     getCollegeDetails,
-    getMLInfo
+    getMLInfo,
+    getCollegeCutoffTrends
 } = require("../controllers/collegeController");
+
+const {
+    handleChatQuery
+} = require("../controllers/chatbotController");
 
 // College prediction endpoint (historical cutoffs + ML inference)
 router.post("/predict", predictColleges);
+
+// AI Counseling Chatbot / Ask CounsellQ Assistant endpoint
+router.post("/chat", handleChatQuery);
 
 // College discovery and directory search
 router.get("/colleges", getColleges);
 
 // Individual college profile with fees, placements, NIRF, and accreditations
 router.get("/colleges/:id", getCollegeDetails);
+
+// Historical Cutoff Trends & Trajectory endpoint (2023-2025 Multi-Year & Multi-Round)
+router.get("/colleges/:id/trends", getCollegeCutoffTrends);
 
 // ML model metadata and evaluation benchmarks
 router.get("/ml/info", getMLInfo);
