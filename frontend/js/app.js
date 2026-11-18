@@ -1394,6 +1394,42 @@ function renderCollegeDetailsHtml(c) {
             </button>
           </div>
         </div>
+
+        <!-- Widget 4: UPTAC Counselling Advisory Guide -->
+        <div class="counselling-guide-card">
+          <div class="bento-tile-header" style="margin-bottom:12px">
+            <div class="bento-tile-title" style="font-size:13px">
+              <i data-lucide="shield-check" style="color:var(--primary)"></i> UPTAC Counselling Advisory
+            </div>
+            <span class="badge" style="background:#ecfdf5;color:#059669;font-size:10px;padding:3px 8px">Official Rules</span>
+          </div>
+          <div class="advisory-list">
+            <div class="advisory-item">
+              <div class="advisory-title">
+                <i data-lucide="check-circle-2" style="color:#059669"></i> Freeze vs. Float Strategy
+              </div>
+              <p class="advisory-desc">
+                Choose <strong>Freeze</strong> if this is your ideal seat. Choose <strong>Float</strong> to hold this seat while competing for higher-preference choices in subsequent rounds.
+              </p>
+            </div>
+            <div class="advisory-item">
+              <div class="advisory-title">
+                <i data-lucide="badge-dollar-sign" style="color:#2563eb"></i> Seat Confirmation Fee
+              </div>
+              <p class="advisory-desc">
+                Requires ₹20,000 (GEN/OBC) or ₹12,000 (SC/ST) online payment, fully adjusted against your first-year institute tuition fee.
+              </p>
+            </div>
+            <div class="advisory-item">
+              <div class="advisory-title">
+                <i data-lucide="git-merge" style="color:#7c3aed"></i> Internal Sliding (Govt Institutes)
+              </div>
+              <p class="advisory-desc">
+                Admitted candidates in Government colleges participate in Round 5 internal sliding to upgrade branches based on vacant seats.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   `;
