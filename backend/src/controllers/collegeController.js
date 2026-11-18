@@ -504,9 +504,9 @@ const getCollegeCutoffTrends = async (req, res) => {
             }
             programsMap[row.program].push({
                 round: row.round,
-                year: row.year,
-                opening_rank: row.opening_rank,
-                closing_rank: row.closing_rank
+                year: Number(row.year),
+                opening_rank: Number(row.opening_rank),
+                closing_rank: Number(row.closing_rank)
             });
         }
 

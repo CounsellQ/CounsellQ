@@ -6,7 +6,7 @@
 [![ML Model](https://img.shields.io/badge/ML_Model-Random_Forest_Ensemble-blue?logo=scikitlearn)](ml/ml_comparison_report.json)
 [![Data Quality](https://img.shields.io/badge/Data_Audit-ALL_CHECKS_PASSED-success)](#data-validation--integrity)
 
-> **CounsellQ** is an evidence-backed college admission counselling decision-support platform designed for Uttar Pradesh Technical Admission Counselling (UPTAC / AKTU). It combines 8,058 historical counselling cutoff records with official NIRF rankings, NBA/NAAC accreditations, audited fee schedules, and verified placement outcomes—powered by a benchmarked Random Forest machine learning ensemble.
+> **CounsellQ** is an evidence-backed college admission counselling decision-support platform designed for Uttar Pradesh Technical Admission Counselling (UPTAC / AKTU). It combines 8,058 official counselling cutoff records across Rounds 1–3 with official NIRF rankings, NBA/NAAC accreditations, audited fee schedules, and verified placement outcomes—powered by a benchmarked Random Forest machine learning ensemble.
 
 ---
 
@@ -23,12 +23,13 @@
 ## Key Features
 
 1. **Rank & Cutoff Prediction with Balanced Headroom:**
-   - Evaluates candidate JEE Main ranks against 8,058 UPTAC 2025 opening and closing cutoffs across 194 participating institutions.
+   - Evaluates candidate JEE Main ranks against 8,058 official UPTAC 2025 opening and closing cutoffs across 194 participating institutions.
    - Eliminates restrictive cutoff query filtering bugs; returns a balanced portfolio of **Safer Options**, **Moderate Options**, and **Ambitious Options**.
    - Supports gender reservation quotas (e.g., `OPEN(GIRL)`, `BC(Girl)`, `SC(Girl)`, `EWS(GL)`) and open merit seat eligibility for reserved categories.
 
 2. **Machine Learning Admission Feasibility (Random Forest Ensemble):**
    - Benchmarked across 5 algorithms: Rule-Based Cutoff Baseline, Logistic Regression, Decision Tree, Random Forest, and Gradient Boosting.
+   - Trained on 24,174 query-evaluation samples generated across rank percentiles from official 2025 UPTAC cutoffs.
    - Produces calibrated admission feasibility scores (0–100%) and class probability distributions: $P(\text{Safe})$, $P(\text{Moderate})$, $P(\text{Ambitious})$.
    - Generates transparent, human-readable explanations explaining cutoff headroom and rank margins.
 
@@ -45,31 +46,32 @@
    - National Board of Accreditation (NBA) program-level accreditations with exact program names and validity periods.
    - National Assessment and Accreditation Council (NAAC) institutional grades.
 
-6. **Side-by-Side College Comparison:**
+6. **Historical Cutoff Trend Visualizer & Side-by-Side College Comparison:**
+   - Track round-by-round seat relaxation dynamics (Round 1 → Round 2 → Round 3).
    - Compare up to three colleges across cutoffs, fees, placements, NIRF rank, and accreditations simultaneously.
 
 ---
 
 ## Machine Learning Benchmark & Comparison
 
-The ML pipeline was trained on 24,174 query-evaluation samples generated across rank percentiles from UPTAC historical cutoffs (Train: 19,339; Test: 4,835; 80/20 stratified split, random seed `42`).
+The ML pipeline was trained on 24,174 query-evaluation samples generated across rank percentiles from official UPTAC 2025 cutoffs (Train: 19,339; Test: 4,835; 80/20 stratified split, random seed `42`).
 
 | Algorithm | Accuracy | Macro F1 | Weighted F1 | ROC-AUC (ovr) | Inference Latency (ms) | Notes |
 |---|---|---|---|---|---|---|
 | **Rule-Based Cutoff Baseline** | 86.16% | 0.8516 | 0.8516 | N/A (Rule) | 0.0008 ms | 32% false negatives on competitive boundary cases |
-| **Logistic Regression** | 100.00% | 1.0000 | 1.0000 | 1.0000 | 0.0003 ms | Linear boundary on scaled features |
-| **Decision Tree** | 100.00% | 1.0000 | 1.0000 | 1.0000 | 0.0005 ms | Depth: 6 |
-| **Random Forest (Selected)** | **100.00%** | **1.0000** | **1.0000** | **1.0000** | **0.0111 ms** | **100 trees, robust calibration, highest generalization** |
-| **Gradient Boosting (GBDT)** | 100.00% | 1.0000 | 1.0000 | 1.0000 | 0.0034 ms | 100 trees, learning rate 0.1 |
+| **Logistic Regression** | 100.00% | 1.0000 | 1.0000 | 1.0000 | 0.0012 ms | Linear boundary on scaled features |
+| **Decision Tree** | 100.00% | 1.0000 | 1.0000 | 1.0000 | 0.0000 ms | Depth: 6 |
+| **Random Forest (Selected)** | **100.00%** | **1.0000** | **1.0000** | **1.0000** | **0.0088 ms** | **100 trees, robust calibration, highest generalization** |
+| **Gradient Boosting (GBDT)** | 100.00% | 1.0000 | 1.0000 | 1.0000 | 0.0048 ms | 100 trees, learning rate 0.1 |
 
 ### Random Forest Feature Importance:
-1. `rel_rank_diff` $(\frac{C_{\text{close}} - R}{C_{\text{close}}})$: **43.45%**
-2. `rank_ratio` $(\frac{R}{C_{\text{close}}})$: **39.98%**
-3. `norm_dist_from_open` $(\frac{R - C_{\text{open}}}{Spread})$: **16.24%**
-4. `rel_spread` $(\frac{Spread}{C_{\text{close}}})$: **0.30%**
-5. `cat_id` (Reservation category): **0.015%**
-6. `inst_tier` (Institution competitiveness tier): **0.008%**
-7. `round` (Counselling round): **0.004%**
+1. `rank_ratio` $(\frac{R}{C_{\text{close}}})$: **45.66%**
+2. `rel_rank_diff` $(\frac{C_{\text{close}} - R}{C_{\text{close}}})$: **35.20%**
+3. `norm_dist_from_open` $(\frac{R - C_{\text{open}}}{Spread})$: **18.74%**
+4. `rel_spread` $(\frac{Spread}{C_{\text{close}}})$: **0.36%**
+5. `inst_tier` (Institution competitiveness tier): **0.02%**
+6. `round` (Counselling round): **0.01%**
+7. `cat_id` (Reservation category): **0.01%**
 
 Detailed experiment records are located at [`ml/ml_comparison_report.json`](ml/ml_comparison_report.json).
 

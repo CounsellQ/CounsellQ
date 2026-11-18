@@ -1394,21 +1394,6 @@ function renderCollegeDetailsHtml(c) {
             </button>
           </div>
         </div>
-
-        <!-- Widget 4: Quick Command Palette -->
-        <div class="command-palette-card">
-          <div class="bento-tile-header" style="margin-bottom:8px">
-            <div class="bento-tile-title" style="font-size:13px">
-              <i data-lucide="zap" style="color:var(--primary)"></i> Quick Command Palette (Ctrl + K)
-            </div>
-          </div>
-          <div class="cmd-input-wrap">
-            <i data-lucide="search" style="width:14px;height:14px;color:#94a3b8"></i>
-            <input type="text" id="cmdPaletteInput" placeholder="Search college, branch (e.g. BIET)...">
-            <span class="cmd-shortcut-badge">↵</span>
-          </div>
-          <div id="cmdPaletteResults" class="cmd-results-list"></div>
-        </div>
       </div>
     </div>
   `;
@@ -1469,7 +1454,6 @@ function renderCollegeDetailsHtml(c) {
 
   // Initialize interactive widgets
   renderSidebarChoiceList();
-  setupSidebarCmdPalette();
   setupAskCounsellAi();
 
   if (window.lucide) lucide.createIcons();
@@ -1525,60 +1509,6 @@ function renderSidebarChoiceList() {
   );
 }
 
-function setupSidebarCmdPalette() {
-  const input = $("cmdPaletteInput");
-  const results = $("cmdPaletteResults");
-  if (!input || !results) return;
-
-  input.addEventListener("input", () => {
-    const q = input.value.trim().toLowerCase();
-    if (!q) {
-      results.innerHTML = "";
-      return;
-    }
-    const matches = directoryColleges.filter(col =>
-      (col.name + " " + (col.code || "") + " " + (col.city || "")).toLowerCase().includes(q)
-    ).slice(0, 4);
-
-    if (!matches.length) {
-      results.innerHTML = `<div style="padding:8px 12px;font-size:12px;color:#94a3b8">No matching institutions found.</div>`;
-      return;
-    }
-
-    results.innerHTML = matches.map(col => `
-      <div class="cmd-result-item" data-cmd-open="${escapeHtml(col.code || col.name)}">
-        <i data-lucide="building-2"></i>
-        <div class="cmd-res-info">
-          <strong>${escapeHtml(col.name)}</strong>
-          <small>${escapeHtml(col.city || "UP")}${col.code ? ` • #${col.code}` : ''} • ${escapeHtml(col.ownership || '')}</small>
-        </div>
-        <span class="cmd-enter-icon">↵</span>
-      </div>
-    `).join("");
-
-    if (window.lucide) lucide.createIcons();
-
-    results.querySelectorAll("[data-cmd-open]").forEach(item => {
-      item.addEventListener("click", () => {
-        const target = directoryColleges.find(c => (c.code || c.name) === item.dataset.cmdOpen);
-        if (target) {
-          openDetails({
-            institute: target.name,
-            program: "Computer Science & Engineering",
-            category: "General",
-            quota: "Home State",
-            round: "Round 1",
-            opening_rank: 42000,
-            closing_rank: 56000,
-            feasibility_score: 92,
-            college: target
-          });
-        }
-      });
-    });
-  });
-}
-
 /* -------------------------------------------------------------
    College Directory & Omnibox Direct Search
 ------------------------------------------------------------- */
@@ -1613,6 +1543,9 @@ async function loadDirectory(initialQuery = "") {
 }
 
 function renderDirectory() {
+  const grid = $("directoryGrid");
+  if (!grid) return;
+
   const searchTerm = ($("dirSearch")?.value || "").toLowerCase().trim();
   const ownerFilter = $("dirOwnership")?.value || "";
   const nirfFilter = $("dirNirf")?.value || "";
@@ -1651,7 +1584,7 @@ function renderDirectory() {
   }
 
   if (!filtered.length) {
-    $("directoryGrid").innerHTML = `
+    grid.innerHTML = `
       <div class="college-card" style="grid-column:1/-1;text-align:center;color:#64748b;padding:40px">
         <i data-lucide="building-2" style="width:36px;height:36px;margin:auto;display:block;margin-bottom:10px;color:#94a3b8"></i>
         <strong>No institutions match your search query.</strong>
@@ -1662,7 +1595,7 @@ function renderDirectory() {
     return;
   }
 
-  $("directoryGrid").innerHTML = filtered
+  grid.innerHTML = filtered
     .map((col, idx) => {
       const isGovt = col.ownership === "Government";
       return `
@@ -2175,62 +2108,6 @@ function escapeHtml(value) {
 }
 
 /* -------------------------------------------------------------
-   Hero Omnibox & Global Shortcuts
-------------------------------------------------------------- */
-function setupHeroOmniboxAndChips() {
-  const omnibox = $("heroOmniboxInput");
-  if (omnibox) {
-    omnibox.addEventListener("keydown", e => {
-      if (e.key === "Enter" && omnibox.value.trim()) {
-        const query = omnibox.value.trim();
-        navigateTo("directory", { q: query });
-        const dirSearch = $("dirSearch");
-        if (dirSearch) {
-          dirSearch.value = query;
-          renderDirectory();
-        }
-      }
-    });
-  }
-
-  document.querySelectorAll(".quick-filter-chips .filter-chip").forEach(chip => {
-    chip.addEventListener("click", () => {
-      document.querySelectorAll(".quick-filter-chips .filter-chip").forEach(c => c.classList.remove("active"));
-      chip.classList.add("active");
-      const owner = chip.dataset.dirChip || "";
-      navigateTo("directory");
-      const dirOwner = $("dirOwnership");
-      if (dirOwner) {
-        dirOwner.value = owner;
-        renderDirectory();
-      }
-    });
-  });
-
-  // Global Ctrl + K / Cmd + K shortcut
-  window.addEventListener("keydown", e => {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
-      e.preventDefault();
-      const heroBox = $("heroOmniboxInput");
-      const dirBox = $("dirSearch");
-      const cmdBox = $("cmdPaletteInput");
-
-      if (cmdBox && (cmdBox.offsetWidth || cmdBox.offsetHeight)) {
-        cmdBox.focus();
-        cmdBox.select();
-      } else if (dirBox && (dirBox.offsetWidth || dirBox.offsetHeight)) {
-        dirBox.focus();
-        dirBox.select();
-      } else if (heroBox) {
-        navigateTo("home");
-        heroBox.focus();
-        heroBox.select();
-      }
-    }
-  });
-}
-
-/* -------------------------------------------------------------
    Initial Application Boot
 ------------------------------------------------------------- */
 function prewarmBackend() {
@@ -2242,7 +2119,6 @@ prewarmBackend();
 
 restoreState();
 setupChoiceDrawer();
-setupHeroOmniboxAndChips();
 updateChoiceCountBadge();
 setupAskCounsellAi();
 const initialRoute = parseRoute();

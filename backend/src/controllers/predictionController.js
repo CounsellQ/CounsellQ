@@ -75,6 +75,7 @@ const predictColleges = async (req, res) => {
 
         let query = `
             SELECT
+                c.year,
                 c.institute,
                 c.program,
                 c.quota,
@@ -213,6 +214,7 @@ const predictColleges = async (req, res) => {
             WHERE c.category = ANY($1)
               AND c.closing_rank >= $2
               AND c.closing_rank <= $3
+              AND c.year = 2025
         `;
 
         // Program filter
@@ -271,6 +273,7 @@ const predictColleges = async (req, res) => {
             }
 
             return {
+                year: Number(row.year),
                 institute: row.institute,
                 program: row.program,
                 quota: row.quota,
@@ -368,12 +371,14 @@ const predictColleges = async (req, res) => {
             student_rank: studentRank,
             evaluated_category: category,
             eligible_categories_searched: eligibleCategories,
+            counselling_year: 2025,
             model_info: {
                 version: "v1.0.0-rf-ensemble",
                 algorithm: "Random Forest Classifier (Ensemble)",
-                evaluated_against_baseline: "Rule-Based Cutoff Baseline"
+                evaluated_against_baseline: "Rule-Based Cutoff Baseline",
+                training_dataset: "counsellq_uptac_2025.csv (8,058 official cutoffs, Rounds 1-3)"
             },
-            disclaimer: "CounsellQ is an academic decision-support tool based on historical UPTAC counselling cutoffs and verified institutional disclosures. Cutoff boundaries vary annually based on seat matrix, applicant volume, and exam difficulty; recommendations do not constitute an admission guarantee.",
+            disclaimer: "CounsellQ is an academic decision-support tool based on official 2025 UPTAC counselling cutoffs and verified institutional disclosures. Cutoff boundaries vary annually based on seat matrix, applicant volume, and exam difficulty; recommendations do not constitute an admission guarantee.",
             results
         });
 

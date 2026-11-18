@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-20T12:03:03Z",
+  "generated_at": "2026-11-18T03:40:03Z",
   "dataset": {
     "source": "counsellq_uptac_2025.csv",
     "total_cutoff_records": 8058,
@@ -13,7 +13,11 @@
       "rel_spread",
       "inst_tier",
       "round",
-      "cat_id"
+      "cat_id",
+      "year"
+    ],
+    "years_covered": [
+      2025
     ],
     "classes": {
       "0": "Ambitious Chance",
@@ -29,7 +33,7 @@
       "F1 (Macro)": 0.8516390183765955,
       "F1 (Weighted)": 0.8516369794297854,
       "ROC-AUC (ovr)": null,
-      "Inference Latency (ms/sample)": 0.000805938626026047,
+      "Inference Latency (ms/sample)": 0.0008307420480091051,
       "Confusion Matrix": [
         [
           1611,
@@ -55,7 +59,7 @@
       "F1 (Macro)": 1.0,
       "F1 (Weighted)": 1.0,
       "ROC-AUC (ovr)": 1.0,
-      "Inference Latency (ms/sample)": 0.00025424740307086996,
+      "Inference Latency (ms/sample)": 0.001184055206077915,
       "Confusion Matrix": [
         [
           1611,
@@ -81,7 +85,7 @@
       "F1 (Macro)": 1.0,
       "F1 (Weighted)": 1.0,
       "ROC-AUC (ovr)": 1.0,
-      "Inference Latency (ms/sample)": 0.000542864557875719,
+      "Inference Latency (ms/sample)": 0.0,
       "Confusion Matrix": [
         [
           1611,
@@ -107,7 +111,7 @@
       "F1 (Macro)": 1.0,
       "F1 (Weighted)": 1.0,
       "ROC-AUC (ovr)": 1.0,
-      "Inference Latency (ms/sample)": 0.011092701766951993,
+      "Inference Latency (ms/sample)": 0.008779671717331105,
       "Confusion Matrix": [
         [
           1611,
@@ -126,13 +130,14 @@
         ]
       ],
       "Feature Importance": {
-        "rel_rank_diff": 0.43450283846559307,
-        "rank_ratio": 0.3998046200975604,
-        "norm_dist_from_open": 0.16244765530876756,
-        "rel_spread": 0.002975804929626469,
-        "inst_tier": 7.747628406433992e-05,
-        "round": 3.896262209919252e-05,
-        "cat_id": 0.0001526422922889861
+        "rel_rank_diff": 0.3519851224249155,
+        "rank_ratio": 0.45662635935091006,
+        "norm_dist_from_open": 0.18735725579810245,
+        "rel_spread": 0.003598673139769662,
+        "inst_tier": 0.00020517175054391814,
+        "round": 7.249544352516832e-05,
+        "cat_id": 0.0001549220922332615,
+        "year": 0.0
       }
     },
     "Gradient Boosting": {
@@ -142,7 +147,7 @@
       "F1 (Macro)": 1.0,
       "F1 (Weighted)": 1.0,
       "ROC-AUC (ovr)": 1.0,
-      "Inference Latency (ms/sample)": 0.0033601979805000562,
+      "Inference Latency (ms/sample)": 0.004819950865121268,
       "Confusion Matrix": [
         [
           1611,
@@ -161,13 +166,14 @@
         ]
       ],
       "Feature Importance": {
-        "rel_rank_diff": 0.35679879077314836,
-        "rank_ratio": 0.6432012092268036,
-        "norm_dist_from_open": 3.1235865443082263e-14,
-        "rel_spread": 1.6784540825360687e-14,
-        "inst_tier": -8.571170218047182e-19,
-        "round": 0.0,
-        "cat_id": 0.0
+        "rel_rank_diff": 0.3534667870572775,
+        "rank_ratio": 0.6465332129426933,
+        "norm_dist_from_open": 2.742391926211406e-14,
+        "rel_spread": 9.70519749044937e-16,
+        "inst_tier": 7.834445728042179e-16,
+        "round": 4.6078827933764934e-20,
+        "cat_id": -7.346354313778368e-19,
+        "year": 0.0
       }
     }
   }

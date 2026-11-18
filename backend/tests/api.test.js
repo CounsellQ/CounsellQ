@@ -122,6 +122,25 @@ describe("CounsellQ API & Data Test Suite", () => {
             const data = await res.json();
             assert.ok(data.eligible_categories_searched.includes("OPEN(GIRL)"));
         });
+
+        test("POST /api/predict should evaluate candidates on official 2025 cutoffs across Rounds 1-3", async () => {
+            const res2025 = await fetch(`${baseUrl}/api/predict`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    rank: 55000,
+                    category: "OPEN",
+                    program: "Computer Science",
+                    round: "Round 1"
+                })
+            });
+            assert.strictEqual(res2025.status, 200);
+            const data2025 = await res2025.json();
+            assert.strictEqual(data2025.counselling_year, 2025);
+            assert.ok(data2025.results.length > 0);
+            assert.strictEqual(data2025.results[0].year, 2025);
+            assert.ok(["Round 1", "Round 2", "Round 3"].includes(data2025.results[0].round));
+        });
     });
 
     describe("3. College Directory & Profile Endpoints", () => {

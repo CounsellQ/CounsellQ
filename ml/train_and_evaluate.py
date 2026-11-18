@@ -107,6 +107,7 @@ def generate_evaluation_samples(df, seed=42):
         inst_tier = categorize_institute(row["Institute"])
         cat_id = categorize_category(row["Category"])
         rnd = round_to_int(row["Round"])
+        year = int(row["Year"]) if "Year" in row and pd.notna(row["Year"]) else 2025
         spread = close_rank - open_rank
         rel_spread = spread / close_rank
 
@@ -119,6 +120,7 @@ def generate_evaluation_samples(df, seed=42):
             "round": rnd,
             "inst_tier": inst_tier,
             "cat_id": cat_id,
+            "year": year,
             "spread": spread,
             "rel_spread": rel_spread,
             "target": 2 # Safer Chance
@@ -133,6 +135,7 @@ def generate_evaluation_samples(df, seed=42):
             "round": rnd,
             "inst_tier": inst_tier,
             "cat_id": cat_id,
+            "year": year,
             "spread": spread,
             "rel_spread": rel_spread,
             "target": 1 # Moderate Chance
@@ -147,6 +150,7 @@ def generate_evaluation_samples(df, seed=42):
             "round": rnd,
             "inst_tier": inst_tier,
             "cat_id": cat_id,
+            "year": year,
             "spread": spread,
             "rel_spread": rel_spread,
             "target": 0 # Ambitious Chance
@@ -178,6 +182,10 @@ def extract_features(df):
     X["inst_tier"] = df["inst_tier"]
     X["round"] = df["round"]
     X["cat_id"] = df["cat_id"]
+    if "year" in df.columns:
+        X["year"] = df["year"]
+    else:
+        X["year"] = 2025
     return X
 
 def rule_based_predict(X):
@@ -313,7 +321,8 @@ def evaluate_models(X_train, X_test, y_train, y_test):
 def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     project_dir = os.path.dirname(base_dir)
-    csv_path = os.path.join(project_dir, "data", "counsellq_uptac_2025.csv")
+    all_years_csv = os.path.join(project_dir, "data", "counsellq_uptac_all_years.csv")
+    csv_path = all_years_csv if os.path.exists(all_years_csv) else os.path.join(project_dir, "data", "counsellq_uptac_2025.csv")
 
     df = load_data(csv_path)
     sample_df = generate_evaluation_samples(df, seed=42)
@@ -336,28 +345,46 @@ def main():
     joblib.dump(models["Gradient Boosting"], os.path.join(model_dir, "gradient_boosting_model.joblib"))
     joblib.dump(scaler, os.path.join(model_dir, "scaler.joblib"))
 
+    def json_serialize(obj):
+        if isinstance(obj, (np.integer, np.int64, np.int32)):
+            return int(obj)
+        if isinstance(obj, (np.floating, np.float64, np.float32)):
+            return float(obj)
+        if isinstance(obj, (np.ndarray,)):
+            return obj.tolist()
+        return str(obj)
+
     # Save evaluation report JSON
+    report_data = {
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "dataset": {
+            "source": os.path.basename(csv_path),
+            "total_cutoff_records": int(len(df)),
+            "total_evaluation_samples": int(len(sample_df)),
+            "train_samples": int(len(X_train)),
+            "test_samples": int(len(X_test)),
+            "features": list(X.columns),
+            "years_covered": [int(x) for x in sorted(list(df["Year"].unique()))] if "Year" in df.columns else [2025],
+            "classes": {
+                "0": "Ambitious Chance",
+                "1": "Moderate Chance",
+                "2": "Safer Chance"
+            }
+        },
+        "models": results
+    }
+
     report_path = os.path.join(base_dir, "ml_comparison_report.json")
     with open(report_path, "w") as f:
-        json.dump({
-            "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            "dataset": {
-                "source": "counsellq_uptac_2025.csv",
-                "total_cutoff_records": len(df),
-                "total_evaluation_samples": len(sample_df),
-                "train_samples": len(X_train),
-                "test_samples": len(X_test),
-                "features": list(X.columns),
-                "classes": {
-                    "0": "Ambitious Chance",
-                    "1": "Moderate Chance",
-                    "2": "Safer Chance"
-                }
-            },
-            "models": results
-        }, f, indent=2)
+        json.dump(report_data, f, indent=2, default=json_serialize)
 
-    print(f"ML evaluation completed! Report saved to {report_path}")
+    # Also sync report to backend/src/ml/
+    backend_report_path = os.path.join(project_dir, "backend", "src", "ml", "ml_comparison_report.json")
+    os.makedirs(os.path.dirname(backend_report_path), exist_ok=True)
+    with open(backend_report_path, "w") as f:
+        json.dump(report_data, f, indent=2, default=json_serialize)
+
+    print(f"ML evaluation completed! Report saved to {report_path} and {backend_report_path}")
 
     # Print summary table
     print("\n" + "="*80)

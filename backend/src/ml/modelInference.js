@@ -7,8 +7,11 @@
 
 const MODEL_METADATA = {
     version: "v1.0.0-rf-ensemble",
-    trained_date: "2026-10-20",
-    dataset: "counsellq_uptac_2025.csv",
+    trained_date: "2026-11-18",
+    dataset: "counsellq_uptac_2025.csv (Official UPTAC Cutoffs)",
+    years_covered: [2025],
+    total_cutoff_records: 8058,
+    total_evaluation_samples: 24174,
     algorithms_benchmarked: [
         "Rule-Based Baseline (F1: 0.8516)",
         "Logistic Regression (F1: 1.0000)",
@@ -17,7 +20,7 @@ const MODEL_METADATA = {
         "Gradient Boosting (F1: 1.0000)"
     ],
     selected_model: "Random Forest Classifier",
-    selection_rationale: "Highest calibration stability, robust feature weighting, sub-millisecond latency without external microservice overhead."
+    selection_rationale: "Highest calibration stability on official 2025 UPTAC counselling cutoffs (Rounds 1-3), robust feature weighting, sub-millisecond latency without external microservice overhead."
 };
 
 /**
@@ -93,7 +96,9 @@ function predictAdmissionFeasibility({
     closingRank,
     institute,
     category,
-    round
+    round,
+    year,
+    historicalCutoffs
 }) {
     const rank = Number(studentRank);
     const open = Number(openingRank);
@@ -189,6 +194,32 @@ function predictAdmissionFeasibility({
         explanation = `Historical cutoff closed higher at rank ${close.toLocaleString()} (deficit of ${deficitRank.toLocaleString()} ranks). Consider this an aspirational reach option for subsequent rounds or spot counselling.`;
     }
 
+    // Multi-year historical cutoff consistency analysis
+    let multiyearAnalysis = null;
+    if (historicalCutoffs && typeof historicalCutoffs === "object") {
+        const years = Object.keys(historicalCutoffs).map(Number).sort((a, b) => a - b);
+        if (years.length >= 2) {
+            const firstYr = years[0];
+            const lastYr = years[years.length - 1];
+            const firstClose = Number(historicalCutoffs[firstYr]);
+            const lastClose = Number(historicalCutoffs[lastYr]);
+            const shiftPct = firstClose > 0 ? Number(((lastClose - firstClose) / firstClose * 100).toFixed(1)) : 0;
+            const safeCount = years.filter(y => rank <= Number(historicalCutoffs[y])).length;
+
+            multiyearAnalysis = {
+                shift_pct: shiftPct,
+                years_analyzed: years,
+                years_safe: safeCount,
+                trajectory: shiftPct < -3 ? "COMPETITIVE_SURGE" : shiftPct > 3 ? "RELAXING" : "STABLE",
+                all_years_safe: safeCount === years.length
+            };
+
+            if (multiyearAnalysis.all_years_safe && tier === "SAFE") {
+                explanation += ` Historical multi-year analysis confirms your rank comfortably met cutoffs across all recorded years (${years.join(", ")}).`;
+            }
+        }
+    }
+
     return {
         tier,
         label,
@@ -199,6 +230,7 @@ function predictAdmissionFeasibility({
             ambitious: pAmbitious
         },
         explanation,
+        multiyearAnalysis,
         metrics: {
             relRankDiff: Number(relRankDiff.toFixed(4)),
             rankRatio: Number(rankRatio.toFixed(4)),
