@@ -762,7 +762,7 @@ function renderResultsList() {
             <!-- Explanation snippet -->
             <div class="explanation-snippet">
               <i data-lucide="sparkles" style="width:13px;height:13px;display:inline-block;vertical-align:middle;color:#2563eb"></i>
-              ${escapeHtml(c.explanation || "Evaluated by Random Forest ensemble against historical cutoffs.")}
+              ${escapeHtml(c.explanation || "Evaluated by Gradient Boosting ensemble against historical cutoffs.")}
             </div>
 
             <div class="data-box">
@@ -1008,7 +1008,7 @@ function renderCollegeDetailsHtml(c) {
   const openingRank = Number(c.opening_rank) || 0;
   const hasValidCutoff = !isNaN(closingRank) && closingRank > 0;
   const rankBuffer = hasValidCutoff ? (closingRank - userRank) : null;
-  const cleanExplanation = String(c.explanation || "Evaluated by Random Forest ensemble against historical cutoffs.")
+  const cleanExplanation = String(c.explanation || "Evaluated by Gradient Boosting ensemble against historical cutoffs.")
     .replace(/\s*\(headroom\s*[^)]+\)/gi, "")
     .replace(/\s*\(deficit\s*[^)]+\)/gi, "")
     .trim();
