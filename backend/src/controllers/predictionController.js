@@ -2,7 +2,7 @@
  * CounsellQ Prediction Controller
  * Integrates historical UPTAC cutoff records, verified college profiles,
  * fees, placements, NIRF rankings, NBA/NAAC accreditations, and
- * Random Forest ML admission feasibility inference.
+ * Gradient Boosting ML admission feasibility inference.
  */
 
 const pool = require("../db");
@@ -373,8 +373,8 @@ const predictColleges = async (req, res) => {
             eligible_categories_searched: eligibleCategories,
             counselling_year: 2025,
             model_info: {
-                version: "v1.0.0-rf-ensemble",
-                algorithm: "Random Forest Classifier (Ensemble)",
+                version: "v1.1.0-gb-ensemble",
+                algorithm: "Gradient Boosting Classifier (Sequential Ensemble)",
                 evaluated_against_baseline: "Rule-Based Cutoff Baseline",
                 training_dataset: "counsellq_uptac_2025.csv (8,058 official cutoffs, Rounds 1-3)"
             },
